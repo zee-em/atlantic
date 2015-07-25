@@ -3,15 +3,15 @@
 // http://natureofcode.com
 
 // Child class constructor
-function Particle(position) {
+function Particle(position, word) {
   VerletParticle2D.call(this,position);
 
+  this.word = word;
   // Override the display method
   this.display = function(){
-    fill(127);
-    stroke(200);
-    strokeWeight(2);
-    ellipse(this.x,this.y,32,32);
+    //fill(127)
+    textSize(18);
+    text(word, this.x,this.y);
   }
 }
 

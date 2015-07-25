@@ -4,12 +4,20 @@
 
 // Reference to physics world
 var physics;
+//array to store particle-words
+var words =[];
 
-var p1;
-var p2;
+
+//updated x and ys for vector
+var currentX = 20;
+var currentY = 20;
+
+//array holding the input text to add to particle-words
+var inputText = ["call", "me"];
+
 
 function setup() {
-  createCanvas(640,360);
+  createCanvas(640,560);
 
   // Initialize the physics
   physics=new VerletPhysics2D();
@@ -18,19 +26,19 @@ function setup() {
   // Set the world's bounding box
   physics.setWorldBounds(new Rect(0,0,width,height));
   
-  // Make two particles
-  p1 = new Particle(new Vec2D(width/2,20));
-  p2 = new Particle(new Vec2D(width/2+160,20));
-  // Lock one in place
-  p1.lock();
+  //loop to create particle-words using input text
+  for(var i = 0; i<inputText.length; i++)
+  {
+  // Make a particle
+  words[i] = new Particle(new Vec2D(currentX,currentY),inputText[i]);
+  physics.addParticle(words[i]);
+  //add particle-word to array so we can get them out later to display
 
-  // Make a spring connecting both Particles
-  var spring=new VerletSpring2D(p1,p2,160,0.01);
+  //update the x and y postions
+  currentX+=textWidth(inputText[i])+18;
+  currentY= 100
+  }
 
-  // Anything we make, we have to add into the physics world
-  physics.addParticle(p1);
-  physics.addParticle(p2);
-  physics.addSpring(spring);
 }
 
 function draw() {
@@ -40,22 +48,12 @@ function draw() {
 
   background(51);
 
-  // Draw a line between the particles
-  stroke(200);
-  strokeWeight(2);
-  line(p1.x,p1.y,p2.x,p2.y);
+  //step through the array to get the particles out for display
+  for(var i = 0; i<words.length; i++)
+  {
+    words[i].display();
+  }
 
-  // Display the particles
-  p1.display();
-  p2.display();
-
-  // Move the second one according to the mouse
-  if (mouseIsPressed) {
-    p2.lock();
-    p2.x = mouseX;
-    p2.y = mouseY;
-    p2.unlock();
-  } 
 }
 
 
