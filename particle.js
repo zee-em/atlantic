@@ -1,9 +1,3 @@
-// The Nature of Code
-// Daniel Shiffman
-// http://natureofcode.com
-
-//get particles to move a bit randomly, depending on their POS
-
 // Child class constructor
 function Particle(position, weight, word, parts) {
   VerletParticle2D.call(this,position,weight);
