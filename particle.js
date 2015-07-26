@@ -27,9 +27,6 @@ function Particle(position, weight, word, parts) {
 
 }
 
- 
-
-
 // Inherit from the parent class
 Particle.prototype = Object.create(VerletParticle2D.prototype);
 Particle.prototype.constructor = Particle;
