@@ -24,7 +24,7 @@ function setup() {
   noStroke();
   // Initialize the physics
   physics=new VerletPhysics2D();
-  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.5)));
+  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.3)));
 
   // Set the world's bounding box
   physics.setWorldBounds(new Rect(0,0,width,height));
@@ -33,10 +33,10 @@ function setup() {
   for(var i = 0; i<inputText.length; i++)
   {
   // Make a particle
-  words[i] = new Particle(new Vec2D(currentX,currentY),inputText[i]);
+  words[i] = new Particle(new Vec2D(currentX,currentY),inputText[i], parts[i]);
+   //add particle-word to array so we can get them out later to display
   words[i].lock();
   physics.addParticle(words[i]);
-  //add particle-word to array so we can get them out later to display
 
   //update the x and y postions
   currentX+=textWidth(inputText[i])+typesize;
@@ -57,14 +57,29 @@ function draw() {
     words[i].display();
   }
 
+
+  //if mouse is pressed, make particles fall
   if(mouseIsPressed)
   {
    for(i = 0; i<words.length; i++)
     {
        words[i].unlock();
     }
-  }    
+  } 
+  
 }
+
+ function keyPressed()
+  {
+    if(keyCode === RETURN)
+    {
+      for(i = 0; i<words.length; i++)
+      {
+       words[i].returnHome();
+       words[i].lock();
+      }
+    }
+  }
 
 
 
