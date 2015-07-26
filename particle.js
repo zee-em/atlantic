@@ -10,7 +10,6 @@ function Particle(position, word) {
   // Override the display method
   this.display = function(){
     //fill(127)
-    textSize(18);
     text(word, this.x,this.y);
   }
 }
