@@ -2,9 +2,11 @@
 // Daniel Shiffman
 // http://natureofcode.com
 
+//get particles to move a bit randomly, depending on their POS
+
 // Child class constructor
-function Particle(position, word, parts) {
-  VerletParticle2D.call(this,position);
+function Particle(position, weight, word, parts) {
+  VerletParticle2D.call(this,position,weight);
 
   this.word = word;
   this.parts = parts;
@@ -23,7 +25,6 @@ function Particle(position, word, parts) {
     this.y = origY;
   }
 
-  
 }
 
  

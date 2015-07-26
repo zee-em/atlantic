@@ -2,6 +2,8 @@
 // Daniel Shiffman
 // http://natureofcode.com
 
+//get words in by line
+
 // Reference to physics world
 var physics;
 //array to store particle-words
@@ -16,6 +18,10 @@ var currentY = 20;
 //array holding the input text to add to particle-words
 var inputText = ["call", "me", "ishmael"];
 var parts = ["vb", "n", "np"];
+var weightDict={};
+weightDict["vb"] = .05;
+weightDict["n"] = 2;
+weightDict["np"] = 7;
 
 
 function setup() {
@@ -33,7 +39,8 @@ function setup() {
   for(var i = 0; i<inputText.length; i++)
   {
   // Make a particle
-  words[i] = new Particle(new Vec2D(currentX,currentY),inputText[i], parts[i]);
+  print(weightDict[parts[i]]);
+  words[i] = new Particle(new Vec2D(currentX,currentY),weightDict[parts[i]],inputText[i], parts[i]);
    //add particle-word to array so we can get them out later to display
   words[i].lock();
   physics.addParticle(words[i]);
@@ -49,7 +56,7 @@ function draw() {
 
   // Update the physics world
   physics.update();
-  background(110,207,246);
+  background(175,206,219);
 
   //step through the array to get the particles out for display
   for(var i = 0; i<words.length; i++)
