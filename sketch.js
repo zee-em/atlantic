@@ -2,14 +2,20 @@
 // using particle system and Toxiclibs physics library to 
 // animate text in an ocean-like way
 
-//get particles to move a bit randomly, depending on their POS
-//particles have random weights (DONE)
+//get particles to move depending on their part of speech
+//certain particles only move in certain areas of the screen
+//particles have different weights
 //bring in a lot more particles (file i/O) (DONE)
-//make 2d array to show all particles, bring in text line by line (or sentance by sentance?)
+//make 2d array to show all particles, bring in text line by line (or sentence by sentence?)(DONE)
 //put more space between particles
+//make fishing!!
 
+//IDEA: cute splash page
 //IDEA: always have the whole text appear as ocean. animate on-screen sections only.
-
+//IDEA: words wiggle on string
+//IDEA: at end, spiral sucks all words into void
+//IDEA: viewer for re-written text
+//IDEA: different sizes for different words
 
 // Reference to physics world
 var physics;
@@ -23,16 +29,15 @@ var allWords = [];
 var currentX = 20;
 var currentY = 20;
 
-//array holding the input text to add to particle-words
-//var inputText = ["call", "me", "ishmael"];
-//var parts = ["vb", "n", "np"];
+//dictionary look-up for parts of speech and vectors or x,y constraints 
 var weightDict={};
 weightDict["vb"] = .5;
 weightDict["n"] = 2;
 weightDict["np"] = 3;
 var rawText;
 var allparts;
-var noSpacer;
+var noSpacer = false;
+var target = "xx";
 
 function preload() {
   rawText = loadStrings("assets/words.txt");
@@ -82,16 +87,28 @@ function draw() {
   
 }
 
+
+function rectTest()
+{
+
+  var rect1 =  new Rect(10, 200, 200, 100);
+  var rectCon = new RectConstraint(rect1);
+  print(rectCon);
+  rectCon.setBox(rect1);
+  VerletPhysics2D.addConstraintToAll(rectCon, physics.particles);
+}
+
  function keyPressed()
   {
-    if(keyCode === RETURN)
-    {
-      for(i = 0; i<words.length; i++)
-      {
-       words[i].returnHome();
-       words[i].lock();
-      }
-    }
+    // if(keyCode === RETURN)
+    // {
+    //   for(i = 0; i<words.length; i++)
+    //   {
+    //   words[i].returnHome();
+    //   words[i].lock();
+    //   }
+    // }
+    rectTest();
   }
 
 
@@ -102,18 +119,23 @@ function makeWords()
   for(var i = 0; i<rawText.length; i++)
   {
     //split arrays into lines or sentences, work by line to make particles
-    var tempWords = split(rawText[i]," ");
-    var tempParts = split(allParts[i]," ");
-    print("string we are dealing with " + tempWords.length);
+    var tempWords = split(trim(rawText[i])," ");
+    var tempParts = split(trim(rawText[i])," ");
+    print("do the lengths match?")
+    print(tempWords.length);
+    print(tempParts.length);
     //loop to create particle-words using input text
     for(var j = 0; j<tempWords.length; j++)
     {
       var nextItem;
       //check to see if the next item is punctuation, set boolean to use for spacing
-      if(j<tempWords.length-1)//don't go out of bounds with the checking of next thing
+      if(j<tempParts.length-1)//don't go out of bounds with the checking of next thing
       {
-        var checker = match(allParts[j+1],"xx");
+        var checker = match(tempParts[j+1],target);
+        //print("matching " +tempParts[j+1]);
+        //print(target);
         if(checker !== null)//check for punctuation using the part of speech
+        //if statment returns match
         {
           noSpacer = true; //we won't put a space after this word
         }
@@ -127,7 +149,14 @@ function makeWords()
       //add to world
       physics.addParticle(w);
       //update x and y as needed (use boolean here later)
-      currentX+=textWidth(tempWords[j])+typesize/2;
+      if(noSpacer===true)
+      {
+        currentX+=textWidth(tempWords[j]);
+      }
+      else
+      {
+        currentX+=textWidth(tempWords[j])+12;
+      }
       if(currentX>=width-50)
       {
         //update the x and y postions
@@ -137,21 +166,18 @@ function makeWords()
       append(words, w);
     }
     
-    //debug stuff
-    print("LENGTH OF ARRAY NEW ARRAY" + words.length);
-    for(var g= 0; g<words.length; g++)
-    {
-      print(words[g].word)
-    }
+    // //debug stuff
+    // print("LENGTH OF ARRAY NEW ARRAY" + words.length);
+    // for(var g= 0; g<words.length; g++)
+    // {
+    //   print(words[g].word)
+    // }
     //add the array to the 2d array
-    print("append the new array, OUTER ARRAY IS");
+   // print("append the new array, OUTER ARRAY IS");
     append(allWords, words);
-    print(allWords.length)
+   // print(allWords.length)
     
   }
   
-  for( g= 0; g<words.length; g++)
-    {
-      print(allWords[5][g].word)
-    }
+
 }
