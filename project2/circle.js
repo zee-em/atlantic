@@ -1,4 +1,4 @@
-function Circle(x,y, size, xsp, ysp, thecolor)
+function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax)
 {
   this.x = x;
   this.y = y;
@@ -6,6 +6,9 @@ function Circle(x,y, size, xsp, ysp, thecolor)
   this.xsp = xsp;
   this.ysp = xsp;
   this.thecolor = thecolor;
+  this.ymin = ymin;
+  this.ymax = ymax;
+  
   // Override the display method
   this.show = function()
   {
@@ -15,13 +18,13 @@ function Circle(x,y, size, xsp, ysp, thecolor)
   
   this.move = function()
   {
-   // y+=ysp;
+    y+=ysp;
     x+=xsp;
     
-    // if(y>height-100 || y<200)
-    // {
-    //   ysp= ysp*-1;
-    // }
+    if(y>max|| y<min)
+    {
+      ysp= ysp*-1;
+    }
     
     if(x>width || x<0)
     {
@@ -32,6 +35,8 @@ function Circle(x,y, size, xsp, ysp, thecolor)
   this.upScroll = function()
   {
      y+=scrollspeed;
+     ymax+=scrollspeed;
+     ymin+=scrollspeed;
      this.move();
     // print("hello up");
   }
@@ -39,6 +44,8 @@ function Circle(x,y, size, xsp, ysp, thecolor)
   this.downScroll = function()
   {
      y-=scrollspeed;
+     ymax-=scrollspeed;
+     ymin-=scrollspeed;
      this.move();
      //print("hello down");
   }

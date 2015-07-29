@@ -17,13 +17,13 @@ function setup() {
    seagreen= color(150,255,220);
    for(var i =0; i<count; i++)
    {
-     var c = new Circle(random(1,width),random(200,300),10,random(1,7),random(1,7), pink);
+     var c = new Circle(random(1,width),random(200,300),10,random(1,7),random(.05,6), pink, 150,300);
      append(circles,c);
      
-     var b = new Circle(random(1,width),random(300,400),15,random(.5,4),random(.5,4),marineblue );
+     var b = new Circle(random(1,width),random(300,400),15,random(.5,4),random(.05,1),marineblue,275,425);
      append(bluecircles,b);
      
-     var g = new Circle(random(1,width),random(400,600),20,random(.05,3),random(.05,3),seagreen );
+     var g = new Circle(random(1,width),random(400,600),20,random(.05,3),random(.05,.5),seagreen,400,600 );
      append(greencircles,g);
    }
 
