@@ -10,7 +10,10 @@ function Zone(ymin, ymax, inhabitants)
     {
       return false;
     }
-    
+    else
+    {
+      return true;
+    }    
   }
   
   this.upZone = function()
