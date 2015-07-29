@@ -6,7 +6,7 @@ var marineblue;
 var seagreen;
 var bluecircles = [];
 var greencircles = [];
-var count =150;
+var count =350;
 var scrollspeed = 5;
 
 function setup() {
