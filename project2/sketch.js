@@ -44,9 +44,9 @@ function draw() {
   background(0);
   for(var i =0; i<zones.length; i++)
    { 
-     print("here");
+     //print("here");
      var checkDisplay = zones[i].testToDisplay();
-     print(checkDisplay);
+     //print(checkDisplay);
      if(checkDisplay === true)
      {
        for(var j = 0; j<zones[i].length; j++)
