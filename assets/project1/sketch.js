@@ -45,7 +45,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(800,600);
+  createCanvas(800,2000);
   textSize(typesize);
   noStroke();
   // Initialize the physics
@@ -127,21 +127,21 @@ function makeWords()
     //loop to create particle-words using input text
     for(var j = 0; j<tempWords.length; j++)
     {
-      var nextItem;
-      //check to see if the next item is punctuation, set boolean to use for spacing
-      if(j<tempParts.length-1)//don't go out of bounds with the checking of next thing
-      {
-        var checker = match(tempParts[j+1],target);
-        //print("matching " +tempParts[j+1]);
-        //print(target);
-        if(checker !== null)//check for punctuation using the part of speech
-        //if statment returns match
-        {
-          noSpacer = true; //we won't put a space after this word
-        }
-      }  
-      // Make a particle
-      //print(weightDict[tempParts[i]]);
+      // var nextItem;
+      // //check to see if the next item is punctuation, set boolean to use for spacing
+      // if(j<tempParts.length-1)//don't go out of bounds with the checking of next thing
+      // {
+      //   var checker = match(tempParts[j+1],target);
+      //   //print("matching " +tempParts[j+1]);
+      //   //print(target);
+      //   if(checker !== null)//check for punctuation using the part of speech
+      //   //if statment returns match
+      //   {
+      //     noSpacer = true; //we won't put a space after this word
+      //   }
+      // }  
+      // // Make a particle
+      // //print(weightDict[tempParts[i]]);
      var w = new Particle(new Vec2D(currentX,currentY), 5, tempWords[j],tempParts[j]);
       //add particle-word to array so we can get them out later to display
       //lock word in place
