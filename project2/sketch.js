@@ -74,7 +74,8 @@ function draw() {
        {
          zones[i].inhabitants[j].downScroll();
        }
-  }
+    }
+ }
 }
 
 function overCircle(x, y, diameter) {
