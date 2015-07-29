@@ -36,6 +36,8 @@ function setup() {
    append(zones,zonePink);
    append(zones,zoneBlue);
    append(zones,zoneGreen);
+   print(zones);
+   print(zones[1].inhabitants[0]);
 }
 
 function draw() {
