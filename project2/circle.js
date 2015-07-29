@@ -15,13 +15,13 @@ function Circle(x,y, size, xsp, ysp, thecolor)
   
   this.move = function()
   {
-    //y+=ysp;
+    y+=ysp;
     x+=xsp;
     
-    // if(y>height-100 || y<200)
-    // {
-    //   ysp= ysp*-1;
-    //   }
+    if(y>height-100 || y<200)
+     {
+       ysp= ysp*-1;
+     }
     
     if(x>width || x<0)
     {
