@@ -21,7 +21,7 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax)
     y+=ysp;
     x+=xsp;
     
-    if(y>ymax|| y<ymin)
+    if(y>ymax || y<ymin)
     {
       ysp= ysp*-1;
     }
