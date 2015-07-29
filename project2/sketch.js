@@ -49,6 +49,7 @@ function draw() {
      {
        for(var j = 0; j<zones[i].length; j++)
        {
+         print("should be displaying here");
          zones[i].inhabitants[j].show();
          zones[i].inhabitants[j].move();
        }
