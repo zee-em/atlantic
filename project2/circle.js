@@ -10,7 +10,7 @@ function Circle(x,y, size, xsp, ysp, thecolor)
   this.show = function()
   {
     fill(thecolor);
-    text(x,y,"herp");
+    text("herp",x,y);
   }
   
   this.move = function()
