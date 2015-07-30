@@ -61,8 +61,11 @@ function draw() {
   ellipse(100,300,25,25);
   if(mouseIsPressed)
   {
-    updateScroll();
-    checkOverWord();
+    var onScroll = updateScroll();
+    if(onScroll === false)
+    {
+      checkOverWord();
+    }
   }
 }
 
@@ -112,6 +115,7 @@ function updateScroll()
        }
        zones[i].upZone();
     }
+    return true;
   }
   if(overCircle(100,300,25) === true && mouseIsPressed)
   {
@@ -124,7 +128,9 @@ function updateScroll()
        }
        zones[i].downZone();
     }
+    return true;
  }
+  return false;
 }
 
 function overCircle(x, y, diameter) 
