@@ -17,6 +17,7 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
     text(word,x,y);
   }
   
+  // move the circle, keep in bounds
   this.move = function()
   {
     y+=ysp;
@@ -33,12 +34,13 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
     } 
   }
   
+  //update scroll and move everybody
   this.upScroll = function()
   {
      y+=scrollspeed;
      ymax+=scrollspeed;
      ymin+=scrollspeed;
-     this.move();
+     //this.move();
     // print("hello up");
   }
   
@@ -47,10 +49,11 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
      y-=scrollspeed;
      ymax-=scrollspeed;
      ymin-=scrollspeed;
-     this.move();
+     //this.move();
      //print("hello down");
   }
   
+  //check to see if we've hooked a word
   this.checkHook = function()
   {
     if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
