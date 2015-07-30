@@ -59,13 +59,21 @@ function draw() {
   fill(255);
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
+  updateScroll();
 }
 
-function mousePressed()
-{
-    checkOverWord();
-    updateScroll();
-}
+// function mousePressed()
+// {
+    
+//     if(overCircle(100,100,25) === true ||overCircle(100,300,25) === true)
+//     {
+//       updateScroll();
+//     }
+//     else
+//     {
+//       checkOverWord();
+//     }
+// }
 
 function checkOverWord()
 {
@@ -89,7 +97,7 @@ function checkOverWord()
 
 function updateScroll()
 {
-  if(overCircle(100,100,25) === true)
+  if(overCircle(100,100,25) === true && mousePressed)
   {
     //do something: add
    for(var i =0; i<zones.length; i++)
@@ -101,7 +109,7 @@ function updateScroll()
        zones[i].upZone();
     }
   }
-  if(overCircle(100,300,25) === true)
+  if(overCircle(100,300,25) === true && mousePressed)
   {
     //do something: subtract
     for(var i =0; i<zones.length; i++)
