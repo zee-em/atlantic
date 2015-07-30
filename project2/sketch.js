@@ -1,3 +1,10 @@
+//NEXT STEPS
+//integrate words, text of full chapter, with parts of speech determining zones
+//automate object creation and storage
+//improve swimmming behaviors, various sizes?
+//create springs thing with hooked words
+//implement word mixing (random?)
+
 var isOver = false;
 var yval = 200;
 var circles = [];
@@ -6,7 +13,7 @@ var marineblue;
 var seagreen;
 var bluecircles = [];
 var greencircles = [];
-var count =150;
+var count =250;
 var scrollspeed = 5;
 var zones = [];
 var textH = 12;
