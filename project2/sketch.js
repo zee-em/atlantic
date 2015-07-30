@@ -97,7 +97,7 @@ function checkOverWord()
 
 function updateScroll()
 {
-  if(overCircle(100,100,25) === true && mousePressed)
+  if(overCircle(100,100,25) === true && mouseIsPressed)
   {
     //do something: add
    for(var i =0; i<zones.length; i++)
@@ -109,7 +109,7 @@ function updateScroll()
        zones[i].upZone();
     }
   }
-  if(overCircle(100,300,25) === true && mousePressed)
+  if(overCircle(100,300,25) === true && mouseIsPressed)
   {
     //do something: subtract
     for(var i =0; i<zones.length; i++)
