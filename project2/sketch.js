@@ -6,7 +6,7 @@ var marineblue;
 var seagreen;
 var bluecircles = [];
 var greencircles = [];
-var count =250;
+var count =150;
 var scrollspeed = 5;
 var zones = [];
 var textH = 12;
@@ -63,7 +63,7 @@ function draw() {
 
 function mousePressed()
 {
-    //checkOverWord();
+    checkOverWord();
     updateScroll();
 }
 
