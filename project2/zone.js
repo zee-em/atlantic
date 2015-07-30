@@ -36,8 +36,8 @@ function Zone(yminZone, ymaxZone, inhabitants)
      ymaxZone+=scrollspeed;
      print(ymaxZone);
      yminZone+=scrollspeed;
-     print(yminZone);
-     print("hello up");
+     //print(yminZone);
+     //print("hello up");
   }
   
   //shifts zone down when scrolling
@@ -45,6 +45,6 @@ function Zone(yminZone, ymaxZone, inhabitants)
   {
      ymaxZone-=scrollspeed;
      yminZone-=scrollspeed;
-     print("hello down");
+     //print("hello down");
   }
 }
