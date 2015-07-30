@@ -1,12 +1,26 @@
-function Zone(ymin, ymax, inhabitants)
+function Zone(yminZone, ymaxZone, inhabitants)
 {
   this.inhabitants = inhabitants;
-  this.ymin = ymin;
-  this.ymax = ymax;
+  this.yminZone = yminZone;
+  this.ymaxZone = ymaxZone;
   
+  //checks to see if mouseY is in zone
+  this.checkZoneAndMouse = function()
+  {
+    if(mouseY>yminZone && mouseY<ymaxZone)
+    {
+      return true;
+    }
+    else
+    {
+      return false;
+    }
+  }
+  
+  //checks to see if the Zone is onscreen 
   this.testToDisplay = function()
   {
-    if(ymin>height || ymax <0)
+    if(yminZone>height || ymaxZone <0)
     {
       return false;
     }
@@ -16,17 +30,21 @@ function Zone(ymin, ymax, inhabitants)
     }    
   }
   
+  //shifts zone up when scrolling
   this.upZone = function()
   {
-     ymax+=scrollspeed;
-     ymin+=scrollspeed;
-    // print("hello up");
+     ymaxZone+=scrollspeed;
+     print(ymaxZone);
+     yminZone+=scrollspeed;
+     print(yminZone);
+     print("hello up");
   }
   
+  //shifts zone down when scrolling
   this.downZone = function()
   {
-     ymax-=scrollspeed;
-     ymin-=scrollspeed;
-     //print("hello down");
+     ymaxZone-=scrollspeed;
+     yminZone-=scrollspeed;
+     print("hello down");
   }
 }

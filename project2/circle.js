@@ -1,4 +1,4 @@
-function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax)
+function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
 {
   this.x = x;
   this.y = y;
@@ -8,12 +8,13 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax)
   this.thecolor = thecolor;
   this.ymin = ymin;
   this.ymax = ymax;
+  this.word = word;
   
   // Override the display method
   this.show = function()
   {
     fill(thecolor);
-    text("herp",x,y);
+    text(word,x,y);
   }
   
   this.move = function()
@@ -48,5 +49,19 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax)
      ymin-=scrollspeed;
      this.move();
      //print("hello down");
+  }
+  
+  this.checkHook = function()
+  {
+    if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
+    {
+      word = "HOOKED"
+      return true;
+    }
+    else 
+    {
+      return false;
+    }
+    
   }
 }
