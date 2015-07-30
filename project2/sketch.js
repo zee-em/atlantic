@@ -59,7 +59,11 @@ function draw() {
   fill(255);
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
-  updateScroll();
+  if(mouseIsPressed)
+  {
+    updateScroll();
+    checkOverWord();
+  }
 }
 
 // function mousePressed()
