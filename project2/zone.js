@@ -34,7 +34,7 @@ function Zone(yminZone, ymaxZone, inhabitants)
   this.upZone = function()
   {
      ymaxZone+=scrollspeed;
-     print(ymaxZone);
+     //print(ymaxZone);
      yminZone+=scrollspeed;
      //print(yminZone);
      //print("hello up");
