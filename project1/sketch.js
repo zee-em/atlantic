@@ -199,10 +199,11 @@ function makeZones()
   {
   //we start with an empty inhabitants array
    var inhabitantsArray = [];
+   print("this is partsData[i].name " + partsData[i].name);
    var tempName = partsData[i].name;
    var tempZone = new Zone(partsData[i].name,partsData[i].ymin,partsData[i].ymax,inhabitantsArray);
    
-   print(tempName);
+   print("this is temp name " + tempName);
   }
   //print(zones["xx"]);
 }
