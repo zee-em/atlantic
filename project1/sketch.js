@@ -199,10 +199,12 @@ function makeZones()
   {
   //we start with an empty inhabitants array
    var inhabitantsArray = [];
+   var tempName = partsData[i].name;
    var tempZone = new Zone(partsData[i].name,partsData[i].ymin,partsData[i].ymax,inhabitantsArray);
-   zones[partsData[i].name] = tempZone;
+   
+   print(tempName);
   }
-  print(zones["xx"]);
+  //print(zones["xx"]);
 }
 
 function makeWords()
