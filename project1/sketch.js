@@ -195,6 +195,7 @@ function loadZoneDataPts()
 
 function makeZones()
 {
+  print("this is partsData[4].name " + partsData[4].name);
   for(var i = 0; i<partsData.length; i++)
   {
   //we start with an empty inhabitants array
