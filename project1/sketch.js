@@ -37,7 +37,7 @@ function setup()
    noStroke();
    textSize(textH);
    loadZoneDataPts();
-   makeZones();
+   makeWords();
    
    pink = color(255,0,255);
    marineblue =color(0,200,255);
@@ -186,28 +186,16 @@ function loadZoneDataPts()
   {
     var partName = trim(partsList[i]);
     var cl = color(200,i*15,255);
+    var inhabitantsArray = [];
     var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5,cl);
+    var thisZone = new Zone(partsList[i], i*100-25,(i*100-25)+100,inhabitantsArray);
     partsData[partsList[i]] = thisPart;
+    append(zones, thisZone);
   }
-  //print(partsData["xx"]);
 }
 
 
-function makeZones()
-{
-  print("this is partsData[4].name " + partsData[4].name);
-  for(var i = 0; i<partsData.length; i++)
-  {
-  //we start with an empty inhabitants array
-   var inhabitantsArray = [];
-   print("this is partsData[i].name " + partsData[i].name);
-   var tempName = partsData[i].name;
-   var tempZone = new Zone(partsData[i].name,partsData[i].ymin,partsData[i].ymax,inhabitantsArray);
-   
-   print("this is temp name " + tempName);
-  }
-  //print(zones["xx"]);
-}
+
 
 function makeWords()
 {
@@ -223,7 +211,9 @@ function makeWords()
     //loop to create particle-words using input text
     for(var j =0; j<tempWords.length;j++)
     {
-      //make this is where we make the words
+      print(partsData[tempParts[i]].name);
+    // var c = new Circle(random(1,width),random(300,400),15,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
+    // append(bluecircles,b);
     }
   }
 }
