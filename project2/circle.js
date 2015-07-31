@@ -28,10 +28,16 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
       ysp= ysp*-1;
     }
     
-    if(x>width || x<0)
+    if(x>width+10)
     {
-      xsp= xsp*-1;
+      x = -10;
+      x+=xsp;
     } 
+     
+    if(x<-10)
+    {
+      x = width+10;
+    }
   }
   
   //update scroll and move everybody
