@@ -27,7 +27,6 @@ function preload() {
   rawText = loadStrings("assets/words.txt");
   allParts = loadStrings("assets/parts.txt");
   partsList = loadStrings("assets/partslookup.txt");
-  print(rawText.length + " " + allParts.length);
   
 }
 
@@ -200,6 +199,7 @@ function loadZoneDataPts()
 
 function makeWords()
 {
+  print(rawText.length + " " + allParts.length);
   //loop on the outside to get each line in the program
   for(var i = 0; i<rawText.length; i++)
   {
