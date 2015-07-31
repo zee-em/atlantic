@@ -23,8 +23,8 @@ var partsList =[];
 
 function preload() {
   //rawText = loadStrings("assets/words.txt");
-  allParts = loadStrings("assets/parts.txt");
-  //partsList = loadStrings("assets/partslookup.txt");
+  allParts = loadStrings("/assets/parts.txt");
+  partsList = loadStrings("/assets/partslookup.txt");
   
 }
 
