@@ -189,7 +189,7 @@ function loadZoneDataPts()
     var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5,cl);
     partsData[partsList[i]] = thisPart;
   }
-  print(partsData["xx"]);
+  //print(partsData["xx"]);
 }
 
 
