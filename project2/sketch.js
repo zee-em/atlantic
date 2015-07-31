@@ -23,8 +23,8 @@ var partsList =[];
 
 function preload() {
   //rawText = loadStrings("assets/words.txt");
-  //allParts = loadStrings("assets/parts.txt");
-  partsList = loadStrings("assets/partslookup.txt");
+  allParts = loadStrings("assets/parts.txt");
+  //partsList = loadStrings("assets/partslookup.txt");
   
 }
 
@@ -34,7 +34,7 @@ function setup()
    createCanvas(800,600);
    noStroke();
    textSize(textH);
-   loadZoneDataPts();
+   //loadZoneDataPts();
    
    pink = color(255,0,255);
    marineblue =color(0,200,255);
