@@ -1,8 +1,9 @@
-function Zone(yminZone, ymaxZone, inhabitants)
+function Zone(name, yminZone, ymaxZone, inhabitants)
 {
-  this.inhabitants = inhabitants;
+  this.name = name;
   this.yminZone = yminZone;
   this.ymaxZone = ymaxZone;
+  this.inhabitants = inhabitants;
   
   //checks to see if mouseY is in zone
   this.checkZoneAndMouse = function()

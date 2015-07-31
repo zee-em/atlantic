@@ -37,6 +37,7 @@ function setup()
    noStroke();
    textSize(textH);
    loadZoneDataPts();
+   makeZones();
    
    pink = color(255,0,255);
    marineblue =color(0,200,255);
@@ -59,9 +60,9 @@ function setup()
    var zoneBlue = new Zone(275,425,bluecircles);
    var zoneGreen = new Zone(400,600,greencircles);
    //add them to the zone array
-   append(zones,zonePink);
-   append(zones,zoneBlue);
-   append(zones,zoneGreen);
+  // append(zones,zonePink);
+  // append(zones,zoneBlue);
+  // append(zones,zoneGreen);
 }
 
 function draw() {
@@ -189,6 +190,18 @@ function loadZoneDataPts()
     partsData[partsList[i]] = thisPart;
   }
   print(partsData["xx"]);
+}
+
+
+function makeZones()
+{
+  for(var i = 0; i<partsData.length; i++)
+  {
+  //we start with an empty inhabitants array
+   var inhabitantsArray = [];
+   var tempZone = new Zone(partsData[i].name,partsData[i].ymin,partsData[i].ymax,inhabitantsArray);
+   append(zones,tempZone);
+  }
 }
 
 function makeWords()
