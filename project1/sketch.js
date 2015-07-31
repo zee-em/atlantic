@@ -20,10 +20,12 @@ var zones = [];
 var textH = 12;
 var partsData = [];
 var partsList =[];
+var rawText = [];
+var allParts =[];
 
 function preload() {
-  //rawText = loadStrings("assets/words.txt");
-  //allParts = loadStrings("assets/parts.txt");
+  rawText = loadStrings("assets/words.txt");
+  allParts = loadStrings("assets/parts.txt");
   partsList = loadStrings("assets/partslookup.txt");
   
 }
@@ -182,9 +184,27 @@ function loadZoneDataPts()
   for(var i = 0; i<partsList.length; i++)
   {
     var partName = trim(partsList[i]);
-    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5);
+    var cl = color(200,i*15,255);
+    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5,cl);
     partsData[partsList[i]] = thisPart;
-   
   }
-  print(partsData["xx"]);
+}
+
+function makeWords()
+{
+  //loop on the outside to get each line in the program
+  for(var i = 0; i<rawText.length; i++)
+  {
+    //split arrays into lines or sentences, work by line to make particles
+    var tempWords = split(trim(rawText[i])," ");
+    var tempParts = split(trim(rawText[i])," ");
+    print("do the lengths match?")
+    print(tempWords.length);
+    print(tempParts.length);
+    //loop to create particle-words using input text
+    for(var j =0; j<tempWords.length;j++)
+    {
+      //make this is where we make the words
+    }
+  }
 }

@@ -1,4 +1,4 @@
-function Part(name, ymin, ymax, size, minspeed, maxspeed)
+function Part(name, ymin, ymax, size, minspeed, maxspeed,cl)
 {
   print("hello");
   this.name = name;
@@ -7,4 +7,5 @@ function Part(name, ymin, ymax, size, minspeed, maxspeed)
   this.size = size;
   this.minspeed = minspeed;
   this.maxspeed = maxspeed;
+  this.cl = cl;
 }  
