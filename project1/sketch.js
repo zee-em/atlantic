@@ -214,8 +214,9 @@ function makeWords()
     {
       print(tempParts[j]);
       print(partsData[tempParts[j]].name);
-    // var c = new Circle(random(1,width),random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax),partsData[tempParts[j]].size,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
-    // append(bluecircles,b);
+      //x,y, size, xsp, ysp, thecolor, ymin, ymax, word
+     var c = new Circle(random(1,width),random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax),partsData[tempParts[j]].size,random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed),random(.005,.75),partsData[tempParts[j]].color,partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, tempWords[j]);
+     //append(bluecircles,b);
     }
   }
 }
