@@ -27,6 +27,7 @@ function preload() {
   rawText = loadStrings("assets/words.txt");
   allParts = loadStrings("assets/parts.txt");
   partsList = loadStrings("assets/partslookup.txt");
+  print(rawText.length + " " + allParts.length);
   
 }
 
@@ -213,7 +214,7 @@ function makeWords()
     {
       print(tempParts[j]);
       print(partsData[tempParts[j]].name);
-    // var c = new Circle(random(1,width),random(300,400),15,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
+    // var c = new Circle(random(1,width),random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax),partsData[tempParts[j]].size,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
     // append(bluecircles,b);
     }
   }
