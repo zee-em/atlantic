@@ -34,7 +34,7 @@ function setup()
    createCanvas(800,600);
    noStroke();
    textSize(textH);
-   //loadZoneDataPts();
+   loadZoneDataPts();
    
    pink = color(255,0,255);
    marineblue =color(0,200,255);
