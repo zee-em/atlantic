@@ -4,7 +4,7 @@ nn prp in nn xx nnp vbd nnp md vb in dt jj cc vb
 dt jj nn in dt nn xx prp vbz dt nn nnp vbp in vbg in dt 
 nn cc vbg dt nn xx wrb nnp vb prp 
 vbg jj in dt nn xx wrb prp vbz dt nn xx rb 
-nnp in prpxx nn xx wrb nnp vb prp rb vbg 
+nnp in prp xx nn xx wrb nnp vb prp rb vbg 
 in nn vbz xx cc vbg in dt jj in dt jj 
 nnp vb xx cc rb wrb prp xx nns vb jj dt jj nn in prp xx 
 in prp vbz dt jj jj nn to vb prp in 
