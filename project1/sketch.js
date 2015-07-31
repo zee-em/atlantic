@@ -204,7 +204,7 @@ function makeWords()
   {
     //split arrays into lines or sentences, work by line to make particles
     var tempWords = split(trim(rawText[i])," ");
-    var tempParts = split(trim(rawText[i])," ");
+    var tempParts = split(trim(allParts[i])," ");
     print("do the lengths match?")
     print(tempWords.length);
     print(tempParts.length);
