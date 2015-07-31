@@ -212,7 +212,7 @@ function makeWords()
     for(var j =0; j<tempWords.length;j++)
     {
       print(tempParts[j]);
-      print(partsData["xx"].name);
+      print(partsData[tempParts[j]].name);
     // var c = new Circle(random(1,width),random(300,400),15,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
     // append(bluecircles,b);
     }
