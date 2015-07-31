@@ -103,6 +103,7 @@ function loadZoneDataPts()
    
   }
   print(partsData["xx"]);
+  print(partsData["in"].ymax);
 }
 
 
