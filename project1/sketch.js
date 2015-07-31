@@ -38,10 +38,13 @@ var rawText;
 var allparts;
 var noSpacer = false;
 var target = "xx";
+var partsList = [];
+var partsData = [];
 
 function preload() {
   rawText = loadStrings("assets/words.txt");
   allParts = loadStrings("assets/parts.txt");
+  partsList = loadStrings("assets/partslookup.txt");
 }
 
 function setup() {
@@ -49,42 +52,55 @@ function setup() {
   textSize(typesize);
   noStroke();
   // Initialize the physics
-  physics=new VerletPhysics2D();
-  physics.setDrag(0.05);
-  physics.addBehavior(new GravityBehavior(new Vec2D(0,0.15)));
-// Set the world's bounding box
-  physics.setWorldBounds(new Rect(0,0,width,height));
-  makeWords();
+//   physics=new VerletPhysics2D();
+//   physics.setDrag(0.05);
+//   physics.addBehavior(new GravityBehavior(new Vec2D(0,0.15)));
+// // Set the world's bounding box
+//   physics.setWorldBounds(new Rect(0,0,width,height));
+//   makeWords();
 }
 
 function draw() {
 
-  // Update the physics world
-  physics.update();
-  background(175,206,219);
+//   // Update the physics world
+// //physics.update();
+//   background(175,206,219);
 
-  //step through the array to get the particles out for display
-  for(var i = 0; i<allWords.length; i++)
-  {
-    for(var j= 0; j<allWords[i].length; j++)
-    {
-      allWords[i][j].display();
-      //print(allWords[i][j].word)
-    }
-  }
+//   //step through the array to get the particles out for display
+//   for(var i = 0; i<allWords.length; i++)
+//   {
+//     for(var j= 0; j<allWords[i].length; j++)
+//     {
+//       allWords[i][j].display();
+//       //print(allWords[i][j].word)
+//     }
+//   }
 
 
-  //if mouse is pressed, make particles fall
-  if(mouseIsPressed)
-  {
-   for(i = 0; i<words.length; i++)
-    {
-       words[i].unlock();
-       // add a negative attraction force field around the new particle
-       physics.addBehavior(new AttractionBehavior(words[i], 20, -1.2, 0.01));
-    }
-  } 
+//   //if mouse is pressed, make particles fall
+//   if(mouseIsPressed)
+//   {
+//   for(i = 0; i<words.length; i++)
+//     {
+//       words[i].unlock();
+//       // add a negative attraction force field around the new particle
+//       physics.addBehavior(new AttractionBehavior(words[i], 20, -1.2, 0.01));
+//     }
+//   } 
   
+}
+
+
+function loadZoneDataPts()
+{
+  for(var i = 0; i<partsList.length; i++)
+  {
+    var partName = trim(partsList[i]);
+    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5);
+    partsData[partsList[i]] = thisPart;
+   
+  }
+  print(partsData["xx"]);
 }
 
 
@@ -108,7 +124,7 @@ function rectTest()
     //   words[i].lock();
     //   }
     // }
-    rectTest();
+    // rectTest();
   }
 
 
@@ -176,8 +192,9 @@ function makeWords()
    // print("append the new array, OUTER ARRAY IS");
     append(allWords, words);
    // print(allWords.length)
-    
   }
   
 
 }
+
+
