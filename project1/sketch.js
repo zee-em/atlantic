@@ -50,6 +50,8 @@ function preload() {
 function setup() {
   createCanvas(800,2000);
   textSize(typesize);
+  text("hello world",10,10);
+  loadZoneDataPts();
   noStroke();
   // Initialize the physics
 //   physics=new VerletPhysics2D();
