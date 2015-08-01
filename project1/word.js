@@ -11,7 +11,8 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   this.word = word;
   this.lineref = lineref;
   this.wordpos = wordpos;
-  this.isHooked = false;
+  this.isHooked;
+  isHooked = false;
   
   // Override the display method
   this.show = function()
