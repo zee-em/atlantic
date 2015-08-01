@@ -76,7 +76,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
     if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
     {
       word = "HOOKED"
-      isHooked = true;
+      //isHooked = true;
       theColor = color(255,0,0);
       return true;
     }
