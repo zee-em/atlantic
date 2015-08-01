@@ -92,7 +92,7 @@ function checkOverWord()
 function updateScroll()
 {
   //if we are using the scroll button
-  if(overCircle(100,100,25) === true && mouseIsPressed && scrollPos < lowEnd)
+  if(overCircle(100,100,25) === true && mouseIsPressed)
   {
     //do something: add to the Y pos of every object to shift down
    for(var i =0; i<zones.length; i++)
@@ -110,7 +110,7 @@ function updateScroll()
   }
   
   //if we are using the scroll button
-  if(overCircle(100,300,25) === true && mouseIsPressed && scrollPos > 0)
+  if(overCircle(100,300,25) === true && mouseIsPressed)
   {
     //do something: subtract from the Y pos of every object to shift up
     for(var i =0; i<zones.length; i++)
