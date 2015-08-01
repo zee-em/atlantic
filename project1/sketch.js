@@ -39,9 +39,9 @@ function setup()
    loadZoneDataPts();
    makeWords();
    
-   pink = color(255,0,255);
-   marineblue =color(0,200,255);
-   seagreen= color(150,255,220);
+  // pink = color(255,0,255);
+  // marineblue =color(0,200,255);
+  // seagreen= color(150,255,220);
   
   // //here we create the arrays of objects 
   // for(var i =0; i<count; i++)
@@ -67,7 +67,7 @@ function setup()
 
 function draw() {
   background(0);
-  //displayZones();
+  displayZones();
   fill(255);
   //these are the scroll buttons
   ellipse(100,100,25,25);
@@ -230,6 +230,7 @@ function makeWords()
       partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, 
       //word
       tempWords[j]); //end constructor
+      //add obj to the appropriate zone array
       for(var k = 0; k< zones.length; k++)
       {
         print("is zones name " +zones[k].name);
