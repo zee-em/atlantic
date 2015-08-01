@@ -106,6 +106,7 @@ function updateScroll()
     }
     //we did it!
     scrollPos+=scrollspeed;
+    print("scroll: " + scrollPos);
     return true;
   }
   
@@ -124,6 +125,7 @@ function updateScroll()
     }
     //we did it! :)
     scrollPos-=scrollSpeed;
+    print("scroll: " + scrollPos);
     return true;
  }
   //not on scroll button
