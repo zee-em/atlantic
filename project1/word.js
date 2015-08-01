@@ -1,4 +1,4 @@
-function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
+function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
 {
   this.x = x;
   this.y = y;
@@ -47,7 +47,7 @@ function Circle(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
      ymax+=scrollspeed;
      ymin+=scrollspeed;
      //this.move();
-    // print("hello up");
+    // print("sup up");
   }
   
   this.downScroll = function()

@@ -43,22 +43,22 @@ function setup()
    marineblue =color(0,200,255);
    seagreen= color(150,255,220);
   
-   //here we create the arrays of objects 
-   for(var i =0; i<count; i++)
-   {
-     var c = new Circle(random(1,width),random(200,300),10,random(1,7)-3,random(.005,1), pink, 150,300, "herp");
-     append(circles,c);
+  // //here we create the arrays of objects 
+  // for(var i =0; i<count; i++)
+  // {
+  //   var c = new Word(random(1,width),random(200,300),10,random(1,7)-3,random(.005,1), pink, 150,300, "herp");
+  //   append(circles,c);
      
-     var b = new Circle(random(1,width),random(300,400),15,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
-     append(bluecircles,b);
+  //   var b = new Word(random(1,width),random(300,400),15,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
+  //   append(bluecircles,b);
      
-     var g = new Circle(random(1,width),random(400,600),20,random(.05,1)-.05,random(.005,.5),seagreen,400,600, "pants" );
-     append(greencircles,g);
-   }
-   //we create the corresponding zone objects
-   var zonePink = new Zone(150,300,circles);
-   var zoneBlue = new Zone(275,425,bluecircles);
-   var zoneGreen = new Zone(400,600,greencircles);
+  //   var g = new Word(random(1,width),random(400,600),20,random(.05,1)-.05,random(.005,.5),seagreen,400,600, "pants" );
+  //   append(greencircles,g);
+  // }
+  // //we create the corresponding zone objects
+  // var zonePink = new Zone(150,300,circles);
+  // var zoneBlue = new Zone(275,425,bluecircles);
+  // var zoneGreen = new Zone(400,600,greencircles);
    //add them to the zone array
   // append(zones,zonePink);
   // append(zones,zoneBlue);
@@ -141,7 +141,7 @@ function updateScroll()
        //now update the zone y max and min
        zones[i].downZone();
     }
-    //we did it!
+    //we did it! :)
     return true;
  }
   //not on scroll button
@@ -182,6 +182,7 @@ function displayZones()
 
 function loadZoneDataPts()
 {
+  //use the list of parts to make parts objects
   for(var i = 0; i<partsList.length; i++)
   {
     var partName = trim(partsList[i]);
@@ -190,11 +191,10 @@ function loadZoneDataPts()
     var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5,cl);
     var thisZone = new Zone(partsList[i], i*100-25,(i*100-25)+100,inhabitantsArray);
     partsData[partsList[i]] = thisPart;
+    //partsData["xx"] = obj;
     append(zones, thisZone);
   }
 }
-
-
 
 
 function makeWords()
@@ -209,14 +209,39 @@ function makeWords()
     print("do the lengths match?")
     print(tempWords.length);
     print(tempParts.length);
-    //loop to create particle-words using input text
+    //loop to create words using input text
     for(var j =0; j<tempWords.length;j++)
     {
       print(tempParts[j]);
       print(partsData[tempParts[j]].name);
       //x,y, size, xsp, ysp, thecolor, ymin, ymax, word
-     var c = new Circle(random(1,width),random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax),partsData[tempParts[j]].size,random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed),random(.005,.75),partsData[tempParts[j]].color,partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, tempWords[j]);
-     //append(bluecircles,b);
+      var w = new Word(
+      //x,y
+      random(1,width),random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax),
+      //size
+      partsData[tempParts[j]].size,
+      //speed range x
+      random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed),
+      //speed range y
+      random(.005,.75),
+      //color
+      partsData[tempParts[j]].color,
+      //y bounds
+      partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, 
+      //word
+      tempWords[j]); //end constructor
+      for(var k = 0; k< zones.length; k++)
+      {
+        if(tempParts[j]===zones[k].name)
+        {
+          append(zones[k].inhabitants,w);
+        }
+        else
+        {
+          print("dropped a word, oops!");
+        }
+      }
+      
     }
   }
 }
