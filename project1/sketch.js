@@ -237,10 +237,7 @@ function makeWords()
         if(tempParts[j]===zones[k].name)
         {
           append(zones[k].inhabitants,w);
-        }
-        else
-        {
-          print("dropped a word, oops!");
+          print("got one!")
         }
       }
       
