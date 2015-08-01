@@ -102,7 +102,7 @@ function updateScroll()
          zones[i].inhabitants[j].downScroll();
        }
        //now update the zone y max and min
-       zones[i].upZone();
+       zones[i].downZone();
     }
     //we did it!
     scrollPos+=scrollspeed;
@@ -120,7 +120,7 @@ function updateScroll()
          zones[i].inhabitants[j].upScroll();
        }
        //now update the zone y max and min
-       zones[i].downZone();
+       zones[i].upZone();
     }
     //we did it! :)
     scrollPos-=scrollSpeed;
