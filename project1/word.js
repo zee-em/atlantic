@@ -26,8 +26,8 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   {
     if(isHooked)
     {
-      x=mouseX;
-      y=mouseY;
+      //do something different for this word
+      
     }
     else
     {
