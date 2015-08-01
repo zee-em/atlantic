@@ -204,7 +204,7 @@ function makeWords()
       //speed range y
       random(.005,.75),
       //color
-      partsData[tempParts[j]].color,
+      partsData[tempParts[j]].cl,
       //y bounds
       partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, 
       //word,  lineref, wordpos
