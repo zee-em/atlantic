@@ -124,7 +124,7 @@ function updateScroll()
        zones[i].upZone();
     }
     //we did it! :)
-    scrollPos-=scrollSpeed;
+    scrollPos-=scrollspeed;
     print("scroll: " + scrollPos);
     return true;
  }
