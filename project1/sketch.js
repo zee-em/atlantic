@@ -25,6 +25,8 @@ var partsList =[];
 var rawText = [];
 var allParts =[];
 var lowEnd;
+var currentBottom; // based on lowEnd calc
+var scrollPos = 0; // compare against top / bottom to start or stop scroll (starts at top)
 
 function preload() {
   rawText = loadStrings("assets/words.txt");
@@ -41,31 +43,6 @@ function setup()
    textSize(textH);
    loadZoneDataPts();
    makeWords();
-   
-  // pink = color(255,0,255);
-  // marineblue =color(0,200,255);
-  // seagreen= color(150,255,220);
-  
-  // //here we create the arrays of objects 
-  // for(var i =0; i<count; i++)
-  // {
-  //   var c = new Word(random(1,width),random(200,300),10,random(1,7)-3,random(.005,1), pink, 150,300, "herp");
-  //   append(circles,c);
-     
-  //   var b = new Word(random(1,width),random(300,400),15,random(.5,1)-.5,random(.005,.75),marineblue,275,425, "derp");
-  //   append(bluecircles,b);
-     
-  //   var g = new Word(random(1,width),random(400,600),20,random(.05,1)-.05,random(.005,.5),seagreen,400,600, "pants" );
-  //   append(greencircles,g);
-  // }
-  // //we create the corresponding zone objects
-  // var zonePink = new Zone(150,300,circles);
-  // var zoneBlue = new Zone(275,425,bluecircles);
-  // var zoneGreen = new Zone(400,600,greencircles);
-   //add them to the zone array
-  // append(zones,zonePink);
-  // append(zones,zoneBlue);
-  // append(zones,zoneGreen);
 }
 
 function draw() {
@@ -99,7 +76,7 @@ function checkOverWord()
      { 
        //if the zone is on screen, check if the mouse is in that zone
        var intersectZone = zones[i].checkZoneAndMouse();
-       print("zone intersect " + intersectZone)
+       //print("zone intersect " + intersectZone)
        if(intersectZone === true)
        {
          //then check for a intersection with this set of objecys
@@ -115,7 +92,7 @@ function checkOverWord()
 function updateScroll()
 {
   //if we are using the scroll button
-  if(overCircle(100,100,25) === true && mouseIsPressed)
+  if(overCircle(100,100,25) === true && mouseIsPressed && scrollPos > lowEnd)
   {
     //do something: add to the Y pos of every object to shift up
    for(var i =0; i<zones.length; i++)
@@ -128,11 +105,12 @@ function updateScroll()
        zones[i].upZone();
     }
     //we did it!
+    scrollPos+=scrollspeed;
     return true;
   }
   
   //if we are using the scroll button
-  if(overCircle(100,300,25) === true && mouseIsPressed)
+  if(overCircle(100,300,25) === true && mouseIsPressed && scrollPos < 0)
   {
     //do something: subtract from the Y pos of every object to shift down
     for(var i =0; i<zones.length; i++)
@@ -145,6 +123,7 @@ function updateScroll()
        zones[i].downZone();
     }
     //we did it! :)
+    scrollPos-=scrollSpeed;
     return true;
  }
   //not on scroll button
@@ -198,13 +177,13 @@ function loadZoneDataPts()
     append(zones, thisZone);
     lowEnd = (i*100-25)+100;
   }
-  print("THIS IS LOW END " + lowEnd);
+  //print("THIS IS LOW END " + lowEnd);
 }
 
 
 function makeWords()
 {
-  print(rawText.length + " " + allParts.length);
+  //print(rawText.length + " " + allParts.length);
   //loop on the outside to get each line in the program
   for(var i = 0; i<rawText.length; i++)
   {
@@ -218,7 +197,7 @@ function makeWords()
     for(var j =0; j<tempWords.length;j++)
     {
       //print(tempParts[j]);
-     // print(partsData[tempParts[j]].name);
+      //print(partsData[tempParts[j]].name);
       //x,y, size, xsp, ysp, thecolor, ymin, ymax, word
       var w = new Word(
       //x,y
