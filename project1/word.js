@@ -1,4 +1,4 @@
-function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
+function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
 {
   this.x = x;
   this.y = y;
@@ -9,6 +9,9 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
   this.ymin = ymin;
   this.ymax = ymax;
   this.word = word;
+  this.lineref = lineref;
+  this.wordpos = wordpos;
+  this.isHooked = false;
   
   // Override the display method
   this.show = function()
@@ -20,23 +23,30 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
   // move the circle, keep in bounds
   this.move = function()
   {
-    y+=ysp;
-    x+=xsp;
-    
-    if(y>ymax || y<ymin)
+    if(isHooked)
     {
-      ysp= ysp*-1;
+      x=mouseX;
+      y=mouseY;
     }
+    else
+    {
+     y+=ysp;
+     x+=xsp;
+     if(y>ymax || y<ymin)
+     {
+      ysp= ysp*-1;
+      }
     
-    if(x>width+10)
-    {
-      x = -10;
-      x+=xsp;
-    } 
+      if(x>width+10)
+      {
+        x = -10;
+        x+=xsp;
+      } 
      
-    if(x<-10)
-    {
-      x = width+10;
+     if(x<-10)
+      {
+       x = width+10;
+      }
     }
   }
   
@@ -65,6 +75,8 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word)
     if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
     {
       word = "HOOKED"
+      isHooked = true;
+      theColor = color(255,0,0);
       return true;
     }
     else 

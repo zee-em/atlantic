@@ -1,7 +1,7 @@
 //NEXT STEPS
-//parts of speech determine zones; create key value pairs
-//integrate words, text of full chapter parts of speech determining zones
-//automate object creation and storage
+//parts of speech determine zones; create key value pairs DONE
+//integrate words, text of full chapter parts of speech determining zones DONE
+//automate object creation and storage DONE
 //improve swimmming behaviors, various sizes?
 //create springs thing with hooked words
 //implement word mixing (random?)
@@ -22,6 +22,7 @@ var partsData = [];
 var partsList =[];
 var rawText = [];
 var allParts =[];
+var lowEnd;
 
 function preload() {
   rawText = loadStrings("assets/words.txt");
@@ -193,7 +194,9 @@ function loadZoneDataPts()
     partsData[partsList[i]] = thisPart;
     //partsData["xx"] = obj;
     append(zones, thisZone);
+    //lowEnd = (i*100-25)+100;
   }
+  
 }
 
 
@@ -228,8 +231,8 @@ function makeWords()
       partsData[tempParts[j]].color,
       //y bounds
       partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, 
-      //word
-      tempWords[j]); //end constructor
+      //word,  lineref, wordpos
+      tempWords[j],i,j); //end constructor
       //add obj to the appropriate zone array
       for(var k = 0; k< zones.length; k++)
       {
