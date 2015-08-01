@@ -232,6 +232,8 @@ function makeWords()
       tempWords[j]); //end constructor
       for(var k = 0; k< zones.length; k++)
       {
+        print("is zones name " +zones[k].name);
+        print("is the current part " +tempParts[j]);
         if(tempParts[j]===zones[k].name)
         {
           append(zones[k].inhabitants,w);
