@@ -5,7 +5,7 @@
 //improve swimmming behaviors, various sizes?
 //create springs thing with hooked words
 //implement word mixing (random?)
-//fix scrolling
+//fix scrolling DONE
 
 
 var isOver = false;
@@ -106,7 +106,7 @@ function updateScroll()
     }
     //we did it!
     scrollPos+=scrollspeed;
-    print("scroll: " + scrollPos);
+    //print("scroll: " + scrollPos);
     return true;
   }
   
@@ -125,7 +125,7 @@ function updateScroll()
     }
     //we did it! :)
     scrollPos-=scrollspeed;
-    print("scroll: " + scrollPos);
+    //print("scroll: " + scrollPos);
     return true;
  }
   //not on scroll button
