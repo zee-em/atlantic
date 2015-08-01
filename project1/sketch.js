@@ -10,12 +10,6 @@
 
 var isOver = false;
 var yval = 200;
-var circles = [];
-var pink;
-var marineblue;
-var seagreen;
-var bluecircles = [];
-var greencircles = [];
 var count =250;
 var scrollspeed = 5;
 var zones = [];
@@ -25,7 +19,6 @@ var partsList =[];
 var rawText = [];
 var allParts =[];
 var lowEnd;
-var currentBottom; // based on lowEnd calc
 var scrollPos = 0; // compare against top / bottom to start or stop scroll (starts at top)
 
 function preload() {

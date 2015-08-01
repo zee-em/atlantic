@@ -14,7 +14,6 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   this.isHooked;
   isHooked = false;
   
-  // Override the display method
   this.show = function()
   {
     fill(thecolor);
@@ -70,12 +69,6 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
     {
       word = "HOOKED"
       thecolor = color(255,0,0);
-      return true;
     }
-    else 
-    {
-      return false;
-    }
-    
   }
 }
