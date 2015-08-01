@@ -24,13 +24,13 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   // move the circle, keep in bounds
   this.move = function()
   {
-    if(isHooked)
-    {
-      //do something different for this word
+    // if(isHooked)
+    // {
+    //   //do something different for this word
       
-    }
-    else
-    {
+    // }
+    // else
+    // {
      y+=ysp;
      x+=xsp;
      if(y>ymax || y<ymin)
@@ -48,7 +48,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
       {
        x = width+10;
       }
-    }
+    //}
   }
   
   //update scroll and move everybody
@@ -77,7 +77,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
     {
       word = "HOOKED"
       //isHooked = true;
-      theColor = color(255,0,0);
+      //theColor = color(255,0,0);
       return true;
     }
     else 
