@@ -94,12 +94,12 @@ function updateScroll()
   //if we are using the scroll button
   if(overCircle(100,100,25) === true && mouseIsPressed && scrollPos < lowEnd)
   {
-    //do something: add to the Y pos of every object to shift up
+    //do something: add to the Y pos of every object to shift down
    for(var i =0; i<zones.length; i++)
     {
       for(var j = 0; j<zones[i].inhabitants.length; j++)
        {
-         zones[i].inhabitants[j].upScroll();
+         zones[i].inhabitants[j].downScroll();
        }
        //now update the zone y max and min
        zones[i].upZone();
@@ -112,12 +112,12 @@ function updateScroll()
   //if we are using the scroll button
   if(overCircle(100,300,25) === true && mouseIsPressed && scrollPos > 0)
   {
-    //do something: subtract from the Y pos of every object to shift down
+    //do something: subtract from the Y pos of every object to shift up
     for(var i =0; i<zones.length; i++)
     {
       for(var j = 0; j<zones[i].inhabitants.length; j++)
        {
-         zones[i].inhabitants[j].downScroll();
+         zones[i].inhabitants[j].upScroll();
        }
        //now update the zone y max and min
        zones[i].downZone();
