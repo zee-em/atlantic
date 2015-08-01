@@ -5,6 +5,8 @@
 //improve swimmming behaviors, various sizes?
 //create springs thing with hooked words
 //implement word mixing (random?)
+//fix scrolling
+
 
 var isOver = false;
 var yval = 200;
@@ -194,9 +196,9 @@ function loadZoneDataPts()
     partsData[partsList[i]] = thisPart;
     //partsData["xx"] = obj;
     append(zones, thisZone);
-    //lowEnd = (i*100-25)+100;
+    lowEnd = (i*100-25)+100;
   }
-  
+  print("THIS IS LOW END " + lowEnd);
 }
 
 
@@ -209,14 +211,14 @@ function makeWords()
     //split arrays into lines or sentences, work by line to make particles
     var tempWords = split(trim(rawText[i])," ");
     var tempParts = split(trim(allParts[i])," ");
-    print("do the lengths match?")
-    print(tempWords.length);
-    print(tempParts.length);
+    // print("do the lengths match?")
+    // print(tempWords.length);
+    //print(tempParts.length);
     //loop to create words using input text
     for(var j =0; j<tempWords.length;j++)
     {
-      print(tempParts[j]);
-      print(partsData[tempParts[j]].name);
+      //print(tempParts[j]);
+     // print(partsData[tempParts[j]].name);
       //x,y, size, xsp, ysp, thecolor, ymin, ymax, word
       var w = new Word(
       //x,y
@@ -236,12 +238,12 @@ function makeWords()
       //add obj to the appropriate zone array
       for(var k = 0; k< zones.length; k++)
       {
-        print("is zones name " +zones[k].name);
-        print("is the current part " +tempParts[j]);
+        //print("is zones name " +zones[k].name);
+        //print("is the current part " +tempParts[j]);
         if(tempParts[j]===zones[k].name)
         {
           append(zones[k].inhabitants,w);
-          print("got one!")
+          //print("got one!")
         }
       }
       
