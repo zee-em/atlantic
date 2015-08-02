@@ -13,6 +13,7 @@ var yval = 200;
 var count =250;
 var scrollspeed = 5;
 var zones = [];
+var textH = 12;
 var partsData = [];
 var partsList =[];
 var rawText = [];
@@ -33,6 +34,7 @@ function setup()
 {
    createCanvas(800,600);
    noStroke();
+   textSize(textH);
    loadZoneDataPts();
    makeWords();
 }
