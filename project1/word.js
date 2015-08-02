@@ -24,7 +24,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   // move the circle, keep in bounds
   this.move = function()
   {
-    if(isHooked)
+    if(isHooked === true)
     {
       x=getMouseX();
       y=getMouseY();
@@ -51,14 +51,12 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
     }
   }
   
-  //update scroll and move everybody
+  //update scroll and move 
   this.upScroll = function()
   {
      y+=scrollspeed;
      ymax+=scrollspeed;
      ymin+=scrollspeed;
-     //this.move();
-    // print("sup up");
   }
   
   this.downScroll = function()
@@ -66,8 +64,6 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
      y-=scrollspeed;
      ymax-=scrollspeed;
      ymin-=scrollspeed;
-     //this.move();
-     //print("hello down");
   }
   
   //check to see if we've hooked a word
@@ -75,9 +71,9 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   {
     if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
     {
-      word = "HOOKED"
       thecolor = color(255,0,0);
       isHooked = true;
+      word = "HOOKED"
     }
   }
 }
