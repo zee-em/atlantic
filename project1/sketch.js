@@ -167,7 +167,7 @@ function loadZoneDataPts()
     var partName = trim(partsList[i]);
     var cl = color(i*8,i*12,255);
     var inhabitantsArray = [];
-    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,i+8,.25,5,cl);
+    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,i+100,.25,5,cl);
     var thisZone = new Zone(partsList[i], i*100-25,(i*100-25)+100,inhabitantsArray);
     partsData[partsList[i]] = thisPart;
     //partsData["xx"] = obj;
