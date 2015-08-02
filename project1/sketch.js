@@ -41,7 +41,7 @@ function setup()
 
 function draw() {
   bgColor= color(scrollPos*14,scrollPos*14,scrollPos*14);
-  background(0);
+  background(bgColor);
   displayZones();
   fill(255);
   //these are the scroll buttons
