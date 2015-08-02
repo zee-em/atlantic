@@ -17,6 +17,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   this.show = function()
   {
     fill(thecolor);
+    textSize(size);
     text(word,x,y);
   }
   
