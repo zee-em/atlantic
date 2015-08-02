@@ -13,7 +13,6 @@ var yval = 200;
 var count =250;
 var scrollspeed = 5;
 var zones = [];
-var textH = 12;
 var partsData = [];
 var partsList =[];
 var rawText = [];
@@ -34,7 +33,6 @@ function setup()
 {
    createCanvas(800,600);
    noStroke();
-   textSize(textH);
    loadZoneDataPts();
    makeWords();
 }
@@ -172,6 +170,7 @@ function loadZoneDataPts()
     partsData[partsList[i]] = thisPart;
     //partsData["xx"] = obj;
     append(zones, thisZone);
+    //this var is the max we can scroll, given the number and width of the zones
     lowEnd = (i*100-25)+100;
   }
 }
