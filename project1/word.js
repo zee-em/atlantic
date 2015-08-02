@@ -1,4 +1,4 @@
-function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
+function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos, isHooked)
 {
   
   this.x = x;
@@ -18,8 +18,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   this.lineref = lineref;
   //location in line
   this.wordpos = wordpos;
-  this.isHooked;
-  isHooked = false;
+  this.isHooked = isHooked;
   
   this.show = function()
   {
@@ -31,13 +30,6 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
   // move the circle, keep in bounds
   this.move = function()
   {
-    if(isHooked === true)
-    {
-      x=getMouseX();
-      y=getMouseY();
-    }
-    if(isHooked === false)
-    {
      y+=ysp;
      x+=xsp;
      if(y>ymax || y<ymin)
@@ -55,7 +47,6 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
       {
        x = width+10;
       }
-    }
   }
   
   //update scroll and move 
@@ -79,9 +70,11 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
     if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
     {
       thecolor = color(255,0,0);
-      isHooked = true;
-      print("isHooked " + isHooked + " for " + word);
-      word = "HOOKED";
+      return true;
+      
+      // isHooked = true;
+      // print("isHooked " + isHooked + " for " + word);
+      // word = "HOOKED";
     }
   }
 }

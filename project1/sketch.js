@@ -2,18 +2,24 @@
 //parts of speech determine zones; create key value pairs DONE
 //integrate words, text of full chapter parts of speech determining zones DONE
 //automate object creation and storage DONE
-//improve swimmming behaviors, various sizes?
-//create springs thing with hooked words
-//implement word mixing (random?)
 //fix scrolling DONE
 
+//add defined data fields for parts (size, color, etc) 
+//create springs thing with hooked words
+//implement word mixing (random?)
 
+//improve swimmming behavior
+//fix text processing problems
+//design page 
+
+var hookedWords = [];
+var hookedVal = false;
 var isOver = false;
 var yval = 200;
 var count =250;
 var scrollspeed = 5;
 var zones = [];
-var textH = 12;
+var textH = 14;
 var partsData = [];
 var partsList =[];
 var rawText = [];
@@ -77,7 +83,15 @@ function checkOverWord()
          //then check for a intersection with this set of objecys
          for(var j = 0; j<zones[i].inhabitants.length; j++)
          {
-           zones[i].inhabitants[j].checkHook();
+           if(zones[i].inhabitants[j].checkHook()=== true)
+           {
+             
+             append(hookedWords, zones[i].inhabitants[j]);
+             print(hookedWords);
+             print(zones[i].inhabitants[j]);
+             
+             
+           }
          }
       }
      }
@@ -221,7 +235,8 @@ function makeWords()
       //y bounds
       partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, 
       //word,  lineref, wordpos
-      tempWords[j],i,j); //end constructor
+      tempWords[j],i,j,
+      hookedVal); //end constructor
       //add obj to the appropriate zone array
       for(var k = 0; k< zones.length; k++)
       {
