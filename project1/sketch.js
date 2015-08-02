@@ -53,10 +53,12 @@ function draw() {
   //these are the scroll buttons
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
+
 }
 
 function mouseClicked()
 {
+   print("here i am j.h.");
     var onScroll = updateScroll();
     //only check for words if we weren't pressing to scroll 
     if(onScroll === false)
@@ -83,8 +85,9 @@ function checkOverWord()
          {
            if(zones[i].inhabitants[j].checkHook() === true)
            {
-              append(hookedWords,zones[i].inhabitants[j]);
+              print("hooked one");
            }
+             
          }
         }
       }
@@ -108,7 +111,7 @@ function updateScroll()
     }
     //we did it!
     scrollPos+=scrollspeed;
-    //print("scroll: " + scrollPos);
+    print("scroll: " + scrollPos);
     return true;
   }
   
