@@ -1,15 +1,22 @@
 function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
 {
+  
   this.x = x;
   this.y = y;
   this.size;
+  //x and y spped
   this.xsp = xsp;
   this.ysp = xsp;
+  //color
   this.thecolor = thecolor;
+  //zone limits
   this.ymin = ymin;
   this.ymax = ymax;
+  //word
   this.word = word;
+  //line reference
   this.lineref = lineref;
+  //location in line
   this.wordpos = wordpos;
   this.isHooked;
   isHooked = false;
@@ -29,7 +36,7 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
       x=getMouseX();
       y=getMouseY();
     }
-    else
+    if(isHooked === false)
     {
      y+=ysp;
      x+=xsp;
@@ -73,7 +80,8 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos)
     {
       thecolor = color(255,0,0);
       isHooked = true;
-      word = "HOOKED"
+      print("isHooked " + isHooked + " for " + word);
+      word = "HOOKED";
     }
   }
 }
