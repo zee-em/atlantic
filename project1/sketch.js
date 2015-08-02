@@ -53,19 +53,17 @@ function draw() {
   //these are the scroll buttons
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
-  //if mouse is down, we might be scrolling or fishing
-  if(mouseIsPressed)
-  {
-    //call updateScroll and return a boolean if it happened
+}
+
+function mouseClicked()
+{
     var onScroll = updateScroll();
     //only check for words if we weren't pressing to scroll 
     if(onScroll === false)
     {
       checkOverWord();
     }
-  }
 }
-
 
 function checkOverWord()
 {
@@ -83,8 +81,10 @@ function checkOverWord()
          //then check for a intersection with this set of objecys
          for(var j = 0; j<zones[i].inhabitants.length; j++)
          {
-           zones[i].inhabitants[j].checkHook();
-             
+           if(zones[i].inhabitants[j].checkHook() === true)
+           {
+              append(hookedWords,zones[i].inhabitants[j]);
+           }
          }
         }
       }

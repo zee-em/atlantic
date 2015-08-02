@@ -70,9 +70,9 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos,
     if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
     {
       thecolor = color(255,0,0);
+      //isHooked = true;
       return true;
       
-      // isHooked = true;
       // print("isHooked " + isHooked + " for " + word);
       // word = "HOOKED";
     }
