@@ -43,7 +43,7 @@ function draw() {
   bgColor= color(255-scrollPos/14,255-scrollPos/14,255);
   background(bgColor);
   displayZones();
-  fill(255);
+  fill(0,255,0);
   //these are the scroll buttons
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
