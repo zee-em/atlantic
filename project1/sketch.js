@@ -40,10 +40,10 @@ function setup()
 }
 
 function draw() {
-  bgColor= color(220-scrollPos/14,240-scrollPos/14,255);
+  bgColor= color(220-scrollPos/14,240-scrollPos/14,240-scrollPos/30);
   background(bgColor);
   displayZones();
-  fill(0,255,0);
+  fill(255);
   //these are the scroll buttons
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
@@ -87,7 +87,7 @@ function checkOverWord()
 function updateScroll()
 {
   //if we are using the scroll button
-  if(overCircle(100,100,25) === true && mouseIsPressed && scrollPos < lowEnd)
+  if(overCircle(100,300,25) === true && mouseIsPressed && scrollPos < lowEnd)
   {
     //do something: add to the Y pos of every object to shift down
    for(var i =0; i<zones.length; i++)
@@ -106,7 +106,7 @@ function updateScroll()
   }
   
   //if we are using the scroll button
-  if(overCircle(100,300,25) === true && mouseIsPressed && scrollPos > 0)
+  if(overCircle(100,100,25) === true && mouseIsPressed && scrollPos > 0)
   {
     //do something: subtract from the Y pos of every object to shift up
     for(var i =0; i<zones.length; i++)
