@@ -40,7 +40,7 @@ function setup()
 }
 
 function draw() {
-  bgColor= color(255-scrollPos/14,255-scrollPos/14,255);
+  bgColor= color(220-scrollPos/14,240-scrollPos/14,255);
   background(bgColor);
   displayZones();
   fill(0,255,0);
