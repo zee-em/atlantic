@@ -86,16 +86,6 @@ function checkOverWord()
            zones[i].inhabitants[j].checkHook();
              
          }
-         for(var j = 0; j<zones[i].inhabitants.length; j++)
-         {
-           if(zones[i].inhabitants[j].isHooked === true)
-           {
-             print(zones[i].inhabitants[j].length);
-             zones[i].inhabitants[j].isHooked = false;
-             append(hookedWords, zones[i].inhabitants[j]);
-             print(hookedWords.length);
-           }
-         }   
         }
       }
    }
