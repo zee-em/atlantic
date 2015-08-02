@@ -20,6 +20,7 @@ var rawText = [];
 var allParts =[];
 var lowEnd;
 var scrollPos = 0; // compare against top / bottom to start or stop scroll (starts at top)
+var bgColor;
 
 function preload() {
   rawText = loadStrings("assets/words.txt");
@@ -39,6 +40,7 @@ function setup()
 }
 
 function draw() {
+  bgColor= color(scrollPos*14,scrollPos*14,scrollPos*14);
   background(0);
   displayZones();
   fill(255);
@@ -163,7 +165,7 @@ function loadZoneDataPts()
   for(var i = 0; i<partsList.length; i++)
   {
     var partName = trim(partsList[i]);
-    var cl = color(200,i*15,255);
+    var cl = color(200,i*15,bval);
     var inhabitantsArray = [];
     var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,10,.25,5,cl);
     var thisZone = new Zone(partsList[i], i*100-25,(i*100-25)+100,inhabitantsArray);
