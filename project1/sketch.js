@@ -177,14 +177,14 @@ function loadZoneDataPts()
   }
 }
 
-getMouseX()
+function getMouseX()
 {
-  returnMouseX;
+  return mouseX;
 }
   
-this.getMouseY()
+function getMouseY()
 {
-  returnMouseY;
+  return mouseY;
 }
   
 
