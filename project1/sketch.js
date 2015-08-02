@@ -177,6 +177,17 @@ function loadZoneDataPts()
   }
 }
 
+getMouseX()
+{
+  returnMouseX;
+}
+  
+this.getMouseY()
+{
+  returnMouseY;
+}
+  
+
 
 function makeWords()
 {
