@@ -20,6 +20,16 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos,
   this.wordpos = wordpos;
   this.isHooked = isHooked;
   
+  this.changeSpeed = function()
+  {
+    xsp = 20;
+  }
+  
+  this.changeWord = function()
+  {
+    xsp = 20;
+  }
+  
   this.show = function()
   {
     fill(thecolor);
@@ -67,10 +77,11 @@ function Word(x,y, size, xsp, ysp, thecolor, ymin, ymax, word, lineref, wordpos,
   //check to see if we've hooked a word
   this.checkHook = function()
   {
-    if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH) 
+    if (mouseX >= x && mouseX <= x+textWidth(word) && mouseY >= y && mouseY <= y+textH && isHooked === false) 
     {
-      thecolor = color(255,0,0);
-      
+      thecolor = color(0,255,0);
+      isHooked = true;
+      return true;
       // print("isHooked " + isHooked + " for " + word);
       // word = "HOOKED";
     }

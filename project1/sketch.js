@@ -8,6 +8,7 @@
 //create springs thing with hooked words
 //implement word mixing (random?)
 
+
 //improve swimmming behavior
 //fix text processing problems
 //design page 
@@ -27,6 +28,7 @@ var allParts =[];
 var lowEnd;
 var scrollPos = 0; // compare against top / bottom to start or stop scroll (starts at top)
 var bgColor;
+var onScroll = false;
 
 function preload() {
   rawText = loadStrings("assets/words.txt");
@@ -43,25 +45,35 @@ function setup()
    textSize(textH);
    loadZoneDataPts();
    makeWords();
+   
 }
 
 function draw() {
-  bgColor= color(220-scrollPos/14,240-scrollPos/14,240-scrollPos/30);
+  colorMode(HSB, 360, 100, 100, 1);
+  bgColor= color(221,100,100-scrollPos/36, 1);
+  //print(100-scrollPos/36);
+  //bgColor =(210,100,50,1);
   background(bgColor);
   displayZones();
   fill(255);
   //these are the scroll buttons
   ellipse(100,100,25,25);
   ellipse(100,300,25,25);
-
+  if(mouseIsPressed)
+   {
+    //print("here i am j.h.");
+    onScroll = updateScroll();
+   }
+  if(hookedWords.length > 0)
+  {
+    displayHookedWords();
+  }
 }
 
 function mouseClicked()
 {
-   print("here i am j.h.");
-    var onScroll = updateScroll();
-    //only check for words if we weren't pressing to scroll 
-    if(onScroll === false)
+  //only check for words if we weren't pressing to scroll 
+    if(onScroll === false && hookedWords.length === 0)
     {
       checkOverWord();
     }
@@ -85,7 +97,7 @@ function checkOverWord()
          {
            if(zones[i].inhabitants[j].checkHook() === true)
            {
-              print("hooked one");
+              hookTheFullLine(zones[i].inhabitants[j].lineref);
            }
              
          }
@@ -111,7 +123,7 @@ function updateScroll()
     }
     //we did it!
     scrollPos+=scrollspeed;
-    print("scroll: " + scrollPos);
+    //print("scroll: " + scrollPos);
     return true;
   }
   
@@ -151,6 +163,14 @@ function overCircle(x, y, diameter)
   }
 }
 
+function displayHookedWords()
+{
+  for(var i =0; i<hookedWords.length; i++)
+    {
+
+    }
+}
+
 function displayZones()
 {
   for(var i =0; i<zones.length; i++)
@@ -175,9 +195,13 @@ function loadZoneDataPts()
   for(var i = 0; i<partsList.length; i++)
   {
     var partName = trim(partsList[i]);
-    var cl = color(i*8,i*12,255);
+    //colorMode(HSB, 360, 100, 100, 1);
+    var cl = color(210,100,(i*2.6-100)*-1);
+    colorMode(RGB,255);
+    var cl = color(255, 255,255);
     var inhabitantsArray = [];
-    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,i+10,.25,5,cl);
+    //name, ymin, ymax, size, minspeed, maxspeed,cl
+    var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,i+10,.05,3,cl);
     var thisZone = new Zone(partsList[i], i*100-25,(i*100-25)+100,inhabitantsArray);
     partsData[partsList[i]] = thisPart;
     //partsData["xx"] = obj;
@@ -197,6 +221,31 @@ function getMouseY()
   return mouseY;
 }
   
+function hookTheFullLine(lineref)
+{
+  for(var i =0; i<zones.length; i++)
+  { 
+      for(var j = 0; j<zones[i].inhabitants.length; j++)
+      {
+        if(zones[i].inhabitants[j].lineref === lineref)
+        {
+          //print(i + " is the i value ");
+          //print(j + " is the j value ");
+          var temploc = new Location(i,j);
+          hookedWords[zones[i].inhabitants[j].wordpos] = temploc; 
+          //print(hookedWords.length + "is the length");
+        }
+      }
+    }
+    
+    for(var i =0; i<hookedWords.length; i++)
+    {
+      
+      zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].changeSpeed();
+      zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].changeWord();
+      print(zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos]);
+    } 
+}
 
 
 function makeWords()
@@ -225,7 +274,7 @@ function makeWords()
       //speed range x
       random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed),
       //speed range y
-      random(.005,.75),
+      random(0,0),
       //color
       partsData[tempParts[j]].cl,
       //y bounds
