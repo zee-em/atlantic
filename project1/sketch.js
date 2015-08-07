@@ -5,6 +5,7 @@
 //fix scrolling DONE
 
 //add defined data fields for parts (size, color, etc) 
+//implement vectors
 //create springs thing with hooked words
 //implement word mixing (random?)
 
@@ -184,6 +185,7 @@ function displayZones()
        {
          zones[i].inhabitants[j].show();
          zones[i].inhabitants[j].move();
+         zones[i].inhabitants[j].checkEdges();
        }
      }
    }
@@ -200,6 +202,7 @@ function loadZoneDataPts()
     colorMode(RGB,255);
     var cl = color(255, 255,255);
     var inhabitantsArray = [];
+    //use preexisting input here for speeds, etc
     //name, ymin, ymax, size, minspeed, maxspeed,cl
     var thisPart = new Part(partsList[i],i*100-25,(i*100-25)+100,i+10,.05,3,cl);
     var thisZone = new Zone(partsList[i], i*100-25,(i*100-25)+100,inhabitantsArray);
@@ -265,16 +268,16 @@ function makeWords()
     {
       //print(tempParts[j]);
       //print(partsData[tempParts[j]].name);
-      //x,y, size, xsp, ysp, thecolor, ymin, ymax, word
-      var w = new Word(
+      var position = createVector(random(1, width), random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax));
+      var vel = createVector(random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed), random(0,1));
+      //location, size, xsp, ysp, thecolor, ymin, ymax, word
+      var w = new seaWord(
       //x,y
-      random(1,width),random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax),
+      position,
       //size
       partsData[tempParts[j]].size,
-      //speed range x
-      random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed),
-      //speed range y
-      random(0,0),
+      //speed 
+      vel,
       //color
       partsData[tempParts[j]].cl,
       //y bounds
