@@ -270,15 +270,19 @@ function makeWords()
       //print(partsData[tempParts[j]].name);
       var position = createVector(random(1, width), random(partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax));
       var vel = createVector(random(partsData[tempParts[j]].minspeed,partsData[tempParts[j]].maxspeed), random(0,1));
+      var acc = p5.Vector.random2D();
       //location, size, xsp, ysp, thecolor, ymin, ymax, word
       var w = new seaWord(
       //x,y
       position,
-      //size
-      partsData[tempParts[j]].size,
       //speed 
       vel,
-      //color
+      //acceleration
+      acc,
+      //topspeed
+      6,
+      //size
+      partsData[tempParts[j]].size,
       partsData[tempParts[j]].cl,
       //y bounds
       partsData[tempParts[j]].ymin,partsData[tempParts[j]].ymax, 

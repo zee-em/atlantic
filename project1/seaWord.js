@@ -1,9 +1,11 @@
-function seaWord(position, size, velocity, thecolor, ymin, ymax, word, lineref, wordpos, isHooked)
+function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymin, ymax, word, lineref, wordpos, isHooked)
  {
   
   this.position = position;
   this.size = size;
   this.velocity = velocity;
+  this.acceleration = acceleration;
+  this.topspeed = topspeed;
   this.thecolor = thecolor;
   //zone limits
   this.ymin = ymin;
@@ -20,6 +22,8 @@ function seaWord(position, size, velocity, thecolor, ymin, ymax, word, lineref, 
 
   this.move = function() {
     position.add(velocity);
+    velocity.add(acceleration);
+    velocity.limit(topspeed);
     print("moving!");
   }
 
