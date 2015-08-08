@@ -17,25 +17,46 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
   //location in line
   this.wordpos = wordpos;
   this.isHooked = isHooked;
+  maxforce = random(0.01,1);
   
   
 
   this.move = function() {
-    position.add(velocity);
+    //print(maxforce);
     velocity.add(acceleration);
     velocity.limit(topspeed);
-    print("moving!");
+    position.add(velocity);
+    //print("moving!");
+    acceleration.mult(0);
   }
 
- this.show = function()
-  {
-    fill(thecolor);
-    //textSize(size);
-    text(word,position.x,position.y);
+  
+ this.applyForce = function (force) {
+    acceleration.add(force);
   }
   
+ this.seek = function(target) 
+ {
+  var desired = p5.Vector.sub(target,this.position);  // A vector pointing from the location to the target
+  // Scale to maximum speed
+  desired.setMag(this.topspeed);
+  // Steering = Desired minus velocity
+  var steer = p5.Vector.sub(desired,this.velocity);
+  steer.limit(this.maxforce);  // Limit to maximum steering force
+  this.applyForce(steer);
+  }
 
-
+  this.show = function()
+  {
+    fill(thecolor);
+    // var theta = this.velocity.heading() + radians(90);
+    // push();
+    // translate(this.position.x,this.position.y);
+    // rotate(theta);
+    text(word,position.x,position.y);
+    //pop();
+  }
+  
   this.checkEdges = function() 
   {
 
@@ -43,20 +64,24 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
     {
       position.x = -10;
     } 
-    else if (position.x < -10) 
+    if (position.x < -10) 
     {
       position.x = width+10;
     }
 
-    if (position.y > ymax) 
+    if (position.y >= ymax) 
     {
-      velocity.y *= -1;
-      print("we are switching the y velocity " + velocity.y);
+      position.y = ymax;
+      //velocity.y = velocity.y * -1;
+      //acceleration.y = acceleration.y*-1;
+      //print("we are switching the y velocity " + velocity.y);
     } 
-    else if (position.y < ymin)
+    if (position.y <= ymin)
     {
-      velocity.y *= -1;
-      print("we are switching the y velocity " + velocity.y);
+      position.y = ymin;
+      // velocity.y = velocity.y * -1;
+      // acceleration.y = acceleration.y*-1;
+      //print("we are switching the y velocity " + velocity.y);
     }
   }
   
