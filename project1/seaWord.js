@@ -1,6 +1,5 @@
 function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymin, ymax, word, lineref, wordpos, isHooked)
  {
-  
   this.position = position;
   this.size = size;
   this.velocity = velocity;
@@ -17,77 +16,138 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
   //location in line
   this.wordpos = wordpos;
   this.isHooked = isHooked;
-  maxforce = random(0.01,1);
+  this.maxforce = random(0.01,1);
   
 
-  this.update = function() {
-    if(isHooked === true)
-    {
-      this.seek(mouse);
-      velocity.add(acceleration);
-      velocity.limit(topspeed);
-      position.add(velocity);
-      //print("moving!");
-      acceleration.mult(0);
-    }  
-    else
-    {
-      velocity.add(acceleration);
-      velocity.limit(topspeed);
-      position.add(velocity);
-      //print("moving!");
-      acceleration.mult(0);
-    }
+  this.update = function() 
+  { 
+    this.velocity.add(this.acceleration);
+    this.velocity.limit(this.topspeed);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
     
+  }
+  
+  this.applyBehaviors = function(wordzone, vector, sepForceM, seekForceM, sepVal) 
+  {
+     
+     //creating a force
+     var separateForce = this.separate(wordzone, sepVal);
+     var seekForce = vector;
+     
+     separateForce.mult(sepForceM);
+     seekForce.mult(seekForceM);
+     
+     this.applyForce(separateForce);
+     this.applyForce(seekForce); 
+  }
+  
+  
+  this.updateSeekTarget = function(vector)
+  {
+    //topSpeed = 5;
+    //print("got here in seek");
+    //this.seekAndArrive(vector);
+    this.velocity.add(acceleration);
+    this.velocity.limit(topspeed);
+    this.position.add(velocity);
+    //print("moving!");
+    this.acceleration.mult(0);
   }
   
   this.applyForce = function (force) 
   {
-    acceleration.add(force);
+    this.acceleration.add(force);
   }
 
- this.seek = function(target) 
+  this.separate = function(wordzone, sepVal) 
+  {
+    var desiredseparation = sepVal;
+    var sum = createVector();
+    var count = 0;
+    // For every seaWord in the system, check if it's too close
+    for (var i = 0; i < wordzone.length; i++) 
+    {
+      var d = p5.Vector.dist(this.position, wordzone[i].position);
+      // If the distance is greater than 0 and less than an arbitrary amount (0 when you are yourself)
+      if ((d > 0) && (d < desiredseparation)) 
+      {
+        // Calculate vector pointing away from neighbor
+        var diff = p5.Vector.sub(this.position, wordzone[i].position);
+        diff.normalize();
+        diff.div(d);        // Weight by distance
+        sum.add(diff);
+        count++;            // Keep track of how many
+      }
+    }
+    // Average -- divide by how many
+    if (count > 0) {
+      sum.div(count);
+      // Our desired vector is the average scaled to maximum speed
+      sum.normalize();
+      sum.mult(this.maxspeed);
+      // Implement Reynolds: Steering = Desired - Velocity
+      sum.sub(this.velocity);
+      sum.limit(this.maxforce);
+    }
+    return sum;
+  }  
+ 
+ this.seekAndArrive = function(target) 
  {
-  var desired = p5.Vector.sub(target,this.position);  // A vector pointing from the location to the target
-  // Scale to maximum speed
-  desired.setMag(this.topspeed);
-  // Steering = Desired minus velocity
-  var steer = p5.Vector.sub(desired,this.velocity);
-  steer.limit(this.maxforce);  // Limit to maximum steering force
-  this.applyForce(steer);
+    var desired = p5.Vector.sub(target,this.position);  // A vector pointing from the location to the target
+    var d = desired.mag();
+    // Scale with arbitrary damping within 100 pixels
+    if (d < 80) 
+    {
+      var m = map(d,0,100,0,this.maxspeed);
+      desired.setMag(m);
+    } 
+    else 
+    {
+      desired.setMag(this.topspeed);
+    }
+
+    // Steering = Desired minus Velocity
+    var steer = p5.Vector.sub(desired,this.velocity);
+    steer.limit(this.maxforce);  // Limit to maximum steering force
+    this.applyForce(steer);
   }
 
   this.show = function()
   {
     fill(thecolor);
-    // var theta = this.velocity.heading() + radians(90);
-    // push();
-    // translate(this.position.x,this.position.y);
-    // rotate(theta);
     text(word,position.x,position.y);
-    //pop();
+
   }
   
   this.updateHooked = function()
   {
-    if(isHooked === true)
+    if(this.isHooked === true)
     {
-      isHooked = false;
+      this.isHooked = false;
     }
     else
     {
-      isHooked = true;
+      this.isHooked = true;
     }
   }
   
   this.changeColor = function()
   {
-    thecolor = color(0,255,0)
+    if(this.isHooked === true)
+    {
+      this.thecolor = color(0,255,0);
+    }
+    else
+    {
+      this.thecolor = color(255,255,255);
+    }
   }
   
   this.checkEdges = function() 
   {
-    if(isHooked === true)
+    if(isHooked === true) // WARNING: no "THIS" in use here!!!
     {
       if (position.x > width+10) 
       {
@@ -98,31 +158,32 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
         
         position.x = width+10;
       }
-      
     }
+    
     else
     {
-      if (position.x > width+10) 
+      if (this.position.x > width+10) 
       {
-        position.x = -10;
+        this.position.x = -10;
       } 
-      if (position.x < -10) 
+      if (this.position.x < -10) 
       {
-        
-        position.x = width+10;
+        this.position.x = width+10;
       }
-      if (position.y >= ymax) 
+      
+      if (this.position.y >= this.ymax) 
       {
         //if we use position they wrap
-        position.y = ymin;
+        this.position.y = this.getYMin(); //this.ymin;
+       // this.thecolor = color(255,0,0);
         //velocity.y = velocity.y * -1;
         //acceleration.y = acceleration.y*-1;
         //print("we are switching the y velocity " + velocity.y);
       } 
-      if (position.y <= ymin)
+      if (this.position.y <= this.ymin)
       {
          //if we use position they wrap
-        position.y = ymax;
+        this.position.y = this.getYMax(); //this.ymax;
         //velocity.y = velocity.y * -1;
         // acceleration.y = acceleration.y*-1;
         //print("we are switching the y velocity " + velocity.y);
@@ -133,22 +194,23 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
   //these functions update the bounds 
   this.upScroll = function()
   {
-     position.y+=scrollspeed;
-     ymax+=scrollspeed;
-     ymin+=scrollspeed;
+     this.position.y+=scrollspeed;
+     this.ymax+=scrollspeed;
+     this.ymin+=scrollspeed;
   }
   
   this.downScroll = function()
   {
-     position.y-=scrollspeed;
-     ymax-=scrollspeed;
-     ymin-=scrollspeed;
+     this.position.y-=scrollspeed;
+     this.ymax-=scrollspeed;
+     this.ymin-=scrollspeed;
   }
+  
   
   //check to see if we've hooked a word
   this.checkHook = function()
   {
-    if (mouseX >= position.x && mouseX <= position.x+textWidth(word) && mouseY >= position.y-size && mouseY <= position.y && isHooked === false) 
+    if (mouseX >= this.position.x && mouseX <= this.position.x+textWidth(word) && mouseY >= this.position.y-this.size && mouseY <= this.position.y && this.isHooked === false) 
     {
       print("hooked!");
       //word = "HOOKED";
@@ -156,5 +218,30 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
       //print("isHooked " + isHooked + " for " + word);
       
     }
+  }
+  
+  this.getWordPos = function()
+  {
+    return this.wordpos;
+  }
+  
+  this.getWordWidth = function()
+  {
+    return textWidth(this.word);
+  }
+  
+   this.getWordSize = function()
+  {
+    return this.size;
+  }
+  
+  this.getYMin = function()
+  {
+    return this.ymin;
+  }
+  
+  this.getYMax = function()
+  {
+    return this.ymax;
   }
 }

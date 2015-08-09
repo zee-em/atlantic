@@ -1,14 +1,15 @@
-function Zone(name, yminZone, ymaxZone, inhabitants)
+function Zone(name, yminZone, ymaxZone, inhabitants, attractor)
 {
   this.name = name;
   this.yminZone = yminZone;
   this.ymaxZone = ymaxZone;
   this.inhabitants = inhabitants;
+  this.attractor = attractor;
   
   //checks to see if mouseY is in zone
   this.checkZoneAndMouse = function()
   {
-    if(mouseY>yminZone && mouseY<ymaxZone)
+    if(mouseY > this.yminZone && mouseY < this.ymaxZone)
     {
       return true;
     }
@@ -21,8 +22,10 @@ function Zone(name, yminZone, ymaxZone, inhabitants)
   //checks to see if the Zone is onscreen 
   this.testToDisplay = function()
   {
-    if(yminZone>height || ymaxZone <0)
+    if(this.yminZone > height || this.ymaxZone < 0)
     {
+      //print(this.name + " off screen, won't display and yMin is" + yminZone);
+      
       return false;
     }
     else
@@ -34,9 +37,9 @@ function Zone(name, yminZone, ymaxZone, inhabitants)
   //shifts zone up when scrolling
   this.upZone = function()
   {
-     ymaxZone+=scrollspeed;
+     this.ymaxZone+=scrollspeed;
      //print(ymaxZone);
-     yminZone+=scrollspeed;
+     this.yminZone+=scrollspeed;
      //print(yminZone);
      //print("hello up");
   }
@@ -44,8 +47,8 @@ function Zone(name, yminZone, ymaxZone, inhabitants)
   //shifts zone down when scrolling
   this.downZone = function()
   {
-     ymaxZone-=scrollspeed;
-     yminZone-=scrollspeed;
+     this.ymaxZone-=scrollspeed;
+     this.yminZone-=scrollspeed;
      //print("hello down");
   }
 }
