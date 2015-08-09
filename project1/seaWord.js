@@ -19,22 +19,33 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
   this.isHooked = isHooked;
   maxforce = random(0.01,1);
   
-  
 
-  this.move = function() {
-    //print(maxforce);
-    velocity.add(acceleration);
-    velocity.limit(topspeed);
-    position.add(velocity);
-    //print("moving!");
-    acceleration.mult(0);
+  this.update = function() {
+    if(isHooked === true)
+    {
+      this.seek(mouse);
+      velocity.add(acceleration);
+      velocity.limit(topspeed);
+      position.add(velocity);
+      //print("moving!");
+      acceleration.mult(0);
+    }  
+    else
+    {
+      velocity.add(acceleration);
+      velocity.limit(topspeed);
+      position.add(velocity);
+      //print("moving!");
+      acceleration.mult(0);
+    }
+    
   }
-
   
- this.applyForce = function (force) {
+  this.applyForce = function (force) 
+  {
     acceleration.add(force);
   }
-  
+
  this.seek = function(target) 
  {
   var desired = p5.Vector.sub(target,this.position);  // A vector pointing from the location to the target
@@ -57,32 +68,66 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
     //pop();
   }
   
+  this.updateHooked = function()
+  {
+    if(isHooked === true)
+    {
+      isHooked = false;
+    }
+    else
+    {
+      isHooked = true;
+    }
+  }
+  
+  this.changeColor = function()
+  {
+    thecolor = color(0,255,0)
+  }
+  
   this.checkEdges = function() 
   {
-
-    if (position.x > width+10) 
+    if(isHooked === true)
     {
-      position.x = -10;
-    } 
-    if (position.x < -10) 
-    {
-      position.x = width+10;
+      if (position.x > width+10) 
+      {
+        position.x = -10;
+      } 
+      if (position.x < -10) 
+      {
+        
+        position.x = width+10;
+      }
+      
     }
-
-    if (position.y >= ymax) 
+    else
     {
-      position.y = ymax;
-      //velocity.y = velocity.y * -1;
-      //acceleration.y = acceleration.y*-1;
-      //print("we are switching the y velocity " + velocity.y);
-    } 
-    if (position.y <= ymin)
-    {
-      position.y = ymin;
-      // velocity.y = velocity.y * -1;
-      // acceleration.y = acceleration.y*-1;
-      //print("we are switching the y velocity " + velocity.y);
-    }
+      if (position.x > width+10) 
+      {
+        position.x = -10;
+      } 
+      if (position.x < -10) 
+      {
+        
+        position.x = width+10;
+      }
+      if (position.y >= ymax) 
+      {
+        //if we use position they wrap
+        position.y = ymin;
+        //velocity.y = velocity.y * -1;
+        //acceleration.y = acceleration.y*-1;
+        //print("we are switching the y velocity " + velocity.y);
+      } 
+      if (position.y <= ymin)
+      {
+         //if we use position they wrap
+        position.y = ymax;
+        //velocity.y = velocity.y * -1;
+        // acceleration.y = acceleration.y*-1;
+        //print("we are switching the y velocity " + velocity.y);
+      }
+    }  
   }
   
   //these functions update the bounds 
@@ -103,13 +148,13 @@ function seaWord(position, velocity, acceleration, topspeed, size, thecolor, ymi
   //check to see if we've hooked a word
   this.checkHook = function()
   {
-    if (mouseX >= position.x && mouseX <= position.x+textWidth(word) && mouseY >= position.y && mouseY <= position.y && isHooked === false) 
+    if (mouseX >= position.x && mouseX <= position.x+textWidth(word) && mouseY >= position.y-size && mouseY <= position.y && isHooked === false) 
     {
-      thecolor = color(0,255,0);
-      isHooked = true;
+      print("hooked!");
+      //word = "HOOKED";
       return true;
-      // print("isHooked " + isHooked + " for " + word);
-      // word = "HOOKED";
+      //print("isHooked " + isHooked + " for " + word);
+      
     }
   }
 }

@@ -4,10 +4,13 @@
 //automate object creation and storage DONE
 //fix scrolling DONE
 
-//add defined data fields for parts (size, color, etc) 
-//implement vectors
+
+//implement vectors DONE
+//fine tune motions and get 
 //create springs thing with hooked words
 //implement word mixing (random?)
+
+//add defined data fields for parts (size, color, etc) DO THIS LATER
 
 
 //improve swimmming behavior
@@ -53,19 +56,18 @@ function draw() {
   colorMode(HSB, 360, 100, 100, 1);
   bgColor = color(221, 100, 100 - scrollPos / 36, 1);
   mouse = createVector(mouseX, mouseY);
-  //print(100-scrollPos/36);
-  //bgColor =(210,100,50,1);
   background(bgColor);
   displayZones();
   fill(255);
   //these are the scroll buttons
   ellipse(100, 100, 25, 25);
   ellipse(100, 300, 25, 25);
-  if (mouseIsPressed) {
-    //print("here i am j.h.");
+  if (mouseIsPressed) 
+  {
     onScroll = updateScroll();
   }
-  if (hookedWords.length > 0) {
+  if(hookedWords.length > 0)
+  {
     displayHookedWords();
   }
 }
@@ -74,6 +76,7 @@ function mouseClicked() {
   //only check for words if we weren't pressing to scroll 
   if (onScroll === false && hookedWords.length === 0) {
     checkOverWord();
+    print("checking!");
   }
 }
 
@@ -87,11 +90,12 @@ function checkOverWord() {
       //print("zone intersect " + intersectZone)
       if (intersectZone === true) {
         //then check for a intersection with this set of objects
-        for (var j = 0; j < zones[i].inhabitants.length; j++) {
-          if (zones[i].inhabitants[j].checkHook() === true) {
+        for (var j = 0; j < zones[i].inhabitants.length; j++) 
+        {
+          if (zones[i].inhabitants[j].checkHook() === true) 
+          {
             hookTheFullLine(zones[i].inhabitants[j].lineref);
           }
-
         }
       }
     }
@@ -144,21 +148,43 @@ function overCircle(x, y, diameter) {
   }
 }
 
-function displayHookedWords() {
-  for (var i = 0; i < hookedWords.length; i++) {
+function keyPressed()
+{
+  if(keyCode === RETURN)
+  {
+    releaseHookedWords();
+  }
+  return false;
+}
 
+function displayHookedWords() 
+{
+  for (var i = 0; i < hookedWords.length; i++) 
+  {
+    zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].update();
+    zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].checkEdges();
+    zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].show();
   }
 }
 
+function releaseHookedWords()
+{
+  for (var i = 0; i < hookedWords.length; i++) 
+  {
+    zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].updateHooked();
+  }
+  hookedWords = [];
+}
+
 function displayZones() {
-  for (var i = 0; i < zones.length; i++) {
+  for (var i = 0; i < zones.length; i++) 
+  {
     //only display objects if the zones are onscreen
     var checkDisplay = zones[i].testToDisplay();
-    if (checkDisplay == true) {
+    if (checkDisplay === true) {
       //the zone is on screen so dislay and move inhabitants
       for (var j = 0; j < zones[i].inhabitants.length; j++) {
-        zones[i].inhabitants[j].seek(mouse);
-        zones[i].inhabitants[j].move();
+        zones[i].inhabitants[j].update();
         zones[i].inhabitants[j].checkEdges();
         zones[i].inhabitants[j].show();
       }
@@ -199,6 +225,7 @@ function hookTheFullLine(lineref) {
   for (var i = 0; i < zones.length; i++) {
     for (var j = 0; j < zones[i].inhabitants.length; j++) {
       if (zones[i].inhabitants[j].lineref === lineref) {
+        zones[i].inhabitants[j].updateHooked();
         //print(i + " is the i value ");
         //print(j + " is the j value ");
         var temploc = new Location(i, j);
@@ -208,12 +235,7 @@ function hookTheFullLine(lineref) {
     }
   }
 
-  for (var i = 0; i < hookedWords.length; i++) {
-
-    zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].changeSpeed();
-    zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos].changeWord();
-    print(zones[hookedWords[i].ipos].inhabitants[hookedWords[i].jpos]);
-  }
+  
 }
 
 
