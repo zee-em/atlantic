@@ -12,7 +12,7 @@ var att;
 var yMin = 200;
 var yMax = 500;
 //intial attractor x and y for the text 
-var attX = 400;
+var attX = 700;
 var attY = 0;
 
 //variable for text zone
@@ -87,7 +87,7 @@ function mouseClicked()
 
 function keyPressed()
 {
-  if(keyCode === UP_ARROW)
+  if(keyCode === DOWN_ARROW)
   {
     //scroll up, and bring up the zone, attractor, and each object
     //update current max and min scroll 
@@ -102,7 +102,7 @@ function keyPressed()
     currentMinScroll -= scrollVal;
   }
   
-  else if(keyCode === DOWN_ARROW)
+  else if(keyCode === UP_ARROW)
   {
     //scroll down, and bring down the zone, attractor, and each object
     zone.setYDown(scrollVal);
@@ -148,7 +148,7 @@ function makeWords()
     {
       // We are now making random vehicles and storing them in an array
       //these are parameters for Vehicle x, y, ymin, ymax, word
-      vehcs.push(new Vehicle(random(width),random(yMin,yMax), yMin, yMax, tempWords[j]));
+      vehcs.push(new Vehicle(random(width),random(yMin,yMax), yMin, yMax, tempWords[j],i,j));
     }
   }
 }

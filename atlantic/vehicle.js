@@ -2,7 +2,7 @@
 // Vehicle object AKA word object
 
 //add parameters: lineref, posref
-function Vehicle(x, y, ymin, ymax, word) {
+function Vehicle(x, y, ymin, ymax, word,lineref, posref) {
   // All the usual stuff
   this.position = createVector(x, y);
   this.r = 10;
@@ -14,6 +14,8 @@ function Vehicle(x, y, ymin, ymax, word) {
   this.yMax = yMax;
   this.word = word;
   this.isHooked = false;
+  this.lineref = lineref;
+  this.posref = posref;
 
   this.applyBehaviors = function(vehicles, x, y) {
      
