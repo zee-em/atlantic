@@ -243,19 +243,19 @@ function displayZones() {
         //wordzone, vector, sepForceM, seekForceM, sepForce
         //calling applyBehaviors which is a seaWord function
         // passes in a bunch of parameter
-        zones[i].inhabitants[j].applyBehaviors
-        (
-          //pass in the zone's array of inhabitants
-          zones[i].inhabitants, 
-          //pass in the target vector
-          zones[i].attractor.getTargetVector(), 
-          //pass in the multiplier for the separating force
-          zones[i].attractor.getSepForceM(), 
-          //pass in the multiplier for the seeking force
-          zones[i].attractor.getSeekForceM(), 
-          //passes in the desired seperation value
-          zones[i].attractor.getSepVal()
-        );
+        // zones[i].inhabitants[j].applyBehaviors
+        // (
+        //   //pass in the zone's array of inhabitants
+        //   zones[i].inhabitants, 
+        //   //pass in the target vector
+        //   zones[i].attractor.getTargetVector(), 
+        //   //pass in the multiplier for the separating force
+        //   zones[i].attractor.getSepForceM(), 
+        //   //pass in the multiplier for the seeking force
+        //   zones[i].attractor.getSeekForceM(), 
+        //   //passes in the desired seperation value
+        //   zones[i].attractor.getSepVal()
+        // );
         
         zones[i].inhabitants[j].update();
         zones[i].inhabitants[j].checkEdges();
