@@ -47,16 +47,23 @@ function draw()
   background(50);
   for (var i = 0; i < zone.vehicles.length; i++) 
   { 
+    //check if an object is hooked
     if(zone.vehicles[i].isHooked)
     {
+      //if hooked, seek mouse
       zone.vehicles[i].applyBehaviors(zone.vehicles, mouseX, mouseY);
+      //update, but don't check borders
+      zone.vehicles[i].update();
     }
     else
     {
+      //if not hooked, seek local attractor
        zone.vehicles[i].applyBehaviors(zone.vehicles, zone.attractor.getWaveX(), zone.attractor.getWaveY());
+       //update and maintain zone borders
+       zone.vehicles[i].update();
+       zone.vehicles[i].borders();
     }
-    zone.vehicles[i].update();
-    zone.vehicles[i].borders();
+    //show all of them 
     zone.vehicles[i].show(); 
   }
   zone.attractor.wave();
@@ -67,10 +74,12 @@ function draw()
 
 function mouseClicked()
 {
+  //check to see if the zone and mouse intersect
   if(zone.checkZoneAndMouse())
   {
     for (var i = 0; i < zone.vehicles.length; i++) 
     {
+      //check to see if the word and mouse intersect, if so, it's hooked!
       zone.vehicles[i].checkHook(); 
     }
   }
@@ -80,42 +89,48 @@ function keyPressed()
 {
   if(keyCode === UP_ARROW)
   {
+    //scroll up, and bring up the zone, attractor, and each object
+    //update current max and min scroll 
     zone.setYUp(scrollVal);
     zone.attractor.setYUp(scrollVal);
     for (var i = 0; i < zone.vehicles.length; i++) 
     {
       zone.vehicles[i].setYUp(scrollVal); 
     }
+    //update current max and min scroll 
     currentMaxScroll -= scrollVal; 
     currentMinScroll -= scrollVal;
   }
   
   else if(keyCode === DOWN_ARROW)
   {
+    //scroll down, and bring down the zone, attractor, and each object
     zone.setYDown(scrollVal);
     zone.attractor.setYDown(scrollVal);
     for (var i = 0; i < zone.vehicles.length; i++) 
     {
       zone.vehicles[i].setYDown(scrollVal); 
     }
+    //update current max and min scroll 
     currentMaxScroll += scrollVal;
     currentMinScroll += scrollVal;
   }
   
   else if(keyCode === ENTER)
   {
+    //this will release the vehicles
     for (var i = 0; i < zone.vehicles.length; i++) 
     {
       if(zone.vehicles[i].isHooked)
       {
         zone.vehicles[i].unHook();
-        zone.vehicles[i].resetBounds(zone.getYMin(),zone.getYMax());
+        //zone.vehicles[i].resetBounds(zone.getYMin(),zone.getYMax());
       }
     }  
   }
   
-  print("cMax " + currentMaxScroll);
-  print("cMin " + currentMinScroll);
+  // print("cMax " + currentMaxScroll);
+  // print("cMin " + currentMinScroll);
   return false;
 }
 

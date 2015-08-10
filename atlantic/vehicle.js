@@ -109,7 +109,7 @@ function Vehicle(x, y, ymin, ymax, word) {
     
     //this resets obj to wrap, and makes sure that it appears offscreen
     //if x is less than 0 minus the size of the object, then set x to be the width plus the obj size 
-    if (this.position.x < -this.r) this.position.x =  width+this.r;
+    if (this.position.x < -this.r) this.position.x = width+this.r;
     // if x is greater than the width plus obj size, set x to be 0 minus the obj size
     if (this.position.x >  width+this.r) this.position.x = -this.r;
     
@@ -141,31 +141,6 @@ function Vehicle(x, y, ymin, ymax, word) {
    this.yMax-=val;
    this.yMin-=val;
    this.position.y-=val;
- }
- 
- //if a word is hooked, it needs to be freed from its zone so it can
- //follow the mouse
- this.releaseBounds = function()
- {
-   this.yMax = height;
-   this.yMin = 0;
-   
-  // if(currentMaxScroll>height)
-  // {
-  //   this.yMax = currentMaxScroll; //this needs to be set to the currentMax scroll value 
-  // }
-  // else
-  // {
-  //   this.yMax = height;
-  // }
-  // if(currentMinScroll<0)
-  // {
-  //   this.yMin = currentMinScroll; //this needs to be set to the currentMin scroll value 
-  // }
-  // else
-  // {
-  //   this.yMin = 0;
-  // }
  }
  
  //when a word is unhooked, it needs to be reassigned to its zone,
