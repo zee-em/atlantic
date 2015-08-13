@@ -4,7 +4,7 @@
 //add parameters: lineref, posref
 //added parameters; r, maxspeed, maxforce
 
-function Vehicle(x, y, ymin, ymax, r, maxspeed, maxforce, word,lineref, posref) {
+function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) {
   // All the usual stuff
   this.position = createVector(x, y);
   this.r = r;
@@ -12,8 +12,8 @@ function Vehicle(x, y, ymin, ymax, r, maxspeed, maxforce, word,lineref, posref) 
   this.maxforce = maxforce;  // Maximum steering force
   this.acceleration = createVector(0, 0);
   this.velocity = createVector(0, 0);
-  this.yMin = ymin;
-  this.yMax = ymax;
+  this.yMin = yMin;
+  this.yMax = yMax;
   this.word = word;
   this.isHooked = false;
   this.lineref = lineref;
@@ -94,7 +94,7 @@ function Vehicle(x, y, ymin, ymax, r, maxspeed, maxforce, word,lineref, posref) 
   }
 
   this.show = function() {
-    print("showing!")
+    //print("showing!")
     if(this.isHooked === true)
     {
       fill(0,255,0);
@@ -105,6 +105,7 @@ function Vehicle(x, y, ymin, ymax, r, maxspeed, maxforce, word,lineref, posref) 
     }
     noStroke();
     //print("here!");
+    textSize(r);
     text(word, this.position.x, this.position.y);
   }
 

@@ -56,9 +56,9 @@ function setup()
 function draw() 
 {
   background(50);
-  print(zones.length + " is length of zones");
   for (var h = 0; h < zones.length; h++)
   {
+    //print(zones[h]);
     for (var i = 0; i < zones[h].vehicles.length; i++) 
     { 
       //check if an object is hooked
@@ -71,6 +71,7 @@ function draw()
       }
       else
       {
+        
         //if not hooked, seek local attractor
          zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
          //update and maintain zone borders
@@ -78,6 +79,7 @@ function draw()
          zones[h].vehicles[i].borders();
       }
       //show all of them 
+      //print(zones[h].vehicles[i].position);
       zones[h].vehicles[i].show(); 
     }
     zones[h].attractor.wave();
@@ -89,60 +91,72 @@ function draw()
 
 function mouseClicked()
 {
-  //check to see if the zone and mouse intersect
-  if(zone.checkZoneAndMouse())
+  for (var h = 0; h < zones.length; h++)
   {
-    for (var i = 0; i < zone.vehicles.length; i++) 
-    {
-      //check to see if the word and mouse intersect, if so, it's hooked!
-      if(zone.vehicles[i].checkHook())
+  //check to see if the zone and mouse intersect
+      if(zones[h].checkZoneAndMouse())
       {
-        //hook the other words
+        for (var i = 0; i < zones[h].vehicles.length; i++) 
+        {
+          //check to see if the word and mouse intersect, if so, it's hooked!
+          if(zones[h].vehicles[i].checkHook())
+          {
+            //hook the other words
+          }
+        }
       }
-    }
-  }
+  }    
 }
 
 function keyPressed()
 {
   if(keyCode === DOWN_ARROW)
   {
-    //scroll up, and bring up the zone, attractor, and each object
-    //update current max and min scroll 
-    zone.setYUp(scrollVal);
-    zone.attractor.setYUp(scrollVal);
-    for (var i = 0; i < zone.vehicles.length; i++) 
+    for (var h = 0; h < zones.length; h++)
     {
-      zone.vehicles[i].setYUp(scrollVal); 
+      //scroll up, and bring up the zone, attractor, and each object
+      //update current max and min scroll 
+      zones[h].setYUp(scrollVal);
+      zones[h].attractor.setYUp(scrollVal);
+      for (var i = 0; i < zones[h].vehicles.length; i++) 
+      {
+        zones[h].vehicles[i].setYUp(scrollVal); 
+      }
+      //update current max and min scroll 
+      currentMaxScroll -= scrollVal; 
+      currentMinScroll -= scrollVal;
     }
-    //update current max and min scroll 
-    currentMaxScroll -= scrollVal; 
-    currentMinScroll -= scrollVal;
   }
   
   else if(keyCode === UP_ARROW)
   {
-    //scroll down, and bring down the zone, attractor, and each object
-    zone.setYDown(scrollVal);
-    zone.attractor.setYDown(scrollVal);
-    for (var i = 0; i < zone.vehicles.length; i++) 
+    for (var h = 0; h < zones.length; h++)
     {
-      zone.vehicles[i].setYDown(scrollVal); 
-    }
-    //update current max and min scroll 
-    currentMaxScroll += scrollVal;
-    currentMinScroll += scrollVal;
+      //scroll down, and bring down the zone, attractor, and each object
+      zones[h].setYDown(scrollVal);
+      zones[h].attractor.setYDown(scrollVal);
+      for (var i = 0; i < zones[h].vehicles.length; i++) 
+      {
+        zones[h].vehicles[i].setYDown(scrollVal); 
+      }
+      //update current max and min scroll 
+      currentMaxScroll += scrollVal;
+      currentMinScroll += scrollVal;
+    }  
   }
   
   else if(keyCode === ENTER)
   {
-    //this will release the vehicles
-    for (var i = 0; i < zone.vehicles.length; i++) 
+    for (var h = 0; h < zones.length; h++)
     {
-      if(zone.vehicles[i].isHooked)
+      //this will release the vehicles
+      for (var i = 0; i < zones[h].vehicles.length; i++) 
       {
-        zone.vehicles[i].unHook();
-        //zone.vehicles[i].resetBounds(zone.getYMin(),zone.getYMax());
+        if(zones[h].vehicles[i].isHooked)
+        {
+          zones[h].vehicles[i].unHook();
+          //zone.vehicles[i].resetBounds(zone.getYMin(),zone.getYMax());
+        }
       }
     }  
   }
@@ -179,14 +193,14 @@ function loadZoneDataPts() {
     var partName = trim(partsList[i]);
     //colorMode(HSB, 360, 100, 100, 1);
     //waveX, waveY, yOffset, theta, thetaMod, amp
-    var att = new Attractor(width/2,i * 100, 200, 0, .02, 60);
+    var att = new Attractor(width/2,i * 100, 50, 0, .02, 30);
     var cl = color(210, 100, (i * 2.6 - 100) * -1);
     var inhabitantsArray = [];
-    //parts parameters: name, ymin, ymax, size, minspeed, maxspeed,cl
-    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, 1, 3, cl);
+    //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
+    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, 5, .05, cl);
     //zone parameters: yMin, yMax, attractor, vehicles
     var thisZone = new Zone(partsList[i], i * 100, (i * 100) + 100, inhabitantsArray, att);
-    //assign this to the array using key-value pairing
+    //assign this part to the array using key-value pairing
     partsData[partsList[i]] = thisPart;
     //add the zone into the zone aray
     append(zones, thisZone);
@@ -195,7 +209,7 @@ function loadZoneDataPts() {
   }
   
   //print("some data " + partsData["xx"].name);
-  //print(" a zone " + zones[22]);
+  print(" a zone " + zones[22].yMin);
 }
 
 
@@ -216,11 +230,11 @@ function makeWords()
       //print(partsData[tempParts[j]]);
       w = new Vehicle(
       //x, y
-      random(width),random(partsData[tempParts[j]].getYMin,partsData[tempParts[j]].getYMax),
+      random(width),random(partsData[tempParts[j]].yMin, partsData[tempParts[j]].yMax),
       //ymin, ymax, 
-      partsData[tempParts[j]].getYMin, partsData[tempParts[j]].getYMax, 
+      partsData[tempParts[j]].yMin, partsData[tempParts[j]].yMax, 
       //r, maxspeed, maxforce,
-      partsData[tempParts[j]].getSize, partsData[tempParts[j]].getMaxSpeed, partsData[tempParts[j]].getMaxForce, 
+      partsData[tempParts[j]].size, partsData[tempParts[j]].maxspeed, partsData[tempParts[j]].maxforce, 
       //word,lineref, posref
       tempWords[j],i,j);
      // print(w.word + " is the word");
@@ -229,7 +243,7 @@ function makeWords()
         if (tempParts[j] === zones[k].name) 
         {
           append(zones[k].vehicles, w);
-          //print("got one!")
+          //print(zones[k].vehicles);
         }
       }  
     }
