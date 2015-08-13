@@ -39,7 +39,7 @@ function preload()
 
 function setup() 
 {
-  print("HELP COMPUTER!!!")
+  //print("HELP COMPUTER!!!")
   textSize(18);
   createCanvas(640,640);
   currentMaxScroll = height;
@@ -56,6 +56,7 @@ function setup()
 function draw() 
 {
   background(50);
+  print(zones.length + " is length of zones");
   for (var h = 0; h < zones.length; h++)
   {
     for (var i = 0; i < zones[h].vehicles.length; i++) 
@@ -222,13 +223,13 @@ function makeWords()
       partsData[tempParts[j]].getSize, partsData[tempParts[j]].getMaxSpeed, partsData[tempParts[j]].getMaxForce, 
       //word,lineref, posref
       tempWords[j],i,j);
-      print(w.word + " is the word");
+     // print(w.word + " is the word");
       for (var k = 0; k < zones.length; k++) 
       {
         if (tempParts[j] === zones[k].name) 
         {
           append(zones[k].vehicles, w);
-          print("got one!")
+          //print("got one!")
         }
       }  
     }
