@@ -14,6 +14,7 @@ var partsList;
 var rawText;
 var allParts;
 var partsData = [];
+var hookedWords =[];
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -65,7 +66,7 @@ function draw()
       if(zones[h].vehicles[i].isHooked)
       {
         //if hooked, seek mouse
-        zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, mouseX, mouseY);
+        zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].vehicles[i].getHookedTargetX(), zones[h].vehicles[i].getHookedTargetY());
         //update, but don't check borders
         zones[h].vehicles[i].update();
       }
@@ -101,7 +102,10 @@ function mouseClicked()
           //check to see if the word and mouse intersect, if so, it's hooked!
           if(zones[h].vehicles[i].checkHook())
           {
+            print(zones[h].vehicles[i].lineref);
+            zones[h].vehicles[i].setHookedTarget(mouseX, mouseY);
             //hook the other words
+            hookTheFullLine(zones[h].vehicles[i].lineref,zones[h].vehicles[i].posref );
           }
         }
       }
@@ -166,24 +170,56 @@ function keyPressed()
   return false;
 }
 
-function hookTheFullLine(lineref) 
+function hookTheFullLine(lineref, pointWordPos) 
 {
-  for (var i = 0; i < zones.length; i++) {
-    for (var j = 0; j < zones[i].inhabitants.length; j++) {
-      if (zones[i].inhabitants[j].lineref === lineref) {
-        zones[i].inhabitants[j].updateHooked();
-        zones[i].inhabitants[j].changeColor();
-        //print(i + " is the i value ");
-        //print(j + " is the j value ");
-        var temploc = new Location(i, j); 
+  for (var i = 0; i < zones.length; i++) 
+  {
+    for (var j = 0; j < zones[i].vehicles.length; j++) 
+    {
+      if (zones[i].vehicles[j].lineref === lineref) 
+      {
+        zones[i].vehicles[j].hook();
+        var temploc = new Location(i, j);
+        //print(temploc.ipos + " is temploc i");
         //the location of the hooked word in the zone array
         //add this location to the hookedWords array so you can get the object later
-        hookedWords[zones[i].inhabitants[j].wordpos] = temploc;
-        //print(hookedWords.length + "is the length");
+        //print("this is how we are indexing the target postion in the array " + zones[i].vehicles[j].posref)
+        hookedWords[zones[i].vehicles[j].posref] = temploc;
       }
     }
   }
-  print('Hooked length: ' + hookedWords.length)
+  setAllHookedTargets(pointWordPos);
+}
+
+function setAllHookedTargets(pointWordPos) 
+{
+  print(pointWordPos + "is point word position");
+  var currentX = mouseX;
+  if(pointWordPos > 0) //here we start at the beginning of the array and work forward
+  {
+    for (var i = pointWordPos; i> 0; i--)
+    {
+      //start with the position of the word you grabbed, and set the seek positions of the others before it
+      //word should arrange around the point word 
+      var currentWidth = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordWidth();
+      var currentSize = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordSize();
+      currentX -= currentWidth+currentSize;
+      print("and now current x is " + currentX);
+      zones[hookedWords[i-1].ipos].vehicles[hookedWords[i-1].jpos].setHookedTarget(currentX, mouseY);
+      
+    }
+  }
+  //reset currentX
+  currentX = mouseX;
+  for (var i = pointWordPos; i< hookedWords.length-1; i++)
+  {
+      //start with the position of the word you grabbed, and set the seek positions of the others after it
+      //word should arrange around the point word 
+      var currentWidth = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordWidth();
+      var currentSize = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordSize();
+      currentX += currentWidth+currentSize;
+      zones[hookedWords[i+1].ipos].vehicles[hookedWords[i+1].jpos].setHookedTarget(currentX, mouseY+random(.5,10));
+  }
 }
 
 //make pars objects and zone objects according to the list of parts of speech
@@ -197,7 +233,7 @@ function loadZoneDataPts() {
     var cl = color(210, 100, (i * 2.6 - 100) * -1);
     var inhabitantsArray = [];
     //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, random(1,5), .05, cl);
+    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, random(1,2), .05, cl);
     //zone parameters: yMin, yMax, attractor, vehicles
     var thisZone = new Zone(partsList[i], i * 100, (i * 100) + 100, inhabitantsArray, att);
     //assign this part to the array using key-value pairing

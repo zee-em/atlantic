@@ -18,6 +18,8 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   this.isHooked = false;
   this.lineref = lineref;
   this.posref = posref;
+  this.hookedTargetX;
+  this.hookedTargetY;
 
   this.applyBehaviors = function(vehicles, x, y) {
      
@@ -134,6 +136,16 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
  {
    return this.yMax;
  }
+ 
+  this.getWordWidth = function()
+ {
+   return textWidth(this.word);
+ }
+ 
+  this.getWordSize = function()
+ {
+   return this.r;
+ }
 
  this.setYDown = function(val)
  {
@@ -169,6 +181,28 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
       this.isHooked = false;
   }
   
+  //hook a word
+  this.hook = function()
+  {
+      this.isHooked = true;
+  }
+  
+  //get the target vector for any hooked word
+  this.getHookedTargetX = function()
+  {
+      return this.hookedTargetX;
+  }
+  
+  this.getHookedTargetY = function()
+  {
+      return this.hookedTargetY;
+  }
+  
+  this.setHookedTarget = function(x, y)
+  {
+    this.hookedTargetX = x;
+    this.hookedTargetY = y;
+  }
 }
 
 
