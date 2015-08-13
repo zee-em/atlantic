@@ -193,11 +193,11 @@ function loadZoneDataPts() {
     var partName = trim(partsList[i]);
     //colorMode(HSB, 360, 100, 100, 1);
     //waveX, waveY, yOffset, theta, thetaMod, amp
-    var att = new Attractor(width/2,i * 100, 50, 0, .02, 30);
+    var att = new Attractor(width+10, 0, i * 100 +50, 0, .02, 30);
     var cl = color(210, 100, (i * 2.6 - 100) * -1);
     var inhabitantsArray = [];
     //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, 5, .05, cl);
+    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, random(1,5), .05, cl);
     //zone parameters: yMin, yMax, attractor, vehicles
     var thisZone = new Zone(partsList[i], i * 100, (i * 100) + 100, inhabitantsArray, att);
     //assign this part to the array using key-value pairing
@@ -207,9 +207,7 @@ function loadZoneDataPts() {
     // this var is the max we can scroll, given the number and width of the zones
     // lowEnd = (i * 100 - 25) + 100;
   }
-  
-  //print("some data " + partsData["xx"].name);
-  print(" a zone " + zones[22].yMin);
+
 }
 
 
