@@ -2,16 +2,18 @@
 // Vehicle object AKA word object
 
 //add parameters: lineref, posref
-function Vehicle(x, y, ymin, ymax, word,lineref, posref) {
+//added parameters; r, maxspeed, maxforce
+
+function Vehicle(x, y, ymin, ymax, r, maxspeed, maxforce, word,lineref, posref) {
   // All the usual stuff
   this.position = createVector(x, y);
-  this.r = 10;
-  this.maxspeed = 3;    // Maximum speed
-  this.maxforce = 0.2;  // Maximum steering force
+  this.r = r;
+  this.maxspeed = maxspeed;    // Maximum speed
+  this.maxforce = maxforce;  // Maximum steering force
   this.acceleration = createVector(0, 0);
   this.velocity = createVector(0, 0);
-  this.yMin = yMin;
-  this.yMax = yMax;
+  this.yMin = ymin;
+  this.yMax = ymax;
   this.word = word;
   this.isHooked = false;
   this.lineref = lineref;
@@ -40,7 +42,7 @@ function Vehicle(x, y, ymin, ymax, word,lineref, posref) {
     var desiredseparation = 150;
     var sum = createVector();
     var count = 0;
-    // For every boid in the system, check if it's too close
+    // For every vehicle in the system, check if it's too close
     for (var i = 0; i < vehicles.length; i++) {
       var d = p5.Vector.dist(this.position, vehicles[i].position);
       // If the distance is greater than 0 and less than an arbitrary amount (0 when you are yourself)
@@ -92,6 +94,7 @@ function Vehicle(x, y, ymin, ymax, word,lineref, posref) {
   }
 
   this.show = function() {
+    print("showing!")
     if(this.isHooked === true)
     {
       fill(0,255,0);
@@ -145,13 +148,6 @@ function Vehicle(x, y, ymin, ymax, word,lineref, posref) {
    this.position.y-=val;
  }
  
- //when a word is unhooked, it needs to be reassigned to its zone,
- //the parameters need to be passed in via that zone
- this.resetBounds = function(newYMin, newYMax)
- {
-   this.yMax = newYMax;
-   this.yMin = newYMin;
- }
  
   this.checkHook = function()
   {
@@ -160,7 +156,6 @@ function Vehicle(x, y, ymin, ymax, word,lineref, posref) {
       print("hooked!");
       //word = "HOOKED";
       this.isHooked = true;
-      this.releaseBounds();
       return true;
       //print("isHooked " + isHooked + " for " + word);
       

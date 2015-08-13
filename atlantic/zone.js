@@ -1,9 +1,10 @@
-function Zone(yMin, yMax, attractor, vehicles)
+function Zone(name, yMin, yMax, vehicles, attractor)
 {
+  this.name = name;
   this.yMin = yMin;
   this.yMax = yMax;
-  this.attractor = attractor;
   this.vehicles = vehicles;
+  this.attractor = attractor;
   
   this.showZone = function()
   {

@@ -1,6 +1,6 @@
 function Attractor(waveX, waveY, yOffset, theta, thetaMod, amp)
 {
-
+  //print("making an attractor!");
   this.waveX = waveX;
   this.waveY = waveY;
   this.yOffset = yOffset;
@@ -21,7 +21,7 @@ function Attractor(waveX, waveY, yOffset, theta, thetaMod, amp)
   this.showWave = function()
   {
       // this turns off / on the marker of attraction
-      fill(255);
+      fill(0,255,0);
       noStroke();
       ellipse(this.waveX, this.waveY, 10, 10); // "current" test marker
       //ellipse(this.waveX, this.waveY+this.yOffset, 10, 10); // "current" test marker

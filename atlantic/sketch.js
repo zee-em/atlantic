@@ -1,4 +1,5 @@
-
+//hook rest of words
+//
 
 // A list of vehicles aka words
 var vehcs = [];
@@ -7,6 +8,12 @@ var vehcs = [];
 var zones = [];
 // attractor object
 var att;
+
+//variables to hold string input
+var partsList;
+var rawText;
+var allParts;
+var partsData = [];
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -32,44 +39,51 @@ function preload()
 
 function setup() 
 {
+  print("HELP COMPUTER!!!")
   textSize(18);
   createCanvas(640,640);
   currentMaxScroll = height;
   currentMinScroll = 0;
+  loadZoneDataPts();
   //attractor parameters are waveX, waveY, yOffset, theta, thetaMod, amp
-  att = new Attractor(attX, attY, 400, 0, .02, 60);
+  //att = new Attractor(attX, attY, 400, 0, .02, 60);
   makeWords();
-  zone = new Zone(yMin,yMax,att,vehcs);
+  //zone = new Zone(name,yMin,yMax,vehcs,att);
+  //print(zone);
+  //print("attractor: " + zone.attractor);
 }
 
 function draw() 
 {
   background(50);
-  for (var i = 0; i < zone.vehicles.length; i++) 
-  { 
-    //check if an object is hooked
-    if(zone.vehicles[i].isHooked)
-    {
-      //if hooked, seek mouse
-      zone.vehicles[i].applyBehaviors(zone.vehicles, mouseX, mouseY);
-      //update, but don't check borders
-      zone.vehicles[i].update();
+  for (var h = 0; h < zones.length; h++)
+  {
+    for (var i = 0; i < zones[h].vehicles.length; i++) 
+    { 
+      //check if an object is hooked
+      if(zones[h].vehicles[i].isHooked)
+      {
+        //if hooked, seek mouse
+        zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, mouseX, mouseY);
+        //update, but don't check borders
+        zones[h].vehicles[i].update();
+      }
+      else
+      {
+        //if not hooked, seek local attractor
+         zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
+         //update and maintain zone borders
+         zones[h].vehicles[i].update();
+         zones[h].vehicles[i].borders();
+      }
+      //show all of them 
+      zones[h].vehicles[i].show(); 
     }
-    else
-    {
-      //if not hooked, seek local attractor
-       zone.vehicles[i].applyBehaviors(zone.vehicles, zone.attractor.getWaveX(), zone.attractor.getWaveY());
-       //update and maintain zone borders
-       zone.vehicles[i].update();
-       zone.vehicles[i].borders();
-    }
-    //show all of them 
-    zone.vehicles[i].show(); 
-  }
-  zone.attractor.wave();
-  //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
-  zone.attractor.showWave();
-  zone.showZone();
+    zones[h].attractor.wave();
+    //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
+    zones[h].attractor.showWave();
+    zones[h].showZone();
+  }  
 }
 
 function mouseClicked()
@@ -80,7 +94,10 @@ function mouseClicked()
     for (var i = 0; i < zone.vehicles.length; i++) 
     {
       //check to see if the word and mouse intersect, if so, it's hooked!
-      zone.vehicles[i].checkHook(); 
+      if(zone.vehicles[i].checkHook())
+      {
+        //hook the other words
+      }
     }
   }
 }
@@ -134,6 +151,53 @@ function keyPressed()
   return false;
 }
 
+function hookTheFullLine(lineref) 
+{
+  for (var i = 0; i < zones.length; i++) {
+    for (var j = 0; j < zones[i].inhabitants.length; j++) {
+      if (zones[i].inhabitants[j].lineref === lineref) {
+        zones[i].inhabitants[j].updateHooked();
+        zones[i].inhabitants[j].changeColor();
+        //print(i + " is the i value ");
+        //print(j + " is the j value ");
+        var temploc = new Location(i, j); 
+        //the location of the hooked word in the zone array
+        //add this location to the hookedWords array so you can get the object later
+        hookedWords[zones[i].inhabitants[j].wordpos] = temploc;
+        //print(hookedWords.length + "is the length");
+      }
+    }
+  }
+  print('Hooked length: ' + hookedWords.length)
+}
+
+//make pars objects and zone objects according to the list of parts of speech
+function loadZoneDataPts() {
+  //use the list of parts to make parts objects
+  for (var i = 0; i < partsList.length; i++) {
+    var partName = trim(partsList[i]);
+    //colorMode(HSB, 360, 100, 100, 1);
+    //waveX, waveY, yOffset, theta, thetaMod, amp
+    var att = new Attractor(width/2,i * 100, 200, 0, .02, 60);
+    var cl = color(210, 100, (i * 2.6 - 100) * -1);
+    var inhabitantsArray = [];
+    //parts parameters: name, ymin, ymax, size, minspeed, maxspeed,cl
+    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, 1, 3, cl);
+    //zone parameters: yMin, yMax, attractor, vehicles
+    var thisZone = new Zone(partsList[i], i * 100, (i * 100) + 100, inhabitantsArray, att);
+    //assign this to the array using key-value pairing
+    partsData[partsList[i]] = thisPart;
+    //add the zone into the zone aray
+    append(zones, thisZone);
+    // this var is the max we can scroll, given the number and width of the zones
+    // lowEnd = (i * 100 - 25) + 100;
+  }
+  
+  //print("some data " + partsData["xx"].name);
+  //print(" a zone " + zones[22]);
+}
+
+
 function makeWords() 
 {
   //print(rawText.length + " " + allParts.length);
@@ -146,9 +210,27 @@ function makeWords()
     //loop to create words using input text
     for (var j = 0; j < tempWords.length; j++) 
     {
-      // We are now making random vehicles and storing them in an array
-      //these are parameters for Vehicle x, y, ymin, ymax, word
-      vehcs.push(new Vehicle(random(width),random(yMin,yMax), yMin, yMax, tempWords[j],i,j));
+      //We are now making  vehicles and storing them in an array
+      //use the current part of speech to ID the parts data
+      //print(partsData[tempParts[j]]);
+      w = new Vehicle(
+      //x, y
+      random(width),random(partsData[tempParts[j]].getYMin,partsData[tempParts[j]].getYMax),
+      //ymin, ymax, 
+      partsData[tempParts[j]].getYMin, partsData[tempParts[j]].getYMax, 
+      //r, maxspeed, maxforce,
+      partsData[tempParts[j]].getSize, partsData[tempParts[j]].getMaxSpeed, partsData[tempParts[j]].getMaxForce, 
+      //word,lineref, posref
+      tempWords[j],i,j);
+      print(w.word + " is the word");
+      for (var k = 0; k < zones.length; k++) 
+      {
+        if (tempParts[j] === zones[k].name) 
+        {
+          append(zones[k].vehicles, w);
+          print("got one!")
+        }
+      }  
     }
   }
 }
