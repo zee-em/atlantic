@@ -35,6 +35,21 @@ function Zone(name, yMin, yMax, vehicles, attractor)
  {
    return this.yMax;
  }
+ 
+ 
+ this.testToDisplay = function()
+  {
+    if(this.yMin > height || this.yMax < 0)
+    {
+      //print(this.name + " off screen, won't display and yMin is" + yminZone);
+      
+      return false;
+    }
+    else
+    {
+      return true;
+    }    
+  }
   
  this.checkZoneAndMouse = function()
   {
