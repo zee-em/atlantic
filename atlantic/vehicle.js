@@ -70,9 +70,8 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
     return sum;
   }
 
-  
-  // A method that calculates a steering force towards a target
-  // STEER = DESIRED MINUS VELOCITY
+      // A method that calculates a steering force towards a target
+    // STEER = DESIRED MINUS VELOCITY
   this.seek = function(target) {
     var desired = p5.Vector.sub(target,this.position);  // A vector pointing from the location to the target
     
@@ -188,22 +187,22 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
       this.isHooked = true;
   }
   
-  // //get the target vector for any hooked word
-  // this.getHookedTargetX = function()
-  // {
-  //     return this.hookedTargetX;
-  // }
+  //get the target vector for any hooked word
+  this.getHookedTargetX = function()
+  {
+      return this.hookedTargetX;
+  }
   
-  // this.getHookedTargetY = function()
-  // {
-  //     return this.hookedTargetY;
-  // }
+  this.getHookedTargetY = function()
+  {
+      return this.hookedTargetY;
+  }
   
-  // this.setHookedTarget = function(x, y)
-  // {
-  //   this.hookedTargetX = x;
-  //   this.hookedTargetY = y;
-  // }
+  this.setHookedTarget = function(x, y)
+  {
+    this.hookedTargetX = x;
+    this.hookedTargetY = y;
+  }
 }
 
 

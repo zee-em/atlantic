@@ -25,7 +25,6 @@ var attY = 0;
 
 //variable for text zone
 var zone;
-var pointWordPos;
 
 //variable to keep track of currentMaxScroll and currentMinScroll so we know where the frame is
 var currentMaxScroll;
@@ -35,9 +34,7 @@ var scrollVal = 4;
 function preload() 
 {
   rawText = loadStrings("assets/words.txt");
-  //rawText = loadStrings("assets/wordsLast.txt");
   allParts = loadStrings("assets/parts.txt");
-  //allParts = loadStrings("assets/partsLast.txt");
   partsList = loadStrings("assets/partslookup.txt");
 }
 
@@ -55,7 +52,6 @@ function setup()
   //zone = new Zone(name,yMin,yMax,vehcs,att);
   //print(zone);
   //print("attractor: " + zone.attractor);
-  printVehicleCountsPerZone();
 }
 
 function draw() 
@@ -63,35 +59,34 @@ function draw()
   background(50);
   for (var h = 0; h < zones.length; h++)
   {
-    var checkDisplay = zones[h].testToDisplay();
-    if (checkDisplay === true) 
-    {
-      for (var i = 0; i < zones[h].vehicles.length; i++) 
-      { 
-        // //check if an object is hooked
-        if(zones[h].vehicles[i].isHooked === false)
-        {
-  
-          //if not hooked, seek local attractor
-          zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
-          //update and maintain zone borders
-          zones[h].vehicles[i].update();
-          zones[h].vehicles[i].borders();
-        }
-        //call the function to display all the hooked words
-        if(pointWordPos !== null)
-        {
-        displayAllHookedWords();
-        }
-        //show all of them 
-        //print(zones[h].vehicles[i].position);
-        zones[h].vehicles[i].show(); 
+    //print(zones[h]);
+    for (var i = 0; i < zones[h].vehicles.length; i++) 
+    { 
+      //check if an object is hooked
+      if(zones[h].vehicles[i].isHooked)
+      {
+        //if hooked, seek mouse
+        zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].vehicles[i].getHookedTargetX(), zones[h].vehicles[i].getHookedTargetY());
+        //update, but don't check borders
+        zones[h].vehicles[i].update();
       }
-      zones[h].attractor.wave();
-      //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
-      zones[h].attractor.showWave();
-      zones[h].showZone();
+      else
+      {
+        
+        //if not hooked, seek local attractor
+         zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
+         //update and maintain zone borders
+         zones[h].vehicles[i].update();
+         zones[h].vehicles[i].borders();
+      }
+      //show all of them 
+      //print(zones[h].vehicles[i].position);
+      zones[h].vehicles[i].show(); 
     }
+    zones[h].attractor.wave();
+    //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
+    zones[h].attractor.showWave();
+    zones[h].showZone();
   }  
 }
 
@@ -107,12 +102,10 @@ function mouseClicked()
           //check to see if the word and mouse intersect, if so, it's hooked!
           if(zones[h].vehicles[i].checkHook())
           {
-            //print(zones[h].vehicles[i].lineref);
-            //zones[h].vehicles[i].setHookedTarget(mouseX, mouseY);
-            //set the point word position, use to align other words in that same line
-            pointWordPos = zones[h].vehicles[i].posref 
+            print(zones[h].vehicles[i].lineref);
+            zones[h].vehicles[i].setHookedTarget(mouseX, mouseY);
             //hook the other words
-            hookTheFullLine(zones[h].vehicles[i].lineref);
+            hookTheFullLine(zones[h].vehicles[i].lineref,zones[h].vehicles[i].posref );
           }
         }
       }
@@ -177,7 +170,7 @@ function keyPressed()
   return false;
 }
 
-function hookTheFullLine(lineref) 
+function hookTheFullLine(lineref, pointWordPos) 
 {
   for (var i = 0; i < zones.length; i++) 
   {
@@ -195,11 +188,12 @@ function hookTheFullLine(lineref)
       }
     }
   }
+  setAllHookedTargets(pointWordPos);
 }
 
-function displayAllHookedWords() 
+function setAllHookedTargets(pointWordPos) 
 {
-  //print(pointWordPos + "is point word position");
+  print(pointWordPos + "is point word position");
   var currentX = mouseX;
   if(pointWordPos > 0) //here we start at the beginning of the array and work forward
   {
@@ -210,11 +204,9 @@ function displayAllHookedWords()
       var currentWidth = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordWidth();
       var currentSize = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordSize();
       currentX -= currentWidth+currentSize;
-      //zones[hookedWords[i-1].ipos].vehicles[hookedWords[i-1].jpos].setHookedTarget(currentX, mouseY)
-      zones[hookedWords[i-1].ipos].vehicles[hookedWords[i-1].jpos].applyBehaviors(
-      zones[hookedWords[i-1].ipos].vehicles, random(currentX, currentX+5.00), random(mouseY,mouseY+5));
-      //update, but don't check borders
-      zones[hookedWords[i-1].ipos].vehicles[hookedWords[i-1].jpos].update();
+      print("and now current x is " + currentX);
+      zones[hookedWords[i-1].ipos].vehicles[hookedWords[i-1].jpos].setHookedTarget(currentX, mouseY);
+      
     }
   }
   //reset currentX
@@ -226,12 +218,7 @@ function displayAllHookedWords()
       var currentWidth = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordWidth();
       var currentSize = zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getWordSize();
       currentX += currentWidth+currentSize;
-      //set the target
-      zones[hookedWords[i+1].ipos].vehicles[hookedWords[i+1].jpos].applyBehaviors(
-      zones[hookedWords[i+1].ipos].vehicles, random(currentX, currentX+5.00), random(mouseY,mouseY+5));
-      //update, but don't check borders
-      zones[hookedWords[i+1].ipos].vehicles[hookedWords[i+1].jpos].update();
-      //zones[hookedWords[i+1].ipos].vehicles[hookedWords[i+1].jpos].setHookedTarget(currentX, mouseY+random(.5,10));
+      zones[hookedWords[i+1].ipos].vehicles[hookedWords[i+1].jpos].setHookedTarget(currentX, mouseY+random(.5,10));
   }
 }
 
@@ -242,11 +229,11 @@ function loadZoneDataPts() {
     var partName = trim(partsList[i]);
     //colorMode(HSB, 360, 100, 100, 1);
     //waveX, waveY, yOffset, theta, thetaMod, amp
-    var att = new Attractor(width+10, 0, i * 400 +150, 0, .02, 30);
+    var att = new Attractor(width+10, 0, i * 100 +50, 0, .02, 30);
     var cl = color(210, 100, (i * 2.6 - 100) * -1);
     var inhabitantsArray = [];
     //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, random(1,2), .02, cl);
+    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, random(1,2), .05, cl);
     //zone parameters: yMin, yMax, attractor, vehicles
     var thisZone = new Zone(partsList[i], i * 100, (i * 100) + 100, inhabitantsArray, att);
     //assign this part to the array using key-value pairing
@@ -274,7 +261,7 @@ function makeWords()
     {
       //We are now making  vehicles and storing them in an array
       //use the current part of speech to ID the parts data
-      //print(tempParts[j]);
+      //print(partsData[tempParts[j]]);
       w = new Vehicle(
       //x, y
       random(width),random(partsData[tempParts[j]].yMin, partsData[tempParts[j]].yMax),
@@ -289,19 +276,10 @@ function makeWords()
       {
         if (tempParts[j] === zones[k].name) 
         {
-          //if zones of that name is full, use next zone, if that one is full, use next zone
           append(zones[k].vehicles, w);
           //print(zones[k].vehicles);
         }
       }  
     }
   }
-}
-
-function printVehicleCountsPerZone()
-{
-  for (var i = 0; i < zones.length; i++) 
-  {
-    print(zones[i].vehicles.length + "  " + zones[i].name);
-  }  
 }
