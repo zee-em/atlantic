@@ -1,4 +1,4 @@
-xx
+vb
 sym
 cd
 ls
@@ -20,7 +20,6 @@ rbr
 rbs
 rp
 to
-vb
 vbd
 vbg
 vbn
@@ -35,3 +34,4 @@ nns
 nnp
 nnps
 fw
+xx

@@ -20,6 +20,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   this.posref = posref;
   this.hookedTargetX;
   this.hookedTargetY;
+  this.isPointWord = false;
 
   this.applyBehaviors = function(vehicles, x, y) {
      
@@ -146,7 +147,17 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
  {
    return this.r;
  }
-
+ 
+   this.getLineref = function()
+ {
+   return this.lineref;
+ }
+ 
+   this.getPosref = function()
+ {
+   return this.posref;
+ }
+      
  this.setYDown = function(val)
  {
    this.yMax+=val;
@@ -202,6 +213,26 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   {
     this.hookedTargetX = x;
     this.hookedTargetY = y;
+  }
+  
+   this.makePointWord = function(mf)
+  {
+    this.isPointWord = true;
+  }
+  
+   this.resetPointWord = function(mf)
+  {
+    this.isPointWord = false;
+  }
+  
+  this.setMaxforce = function(mf)
+  {
+    this.maxforce = mf;
+  }
+  
+  this.setMaxspeed = function(ms)
+  {
+    this.maxspeed = ms;
   }
 }
 
