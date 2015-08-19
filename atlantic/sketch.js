@@ -1,4 +1,5 @@
-//fix motion along x for anchor word
+//fix motion along y for anchor word DONE
+//fix x wrap for words 
 //divide zones properly
 
 //how can we swap and save out?
@@ -51,15 +52,9 @@ function setup() {
   currentMaxScroll = height;
   currentMinScroll = 0;
   loadZoneDataPts();
-  //attractor parameters are waveX, waveY, yOffset, theta, thetaMod, amp
-  //att = new Attractor(attX, attY, 400, 0, .02, 60);
   makeWords();
   for (var h = 0; h < zones.length; h++) {
-    //print(zones[h].vehicles.length + " type " + zones[h].name );
   }
-  //zone = new Zone(name,yMin,yMax,vehcs,att);
-  //print(zone);
-  //print("attractor: " + zone.attractor);
 }
 
 function draw() {
@@ -80,9 +75,6 @@ function draw() {
           zones[h].vehicles[i].borders();
           zones[h].vehicles[i].show();
        }
-      //show all of them 
-      //print(zones[h].vehicles[i].position);
-      // zones[h].vehicles[i].show();
       }
       zones[h].attractor.wave();
       //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
@@ -97,8 +89,8 @@ function draw() {
         setAllHookedTargets(pointWordPosVar);
         //if hooked, seek target
         zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].vehicles[i].getHookedTargetX(), zones[h].vehicles[i].getHookedTargetY());
-        //update, but don't check borders
         zones[h].vehicles[i].update();
+        zones[h].vehicles[i].bordersXOnly();//update, but don't check borders along Y
         zones[h].vehicles[i].show();
       }
     }  

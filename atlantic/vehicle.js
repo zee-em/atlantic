@@ -128,6 +128,16 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
     
   }
 
+ this.bordersXOnly = function() 
+  {
+    
+    //this resets obj to wrap, and makes sure that it appears offscreen
+    //if x is less than 0 minus the size of the object, then set x to be the width plus the obj size 
+    if (this.position.x < -this.r) this.position.x = width+this.r;
+    // if x is greater than the width plus obj size, set x to be 0 minus the obj size
+    if (this.position.x >  width+this.r) this.position.x = -this.r;
+  }
+  
  this.getYMin = function()
  {
    return this.yMin;
@@ -190,6 +200,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   this.unHook = function()
   {
       this.isHooked = false;
+      this.isPointWord = false;
   }
   
   //hook a word
