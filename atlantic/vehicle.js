@@ -21,6 +21,8 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   this.hookedTargetX;
   this.hookedTargetY;
   this.isPointWord = false;
+  this.origSpeed = maxspeed;
+  this.origForce = maxforce;
 
   this.applyBehaviors = function(vehicles, x, y) {
      
@@ -167,6 +169,26 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
  {
    return this.posref;
  }
+ 
+ this.getOrgiSpeed = function()
+ {
+   return this.origSpeed;
+ }
+ 
+ this.getOrigForce = function()
+ {
+   return this.origForce;
+ }
+ 
+ this.resetMaxforce = function()
+  {
+    this.maxforce = this.getOrigForce();
+  }
+  
+  this.resetMaxspeed = function()
+  {
+    this.maxspeed = this.getOrigSpeed();
+  }
       
  this.setYDown = function(val)
  {
@@ -201,6 +223,8 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   {
       this.isHooked = false;
       this.isPointWord = false;
+      // this.resetMaxforce();
+      // this.resetMaxspeed();
   }
   
   //hook a word
@@ -245,6 +269,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   {
     this.maxspeed = ms;
   }
+
 }
 
 

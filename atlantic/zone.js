@@ -5,6 +5,7 @@ function Zone(name, yMin, yMax, vehicles, attractor)
   this.yMax = yMax;
   this.vehicles = vehicles;
   this.attractor = attractor;
+  this.identifier;
   
   this.showZone = function()
   {

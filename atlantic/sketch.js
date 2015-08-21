@@ -1,8 +1,10 @@
 //fix motion along y for anchor word DONE
-//fix x wrap for words 
+//fix x wrap for words DONE
 //divide zones properly
 
 //how can we swap and save out?
+
+//then view the new text
 
 //add flocking?
 //add noise to motion? wiggle
@@ -220,20 +222,21 @@ function setAllHookedTargets(pointWordPos) {
   }
 }
 
-//make pars objects and zone objects according to the list of parts of speech
+//make parts objects and zone objects according to the list of parts of speech
 function loadZoneDataPts() {
   //use the list of parts to make parts objects
   for (var i = 0; i < partsList.length; i++) {
     var partName = trim(partsList[i]);
     //colorMode(HSB, 360, 100, 100, 1);
     //waveX, waveY, yOffset, theta, thetaMod, amp
-    var att = new Attractor(width + 10, 0, i * 100 + 50, 0, .02, 30);
+    var offset = 300;
+    var att = new Attractor(width + 10, offset, offset + (i * 100)+ 50, 0, .02, 30);
     var cl = color(210, 100, (i * 2.6 - 100) * -1);
     var inhabitantsArray = [];
     //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-    var thisPart = new Part(partsList[i], i * 100, (i * 100) + 100, 12, random(.05, 2), .05, cl);
-    //zone parameters: yMin, yMax, attractor, vehicles
-    var thisZone = new Zone(partsList[i], i * 100, (i * 100) + 100, inhabitantsArray, att);
+    var thisPart = new Part(partsList[i], i * 100 +offset, offset + (i * 100) + 100, 12, random(.05, 2), .05, cl);
+    //zone parameters: name, yMin, yMax, attractor, vehicles
+    var thisZone = new Zone(partsList[i], i * 100 +offset, offset + (i * 100) + 100, inhabitantsArray, att);
     //assign this part to the array using key-value pairing
     partsData[partsList[i]] = thisPart;
     //add the zone into the zone aray
@@ -275,4 +278,24 @@ function makeWords() {
       }
     }
   }
+  
+//new dynamic approach for zones and words
+  
+function dynamicZonesAndWords()
+{
+//bring in words,  for each word, check if a corresponding zone exists
+//zones need a zone name and an identifier (if they are a second version of a zone)
+
+// if it does, and the zone is not full,
+// make the word, and  add the word to the zone array
+
+// if the zone does not exist, 
+// make a new zone
+// make the word, and  add the word to the zone array
+
+// if the zone does exist but is full, 
+// make a new zone
+// make the word, and  add the word to the zone array
+}
+
 }
