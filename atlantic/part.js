@@ -1,6 +1,5 @@
-function Part(name, yMin, yMax, size, maxspeed, maxforce,cl)
+function Part(name, yMin, yMax, size, maxspeed, maxforce, cl)
 {
-
   this.name = name;
   this.yMin = yMin;
   this.yMax = yMax;
@@ -8,5 +7,4 @@ function Part(name, yMin, yMax, size, maxspeed, maxforce,cl)
   this.maxspeed = maxspeed;
   this.maxforce = maxforce;
   this.cl = cl;
-  
 }  

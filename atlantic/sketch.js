@@ -1,10 +1,11 @@
 //fix motion along y for anchor word DONE
 //fix x wrap for words DONE
-//divide zones properly
+//divide zones properly THIS ONE NEXT!!!
 
-//how can we swap and save out?
+//how can we swap and save out? //DO WE EVEN WANT TO? ONLY TO DISPLAY SEPARATELY
+//how can we show when you've got a complete sentence ALMOSt DONE
 
-//then view the new text
+//view the new text??
 
 //add flocking?
 //add noise to motion? wiggle
@@ -24,6 +25,8 @@ var allParts;
 var partsData = [];
 var hookedWords = [];
 var pointWordPosVar;
+var counter = 0;
+var arrivedColor;
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -35,14 +38,15 @@ var attY = 0;
 //variable for text zone
 var zone;
 
+
 //variable to keep track of currentMaxScroll and currentMinScroll so we know where the frame is
 var currentMaxScroll;
 var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  rawText = loadStrings("assets/words.txt");
-  allParts = loadStrings("assets/parts.txt");
+  rawText = loadStrings("assets/wordsLastShort.txt");
+  allParts = loadStrings("assets/partsLastShort.txt");
   partsList = loadStrings("assets/partslookup.txt");
 }
 
@@ -50,9 +54,10 @@ function setup() {
   frameRate(30);
   //print("HELP COMPUTER!!!")
   textSize(18);
-  createCanvas(640, 480);
+  createCanvas(800, 480);
   currentMaxScroll = height;
   currentMinScroll = 0;
+  arrivedColor = color(255,0,0);
   loadZoneDataPts();
   makeWords();
   for (var h = 0; h < zones.length; h++) {
@@ -95,11 +100,24 @@ function draw() {
         zones[h].vehicles[i].bordersXOnly();//update, but don't check borders along Y
         zones[h].vehicles[i].show();
       }
-    }  
+    }
+    
   }
+  setColorForFullCatch();
 }
 
 function mouseClicked() {
+  for (var h = 0; h < zones.length; h++) 
+  {     //this will release any vehicles currently hooked
+      for (var i = 0; i < zones[h].vehicles.length; i++) 
+      {
+        if (zones[h].vehicles[i].isHooked) {
+          //swapOutWords(zones[h].vehicles[i]);
+          zones[h].vehicles[i].unHook();
+      }
+    }
+  }
+  hookedWords = [];
   for (var h = 0; h < zones.length; h++) {
     //check to see if the zone and mouse intersect
     var checkDisplay = zones[h].testToDisplay();
@@ -111,7 +129,6 @@ function mouseClicked() {
           if (zones[h].vehicles[i].checkHook()) {
             //make this word the point word
             zones[h].vehicles[i].makePointWord();
-            print(zones[h].vehicles[i].isPointWord)
             //hook the other words
             pointWordPosVar = zones[h].vehicles[i].getPosref();
             hookTheFullLine(zones[h].vehicles[i].getLineref(), zones[h].vehicles[i].getPosref());
@@ -153,12 +170,13 @@ function keyPressed() {
       //this will release the vehicles
       for (var i = 0; i < zones[h].vehicles.length; i++) {
         if (zones[h].vehicles[i].isHooked) {
+          //swapOutWords(zones[h].vehicles[i]);
           zones[h].vehicles[i].unHook();
-        }
       }
     }
   }
-
+  hookedWords = [];
+}
   // print("cMax " + currentMaxScroll);
   // print("cMin " + currentMinScroll);
   return false;
@@ -187,7 +205,7 @@ function setAllHookedTargets(pointWordPos) {
    for (var i = 0; i < hookedWords.length; i++)
    {
      
-     zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxspeed(random(2,5));
+     zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxspeed(random(2,7));
      zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxforce(random(.05,1));
      if(zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].isPointWord)
      {
@@ -222,6 +240,38 @@ function setAllHookedTargets(pointWordPos) {
   }
 }
 
+function swapOutWords()
+{
+  
+}
+
+//some feedback to show you have all the words in the line
+//this is not working now -- variable problems? why won't counter increment?
+function setColorForFullCatch()
+{
+  for (var i = 0; i < hookedWords.length; i++)
+   {
+     print(hookedWords.length);
+     print("status is " +zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].arrived
+      + "word is " + zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].word);
+     if(zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getArrived())
+     {
+       println("here!");
+       counter+=1;
+       print("this is  counter " + counter);
+     }
+     if(counter === hookedWords.length)
+     {
+       for (var j = 0; j < hookedWords.length; j++)
+       {
+         println("all here!");
+         //zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setColor();
+       }
+     }
+   }
+   counter = 0;
+}
+
 //make parts objects and zone objects according to the list of parts of speech
 function loadZoneDataPts() {
   //use the list of parts to make parts objects
@@ -234,7 +284,7 @@ function loadZoneDataPts() {
     var cl = color(210, 100, (i * 2.6 - 100) * -1);
     var inhabitantsArray = [];
     //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-    var thisPart = new Part(partsList[i], i * 100 +offset, offset + (i * 100) + 100, 12, random(.05, 2), .05, cl);
+    var thisPart = new Part(partsList[i], i * 100 +offset, offset + (i * 100) + 100, 5+i, random(.05, 5), random(.05, .5), cl);
     //zone parameters: name, yMin, yMax, attractor, vehicles
     var thisZone = new Zone(partsList[i], i * 100 +offset, offset + (i * 100) + 100, inhabitantsArray, att);
     //assign this part to the array using key-value pairing
@@ -249,7 +299,6 @@ function loadZoneDataPts() {
 
 
 function makeWords() {
-  //print(rawText.length + " " + allParts.length);
   //loop on the outside to get each line in the program
   for (var i = 0; i < rawText.length; i++) {
     //split arrays into lines or sentences, work by line to make particles
@@ -278,24 +327,54 @@ function makeWords() {
       }
     }
   }
+}  
   
 //new dynamic approach for zones and words
   
-function dynamicZonesAndWords()
-{
-//bring in words,  for each word, check if a corresponding zone exists
-//zones need a zone name and an identifier (if they are a second version of a zone)
+// function dynamicZonesAndWords()
+// {
+//   //loop on the outside to get each line in the program
+//   for (var i = 0; i < rawText.length; i++) {
+//     //split arrays into lines or sentences, work by line to make particles
+//     var tempWords = split(trim(rawText[i]), " ");
+//     var tempParts = split(trim(allParts[i]), " ");
+//     //loop to create words using input text
+//     for (var j = 0; j < tempWords.length; j++) {
+    
+//     if(isZoneInList(tempParts[j]) //check if a corresponding zone already exists
+//     {
 
-// if it does, and the zone is not full,
-// make the word, and  add the word to the zone array
+    
+//     }
+//     else
+//     {
+      
+//     }
+// //bring in words,  for each word, 
+// //zones need a zone name and an identifier (if they are a second version of a zone)
 
-// if the zone does not exist, 
-// make a new zone
-// make the word, and  add the word to the zone array
+// // if it does, and the zone is not full,
+// // make the word, and  add the word to the zone array
 
-// if the zone does exist but is full, 
-// make a new zone
-// make the word, and  add the word to the zone array
-}
+// // if the zone does not exist, 
+// // make a new zone
+// // make the word, and  add the word to the zone array
 
-}
+// // if the zone does exist but is full, 
+// // make a new zone
+// // make the word, and  add the word to the zone array
+// }
+
+// function isZoneInList(thisPart)
+// {
+//   for(var k = 0; k<partsList; k++)
+//     {
+//       if(partsData[k] === thisPart)
+//       {
+//         return true;
+//       }
+//       else 
+//       {
+//         return false;
+//       }
+// }

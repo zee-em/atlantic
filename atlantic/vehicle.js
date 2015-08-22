@@ -23,6 +23,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   this.isPointWord = false;
   this.origSpeed = maxspeed;
   this.origForce = maxforce;
+  this.arrived = false;
 
   this.applyBehaviors = function(vehicles, x, y) {
      
@@ -99,19 +100,35 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   }
 
   this.show = function() {
-    //print("showing!")
-    if(this.isHooked === true)
+    //a variable that shows the distance
+    noStroke();
+    if(this.isHooked)
     {
-      fill(0,255,0);
+       fill(0,255,0);
     }
     else
     {
-      fill(255);
+       fill(255);
     }
-    noStroke();
-    //print("here!");
-    textSize(r);
-    text(word, this.position.x, this.position.y);
+    var distMouse = dist(mouseX, mouseY, mouseX,this.position.y);
+    //if the vehicle is hooked and not near the mouse, we can rotate it towards the mouse
+    if(this.isHooked === true && distMouse > 100)
+    {
+      this.arrived = true;
+      var theta = this.velocity.heading();
+      //print("angle is " +theta);
+      push();
+      translate(this.position.x,this.position.y);
+      rotate(theta) + radians(90);
+      textSize(r);
+      text(word,0,0);
+      pop();
+    }
+    else
+    {
+      textSize(r);
+      text(word,this.position.x,this.position.y);
+    }
   }
 
   // Wraparound
@@ -204,6 +221,10 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
    this.position.y-=val;
  }
  
+ this.getArrived = function()
+ {
+   return this.arrived;
+ }
  
   this.checkHook = function()
   {
@@ -223,6 +244,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
   {
       this.isHooked = false;
       this.isPointWord = false;
+      this.arrived = false;
       // this.resetMaxforce();
       // this.resetMaxspeed();
   }
