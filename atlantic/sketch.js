@@ -3,7 +3,7 @@
 //divide zones properly THIS ONE NEXT!!!
 
 //how can we swap and save out? //DO WE EVEN WANT TO? ONLY TO DISPLAY SEPARATELY
-//how can we show when you've got a complete sentence ALMOSt DONE
+//how can we show when you've got a complete sentence ALMOSt DONE, needs help!
 
 //view the new text??
 
@@ -27,6 +27,8 @@ var hookedWords = [];
 var pointWordPosVar;
 var counter = 0;
 var arrivedColor;
+var concordance;
+var partsCount= {};
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -45,8 +47,9 @@ var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  rawText = loadStrings("assets/wordsLastShort.txt");
-  allParts = loadStrings("assets/partsLastShort.txt");
+  rawText = loadStrings("assets/wordsLast.txt");
+  allParts = loadStrings("assets/partsLast.txt");
+  //this is the ordered list of parts
   partsList = loadStrings("assets/partslookup.txt");
 }
 
@@ -54,6 +57,9 @@ function setup() {
   frameRate(30);
   //print("HELP COMPUTER!!!")
   textSize(18);
+  concordance = new Concordance();
+  //
+  checkWordCounts(allParts);
   createCanvas(800, 480);
   currentMaxScroll = height;
   currentMinScroll = 0;
@@ -274,29 +280,127 @@ function setColorForFullCatch()
 
 //make parts objects and zone objects according to the list of parts of speech
 function loadZoneDataPts() {
+  var offset = 300; //this is the distance of the first zone from the top pf the screen
   //use the list of parts to make parts objects
   for (var i = 0; i < partsList.length; i++) {
     var partName = trim(partsList[i]);
-    //colorMode(HSB, 360, 100, 100, 1);
-    //waveX, waveY, yOffset, theta, thetaMod, amp
-    var offset = 300;
-    var att = new Attractor(width + 10, offset, offset + (i * 100)+ 50, 0, .02, 30);
-    var cl = color(210, 100, (i * 2.6 - 100) * -1);
-    var inhabitantsArray = [];
-    //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-    var thisPart = new Part(partsList[i], i * 100 +offset, offset + (i * 100) + 100, 5+i, random(.05, 5), random(.05, .5), cl);
-    //zone parameters: name, yMin, yMax, attractor, vehicles
-    var thisZone = new Zone(partsList[i], i * 100 +offset, offset + (i * 100) + 100, inhabitantsArray, att);
-    //assign this part to the array using key-value pairing
-    partsData[partsList[i]] = thisPart;
-    //add the zone into the zone aray
-    append(zones, thisZone);
-    // this var is the max we can scroll, given the number and width of the zones
-    // lowEnd = (i * 100 - 25) + 100;
+    //print(partsCount[partName] + ": " + partName);
+    if(partsCount[partName] !== undefined) //if we have parts, let's make parts objects and zones for them
+    {
+      population = partsCount[partName];
+      var thisPart;
+      var thisZone;
+      //if the number of words associated with a part is more than 200, we'll need to make an extra zone
+      // if(population>175)
+      // {
+      //   //how many words do we want per zone? divide the total by this number
+      //   var loopVal = Math.round(population/175);
+      //   //loopVal is the number of total zones we need to 
+      //   // print("this is loopVal " +loopVal);
+      //   //here we will need to make an extra zones, per loopVal
+      //   for(var j = 0; j< loopVal; j++)
+      //   {
+      //     if(j> 0)
+      //     {
+      //     //we make a new name to associate with the additional divisions
+      //       num = j.toString();
+      //       partName = partName.concat(num);
+      //     }
+      //     print("this is the new part name " + partName);
+      //     //we call make part using the name and the offset
+      //     thisPart = makePart(partName, offset, population);
+      //     thisZone = makeZone(partName, offset, thisPart.yMax);
+      //     partsData[partsList[i]] = thisPart;
+      //     //add the zone into the zone aray
+      //     append(zones, thisZone);
+      //     //***update offset before you go!!****
+      //     offset = thisPart.yMax;
+      //     print('offset for high pop ' + partName + "  "+ offset);
+      //     population = population - population/loopVal;
+      //     print("updated population is :"+ population);
+      //   }
+      //   //function? pass in offset (or make offset global) plus the number of times 
+      //   //print(partName +"  has too many! " + partsCount[partName])
+      // }
+      // else
+      // {
+          thisPart = makePart(partName, offset, population);
+          thisZone = makeZone(partName, offset, thisPart.yMax);
+          partsData[partsList[i]] = thisPart;
+          //add the zone into the zone array
+          append(zones, thisZone);
+          //***update offset before you go!!****
+          offset = thisPart.yMax;
+          print('this is the name ' + partName + " this is yMax "+ offset);
+    //}
+      //we need to determine the bondaries for each part of speech
+      //the ymin should be the the current offset
+      //the ymax is the ymin plus space to allow for the words. 
+      // var ymax;
+      // if(partName === "xx" )
+      // {
+      //   //make zone width smaller for the punctuation because they're so tiny
+      //   ymax = offset + (population *.75)+ 25;
+      // }
+      // else
+      // {
+      //   ymax = offset + (population *1.5)+ 25;
+      // }
+      // //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
+      // //colorMode(HSB, 360, 100, 100, 1);
+      // var cl = color(210, 100, (i * 2.6 - 100) * -1);
+      // var thisPart = new Part(partsList[i], offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
+      // //THIS IS JUST FOR THE ATTRACTOR
+      // //attractor parameters: waveX, waveY, yOffset, theta, thetaMod, amp
+      // attrY = ymax-offset/2;
+      // var att = new Attractor(width + 10, offset, attrY, 0, .02, 30);
+      
+      // //THIS IS FOR THE ZONES
+      // //zone parameters: name, yMin, yMax, attractor, vehicles
+      // var inhabitantsArray = [];
+      // var thisZone = new Zone(partsList[i], offset, ymax, inhabitantsArray, att);
+      // //assign this part to the array using key-value pairing
+    }
   }
-
 }
 
+function makePart(name, offset, population)
+{
+      print("in make part and the population is" + population);
+      //use the current offset and info about the population to determine the max y value
+      var ymax;
+      print(name + " is name in makePart!");
+      print(offset + " is intial  offset in makePart!");
+      if(name === "xx" )
+      {
+        //make zone width smaller for the punctuation because they're so tiny
+         ymax = offset + (population *.75)+ 25;
+      }
+      else
+      {
+         ymax = offset + (population *1.5)+ 25;
+      }
+      //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
+      //colorMode(HSB, 360, 100, 100, 1);
+      print(offset + " is updated  offset in makePart!");
+      var cl = color(210, 100, offset * -1);
+      //could use name here?
+      var thisPart = new Part(name, offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
+      return thisPart;
+}
+
+function makeZone(name, offset, ymax)
+{
+  //THIS IS JUST FOR THE ATTRACTOR
+  //attractor parameters: waveX, waveY, yOffset, theta, thetaMod, amp
+  attrY = ymax-offset/2;
+  var att = new Attractor(width + 10, offset, attrY, 0, .02, 30)
+  //THIS IS FOR THE ZONES
+  //zone parameters: name, yMin, yMax, attractor, vehicles
+  var inhabitantsArray = [];
+  var thisZone = new Zone(name, offset, ymax, inhabitantsArray, att);
+  return thisZone;
+}
 
 function makeWords() {
   //loop on the outside to get each line in the program
@@ -328,7 +432,32 @@ function makeWords() {
     }
   }
 }  
+
+function checkWordCounts(data)
+{
+  var text;
+  // Did we get an array from loadStrings()
+  // or just some raw text
+  if (data instanceof Array) {
+    text = data.join(' ');
+  } else {
+    text = data;
+  }
+  // Process this data
+  concordance.process(text);
+
+  // Sort
+  concordance.sortByCount();
   
+  var keys = concordance.getKeys();
+  partsCount = concordance.getHash();
+  //print(partsCount);
+}
+
+this.getCount = function(word) 
+{
+    return this.hash[word];
+}
 //new dynamic approach for zones and words
   
 // function dynamicZonesAndWords()
