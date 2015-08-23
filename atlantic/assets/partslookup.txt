@@ -1,6 +1,5 @@
 xx
 jj
-jjr
 jjs
 nn
 nns
@@ -10,7 +9,6 @@ uh
 nnps
 nnp
 vbg
-vbn
 rb
 rbr
 rbs
@@ -28,8 +26,10 @@ dt
 ex
 pos
 prp
+vbn
 prp$
 wdt
+jjr
 wp
 wp$
 wrb

@@ -2,16 +2,9 @@
 //fix x wrap for words DONE
 //divide zones properly DONE
 
-//fix settings for parts: 
-// speed and force  
-//COLOR
 //add fonts
 
-//add TITLE
 
-
-
-//add noise to motion? wiggle maybe not?
 
 
 
@@ -52,6 +45,7 @@ var yMax = 500;
 //intial attractor x and y for the text 
 var attX = 700;
 var attY = 0;
+var myFont;
 
 //variable for text zone
 var zone;
@@ -66,19 +60,21 @@ var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  rawText = loadStrings("assets/words.txt");
-  allParts = loadStrings("assets/parts.txt");
+  // rawText = loadStrings("assets/words.txt");
+  // allParts = loadStrings("assets/parts.txt");
   rawText = loadStrings("assets/wordsLastShort.txt");
   allParts = loadStrings("assets/partsLastShort.txt");
   //this is the ordered list of parts
   partsList = loadStrings("assets/partslookup.txt");
   //im = loadImage("assets/horizon.png");
+  //myFont = loadFont('');
 }
 
 function setup() {
   frameRate(30);
   //print("HELP COMPUTER!!!")
   textSize(18);
+  textFont("Georgia");
   concordance = new Concordance();
   citation = new Title("from CHAPTER 135. The Chase.--Third Day", 50,50,16)
   topTitle = new Title("from Moby Dick, by Herman Melville", 50,70,12);
@@ -98,8 +94,8 @@ function draw() {
   //print(frameRate());
   colorMode(HSB, 360, 100, 100, 1);
   //what is the real maxScroll number?
-  var currentlight = map(-currentMaxScroll,0,3000,75,0);
-  background(223, 85, currentlight);
+  var currentlight = map(-currentMaxScroll,0,3000,50,0);
+  background(223, 70, currentlight);
   //background(50);
   topTitle.show();
   citation.show();
@@ -157,7 +153,7 @@ function draw() {
     }
     
   }
-  setColorForFullCatch();
+  //setColorForFullCatch();
 }
 
 function mouseClicked() {
@@ -194,7 +190,7 @@ function mouseClicked() {
 }
 
 function keyPressed() {
-  if (keyCode === DOWN_ARROW && currentMinScroll >-3000) {
+  if (keyCode === DOWN_ARROW && currentMinScroll >-lastYMax) {
     for (var h = 0; h < zones.length; h++) {
       //scroll up, and bring up the zone, attractor, and each object
       //update current max and min scroll 
@@ -236,7 +232,7 @@ function keyPressed() {
   }
   hookedWords = [];
 }
-  print("cMax: " + currentMaxScroll + " cMin: " + currentMinScroll);
+  //print("cMax: " + currentMaxScroll + " cMin: " + currentMinScroll);
   return false;
 }
 
@@ -375,7 +371,8 @@ function makePart(name, offset, population)
       }
       else
       {
-        zoneHeight = (population *2)+ 40;
+        zoneHeight = (population *2)+ 100;
+        // zoneHeight = (population *2)+ 40;
         ymax = offset + zoneHeight;
       }
       
@@ -383,7 +380,7 @@ function makePart(name, offset, population)
       var cl = color(210, 100, offset * -1);
       //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
       //offset becomes yYmin
-      var thisPart = new Part(name, offset, ymax, random(10,13), random(2,6), .35, cl, population, zoneHeight);
+      var thisPart = new Part(name, offset, ymax, random(10,13), random(1.5,5.5), .35, cl, population, zoneHeight);
       //var thisPart = new Part(name, offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
       return thisPart;
 }
@@ -407,7 +404,7 @@ function makeZone(thePart)
   var xOffVal = [offScreenLeft, offScreenRight];
   //print("what we get for chooser " + xOffVal[chooser]);
   //attractor parameters: waveX, waveY, yOffset, theta, thetaMod, amp
-  var att = new Attractor(xOffVal[chooser], 0, attrY, 0, .05,60)
+  var att = new Attractor(xOffVal[chooser], 0, attrY, 0, random(.02,.04),random(40,60));
   //THIS IS FOR THE ZONES
   //zone parameters: name, yMin, yMax, attractor, vehicles
   var inhabitantsArray = [];
