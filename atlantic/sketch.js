@@ -72,7 +72,7 @@ function preload() {
   allParts = loadStrings("assets/partsLastShort.txt");
   //this is the ordered list of parts
   partsList = loadStrings("assets/partslookup.txt");
-  im = loadImage("assets/horizon.png");
+  //im = loadImage("assets/horizon.png");
 }
 
 function setup() {
@@ -82,7 +82,6 @@ function setup() {
   concordance = new Concordance();
   citation = new Title("from CHAPTER 135. The Chase.--Third Day", 50,50,16)
   topTitle = new Title("from Moby Dick, by Herman Melville", 50,70,12);
-  horizon = new Img(im,0,0);
   //endTitle = new Title("THE END", width/2, 8500, 36);
   checkWordCounts(allParts);
   createCanvas(800, 480);
@@ -101,7 +100,6 @@ function draw() {
   //what is the real maxScroll number?
   var currentlight = map(-currentMaxScroll,0,3000,75,0);
   background(223, 85, currentlight);
-  //horizon.show();
   //background(50);
   topTitle.show();
   citation.show();
@@ -109,22 +107,40 @@ function draw() {
     var checkDisplay = zones[h].testToDisplay();
     if (checkDisplay === true) 
     {
+      if(zones[h].name === "xx")
+      {
+        for(var i = 0; i < zones[h].vehicles.length/2.5; i++ )
+        {
+         if (zones[h].vehicles[i].isHooked === false)
+         {
+            //if not hooked, seek local attractor
+            zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
+            //update and maintain zone borders
+            zones[h].vehicles[i].update();
+            zones[h].vehicles[i].borders();
+            zones[h].vehicles[i].show();
+         }
+        }
+      }
+      else
+      {
       for(var i = 0; i < zones[h].vehicles.length; i++ )
       {
-       if (zones[h].vehicles[i].isHooked === false)
-       {
-          //if not hooked, seek local attractor
-          zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
-          //update and maintain zone borders
-          zones[h].vehicles[i].update();
-          zones[h].vehicles[i].borders();
-          zones[h].vehicles[i].show();
-       }
+         if (zones[h].vehicles[i].isHooked === false)
+         {
+            //if not hooked, seek local attractor
+            zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
+            //update and maintain zone borders
+            zones[h].vehicles[i].update();
+            zones[h].vehicles[i].borders();
+            zones[h].vehicles[i].show();
+         }
       }
-      zones[h].attractor.wave();
-      //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
-      zones[h].attractor.showWave();
-      //zones[h].showZone();
+    }
+    zones[h].attractor.wave();
+    //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
+    zones[h].attractor.showWave();
+    //zones[h].showZone();
     } 
     for (var i = 0; i < zones[h].vehicles.length; i++)
     {
@@ -190,7 +206,8 @@ function keyPressed() {
       }
       //update current max and min scroll 
     }
-    //horizon.setYUp(scrollVal);
+    topTitle.setYUp(scrollVal);
+    citation.setYUp(scrollVal);
     currentMaxScroll -= scrollVal;
     currentMinScroll -= scrollVal;
   } else if (keyCode === UP_ARROW && currentMinScroll <0) {
@@ -205,7 +222,8 @@ function keyPressed() {
 }
     currentMaxScroll += scrollVal;
     currentMinScroll += scrollVal;
-    //horizon.setYDown(scrollVal);
+    topTitle.setYDown(scrollVal);
+    citation.setYDown(scrollVal);
   } else if (keyCode === ENTER) {
     for (var h = 0; h < zones.length; h++) {
       //this will release the vehicles
@@ -286,7 +304,7 @@ function swapOutWords()
 }
 
 //some feedback to show you have all the words in the line
-//this is not working now -- variable problems? why won't counter increment?
+//this is not working now
 function setColorForFullCatch()
 {
   for (var i = 0; i < hookedWords.length; i++)
@@ -352,7 +370,7 @@ function makePart(name, offset, population)
       if(name === "xx" )
       {
         //make zone height smaller for the punctuation because they're so tiny
-         zoneHeight = (population *.5)-75;
+         zoneHeight = (population *.5)-100;
          ymax = offset+ zoneHeight;
       }
       else

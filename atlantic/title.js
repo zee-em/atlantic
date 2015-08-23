@@ -14,7 +14,7 @@ function Title(word,x,y,size)
   
  this.setYDown = function(val)
   {
-   this.y=val;
+   this.y+=val;
   }
 
  this.setYUp = function(val)
