@@ -1,6 +1,21 @@
 //fix motion along y for anchor word DONE
 //fix x wrap for words DONE
-//divide zones properly THIS ONE NEXT!!!
+//divide zones properly DONE
+
+//fix settings for parts: 
+// speed and force  
+//COLOR
+//add fonts
+
+//add TITLE
+
+
+
+//add noise to motion? wiggle maybe not?
+
+
+
+//make randomly accessed passages
 
 //how can we swap and save out? //DO WE EVEN WANT TO? ONLY TO DISPLAY SEPARATELY
 //how can we show when you've got a complete sentence ALMOSt DONE, needs help!
@@ -8,7 +23,7 @@
 //view the new text??
 
 //add flocking?
-//add noise to motion? wiggle
+
 
 // A list of vehicles aka words
 var vehcs = [];
@@ -29,6 +44,7 @@ var counter = 0;
 var arrivedColor;
 var concordance;
 var partsCount= {};
+var lastYMax;
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -40,6 +56,9 @@ var attY = 0;
 //variable for text zone
 var zone;
 
+//image
+var im;
+
 
 //variable to keep track of currentMaxScroll and currentMinScroll so we know where the frame is
 var currentMaxScroll;
@@ -47,10 +66,13 @@ var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  rawText = loadStrings("assets/wordsLast.txt");
-  allParts = loadStrings("assets/partsLast.txt");
+  rawText = loadStrings("assets/words.txt");
+  allParts = loadStrings("assets/parts.txt");
+  rawText = loadStrings("assets/wordsLastShort.txt");
+  allParts = loadStrings("assets/partsLastShort.txt");
   //this is the ordered list of parts
   partsList = loadStrings("assets/partslookup.txt");
+  im = loadImage("assets/horizon.png");
 }
 
 function setup() {
@@ -58,12 +80,15 @@ function setup() {
   //print("HELP COMPUTER!!!")
   textSize(18);
   concordance = new Concordance();
-  //
+  citation = new Title("from CHAPTER 135. The Chase.--Third Day", 50,50,16)
+  topTitle = new Title("from Moby Dick, by Herman Melville", 50,70,12);
+  horizon = new Img(im,0,0);
+  //endTitle = new Title("THE END", width/2, 8500, 36);
   checkWordCounts(allParts);
   createCanvas(800, 480);
   currentMaxScroll = height;
   currentMinScroll = 0;
-  arrivedColor = color(255,0,0);
+  //arrivedColor = color(255,0,0);
   loadZoneDataPts();
   makeWords();
   for (var h = 0; h < zones.length; h++) {
@@ -72,7 +97,14 @@ function setup() {
 
 function draw() {
   //print(frameRate());
-  background(50);
+  colorMode(HSB, 360, 100, 100, 1);
+  //what is the real maxScroll number?
+  var currentlight = map(-currentMaxScroll,0,3000,75,0);
+  background(223, 85, currentlight);
+  //horizon.show();
+  //background(50);
+  topTitle.show();
+  citation.show();
   for (var h = 0; h < zones.length; h++) {
     var checkDisplay = zones[h].testToDisplay();
     if (checkDisplay === true) 
@@ -92,7 +124,7 @@ function draw() {
       zones[h].attractor.wave();
       //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
       zones[h].attractor.showWave();
-      zones[h].showZone();
+      //zones[h].showZone();
     } 
     for (var i = 0; i < zones[h].vehicles.length; i++)
     {
@@ -146,31 +178,34 @@ function mouseClicked() {
 }
 
 function keyPressed() {
-  if (keyCode === DOWN_ARROW) {
+  if (keyCode === DOWN_ARROW && currentMinScroll >-3000) {
     for (var h = 0; h < zones.length; h++) {
       //scroll up, and bring up the zone, attractor, and each object
       //update current max and min scroll 
       zones[h].setYUp(scrollVal);
       zones[h].attractor.setYUp(scrollVal);
-      for (var i = 0; i < zones[h].vehicles.length; i++) {
+      for (var i = 0; i < zones[h].vehicles.length; i++) 
+      {
         zones[h].vehicles[i].setYUp(scrollVal);
       }
       //update current max and min scroll 
-      currentMaxScroll -= scrollVal;
-      currentMinScroll -= scrollVal;
     }
-  } else if (keyCode === UP_ARROW) {
+    //horizon.setYUp(scrollVal);
+    currentMaxScroll -= scrollVal;
+    currentMinScroll -= scrollVal;
+  } else if (keyCode === UP_ARROW && currentMinScroll <0) {
     for (var h = 0; h < zones.length; h++) {
       //scroll down, and bring down the zone, attractor, and each object
       zones[h].setYDown(scrollVal);
       zones[h].attractor.setYDown(scrollVal);
       for (var i = 0; i < zones[h].vehicles.length; i++) {
         zones[h].vehicles[i].setYDown(scrollVal);
-      }
-      //update current max and min scroll 
-      currentMaxScroll += scrollVal;
-      currentMinScroll += scrollVal;
-    }
+}
+          //update current max and min scroll 
+}
+    currentMaxScroll += scrollVal;
+    currentMinScroll += scrollVal;
+    //horizon.setYDown(scrollVal);
   } else if (keyCode === ENTER) {
     for (var h = 0; h < zones.length; h++) {
       //this will release the vehicles
@@ -183,8 +218,7 @@ function keyPressed() {
   }
   hookedWords = [];
 }
-  // print("cMax " + currentMaxScroll);
-  // print("cMin " + currentMinScroll);
+  print("cMax: " + currentMaxScroll + " cMin: " + currentMinScroll);
   return false;
 }
 
@@ -211,7 +245,7 @@ function setAllHookedTargets(pointWordPos) {
    for (var i = 0; i < hookedWords.length; i++)
    {
      
-     zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxspeed(random(2,7));
+     zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxspeed(random(4,7));
      zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxforce(random(.05,1));
      if(zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].isPointWord)
      {
@@ -290,115 +324,76 @@ function loadZoneDataPts() {
       population = partsCount[partName];
       var thisPart;
       var thisZone;
-      //if the number of words associated with a part is more than 200, we'll need to make an extra zone
-      // if(population>175)
-      // {
-      //   //how many words do we want per zone? divide the total by this number
-      //   var loopVal = Math.round(population/175);
-      //   //loopVal is the number of total zones we need to 
-      //   // print("this is loopVal " +loopVal);
-      //   //here we will need to make an extra zones, per loopVal
-      //   for(var j = 0; j< loopVal; j++)
-      //   {
-      //     if(j> 0)
-      //     {
-      //     //we make a new name to associate with the additional divisions
-      //       num = j.toString();
-      //       partName = partName.concat(num);
-      //     }
-      //     print("this is the new part name " + partName);
-      //     //we call make part using the name and the offset
-      //     thisPart = makePart(partName, offset, population);
-      //     thisZone = makeZone(partName, offset, thisPart.yMax);
-      //     partsData[partsList[i]] = thisPart;
-      //     //add the zone into the zone aray
-      //     append(zones, thisZone);
-      //     //***update offset before you go!!****
-      //     offset = thisPart.yMax;
-      //     print('offset for high pop ' + partName + "  "+ offset);
-      //     population = population - population/loopVal;
-      //     print("updated population is :"+ population);
-      //   }
-      //   //function? pass in offset (or make offset global) plus the number of times 
-      //   //print(partName +"  has too many! " + partsCount[partName])
-      // }
-      // else
-      // {
-          thisPart = makePart(partName, offset, population);
-          thisZone = makeZone(partName, offset, thisPart.yMax);
-          partsData[partsList[i]] = thisPart;
-          //add the zone into the zone array
-          append(zones, thisZone);
+      thisPart = makePart(partName, offset, population);
+      //add to parts data array
+      partsData[partsList[i]] = thisPart;
+      thisZone = makeZone(thisPart);
+      //thisZone = makeZone(partName, offset, thisPart.yMax);
+      //add the zone into the zone array
+      append(zones, thisZone);
           //***update offset before you go!!****
-          offset = thisPart.yMax;
-          print('this is the name ' + partName + " this is yMax "+ offset);
-    //}
-      //we need to determine the bondaries for each part of speech
-      //the ymin should be the the current offset
-      //the ymax is the ymin plus space to allow for the words. 
-      // var ymax;
-      // if(partName === "xx" )
-      // {
-      //   //make zone width smaller for the punctuation because they're so tiny
-      //   ymax = offset + (population *.75)+ 25;
-      // }
-      // else
-      // {
-      //   ymax = offset + (population *1.5)+ 25;
-      // }
-      // //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
-      // //colorMode(HSB, 360, 100, 100, 1);
-      // var cl = color(210, 100, (i * 2.6 - 100) * -1);
-      // var thisPart = new Part(partsList[i], offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
-      // //THIS IS JUST FOR THE ATTRACTOR
-      // //attractor parameters: waveX, waveY, yOffset, theta, thetaMod, amp
-      // attrY = ymax-offset/2;
-      // var att = new Attractor(width + 10, offset, attrY, 0, .02, 30);
-      
-      // //THIS IS FOR THE ZONES
-      // //zone parameters: name, yMin, yMax, attractor, vehicles
-      // var inhabitantsArray = [];
-      // var thisZone = new Zone(partsList[i], offset, ymax, inhabitantsArray, att);
-      // //assign this part to the array using key-value pairing
-    }
+      offset = thisPart.yMax;
+      //print('this is the name ' + partName + " this is yMax "+ offset
+      }
   }
+  lastYMax = offset;
+  print("lastYMax is" + lastYMax);
+  
 }
 
 function makePart(name, offset, population)
 {
-      print("in make part and the population is" + population);
+      //print("in make part and the population is" + population);
       //use the current offset and info about the population to determine the max y value
       var ymax;
-      print(name + " is name in makePart!");
-      print(offset + " is intial  offset in makePart!");
+      var zoneHeight;
+      //print(name + " is name in makePart!");
+      //print(offset + " is intial  offset in makePart!");
       if(name === "xx" )
       {
-        //make zone width smaller for the punctuation because they're so tiny
-         ymax = offset + (population *.75)+ 25;
+        //make zone height smaller for the punctuation because they're so tiny
+         zoneHeight = (population *.5)-75;
+         ymax = offset+ zoneHeight;
       }
       else
       {
-         ymax = offset + (population *1.5)+ 25;
+        zoneHeight = (population *2)+ 40;
+        ymax = offset + zoneHeight;
       }
-      //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
+      
       //colorMode(HSB, 360, 100, 100, 1);
-      print(offset + " is updated  offset in makePart!");
       var cl = color(210, 100, offset * -1);
-      //could use name here?
-      var thisPart = new Part(name, offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
+      //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
+      //offset becomes yYmin
+      var thisPart = new Part(name, offset, ymax, random(10,13), random(2,6), .35, cl, population, zoneHeight);
+      //var thisPart = new Part(name, offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
       return thisPart;
 }
 
-function makeZone(name, offset, ymax)
+function makeZone(thePart)
 {
   //THIS IS JUST FOR THE ATTRACTOR
+  if(thePart.name === "xx")
+  {
+    print("in attractor definition area");
+    attrY = thePart.yMax;
+  }
+  else
+  {
+    attrY = thePart.yMax-(thePart.population+15);
+    // var offScreenLeft = 10-20;
+  }
+  var offScreenRight = width +40;
+  var offScreenLeft = 10-40;
+  var chooser = Math.round(random(0,1));
+  var xOffVal = [offScreenLeft, offScreenRight];
+  //print("what we get for chooser " + xOffVal[chooser]);
   //attractor parameters: waveX, waveY, yOffset, theta, thetaMod, amp
-  attrY = ymax-offset/2;
-  var att = new Attractor(width + 10, offset, attrY, 0, .02, 30)
+  var att = new Attractor(xOffVal[chooser], 0, attrY, 0, .05,60)
   //THIS IS FOR THE ZONES
   //zone parameters: name, yMin, yMax, attractor, vehicles
   var inhabitantsArray = [];
-  var thisZone = new Zone(name, offset, ymax, inhabitantsArray, att);
+  var thisZone = new Zone(thePart.name, thePart.yMin, thePart.yMax, inhabitantsArray, att);
   return thisZone;
 }
 
@@ -410,12 +405,14 @@ function makeWords() {
     var tempParts = split(trim(allParts[i]), " ");
     //loop to create words using input text
     for (var j = 0; j < tempWords.length; j++) {
+      //if has extra && is full
       //We are now making  vehicles and storing them in an array
       //use the current part of speech to ID the parts data
       //print(partsData[tempParts[j]]);
+      //check in partsData
       w = new Vehicle(
         //x, y
-        random(width), random(partsData[tempParts[j]].yMin, partsData[tempParts[j]].yMax),
+        random(0,width), random(partsData[tempParts[j]].yMin, partsData[tempParts[j]].yMax),
         //ymin, ymax, 
         partsData[tempParts[j]].yMin, partsData[tempParts[j]].yMax,
         //r, maxspeed, maxforce,
@@ -423,10 +420,17 @@ function makeWords() {
         //word,lineref, posref
         tempWords[j], i, j);
       // print(w.word + " is the word");
+      //step through the array of zones
       for (var k = 0; k < zones.length; k++) {
-        if (tempParts[j] === zones[k].name) {
+        if (tempParts[j] === zones[k].name ) { 
+        // "call"  vb    vb
+        //do these match, if so you found your name
+        //if zones[k].vehicles.length < 200, then add
           append(zones[k].vehicles, w);
           //print(zones[k].vehicles);
+        //else
+        //concatenate name 
+        //
         }
       }
     }
@@ -458,52 +462,3 @@ this.getCount = function(word)
 {
     return this.hash[word];
 }
-//new dynamic approach for zones and words
-  
-// function dynamicZonesAndWords()
-// {
-//   //loop on the outside to get each line in the program
-//   for (var i = 0; i < rawText.length; i++) {
-//     //split arrays into lines or sentences, work by line to make particles
-//     var tempWords = split(trim(rawText[i]), " ");
-//     var tempParts = split(trim(allParts[i]), " ");
-//     //loop to create words using input text
-//     for (var j = 0; j < tempWords.length; j++) {
-    
-//     if(isZoneInList(tempParts[j]) //check if a corresponding zone already exists
-//     {
-
-    
-//     }
-//     else
-//     {
-      
-//     }
-// //bring in words,  for each word, 
-// //zones need a zone name and an identifier (if they are a second version of a zone)
-
-// // if it does, and the zone is not full,
-// // make the word, and  add the word to the zone array
-
-// // if the zone does not exist, 
-// // make a new zone
-// // make the word, and  add the word to the zone array
-
-// // if the zone does exist but is full, 
-// // make a new zone
-// // make the word, and  add the word to the zone array
-// }
-
-// function isZoneInList(thisPart)
-// {
-//   for(var k = 0; k<partsList; k++)
-//     {
-//       if(partsData[k] === thisPart)
-//       {
-//         return true;
-//       }
-//       else 
-//       {
-//         return false;
-//       }
-// }

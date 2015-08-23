@@ -104,11 +104,27 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
     noStroke();
     if(this.isHooked)
     {
-       fill(0,255,0);
+       fill(120,100,100); // bright butt green
     }
     else
     {
-       fill(255);
+      var zoneMiddle = (this.yMin+this.yMax)/2; // find middle of zone
+      
+      //print("position: " + this.position.y + " yMin: " + this.yMin + " yMax: " + this.yMax + " zoneMiddle: " + zoneMiddle);
+      if (this.position.y > zoneMiddle){ // if word is above middle
+          var yDist = dist(0,this.position.y,0,zoneMiddle); // y distance from middle
+          //print(yDist + " this is yDist from midde to top");
+          var alphaVal = map(yDist,this.yMin,zoneMiddle,1,0); // map alpha
+          fill(0,0,100,alphaVal);
+      }
+      
+      else { // if word is below middle
+          var yDist = dist(0,this.position.y,0,zoneMiddle); // y distance from middle
+          //print(yDist + " this is yDist from midde to bottom");
+          var alphaVal = map(yDist,this.yMax,zoneMiddle,1,0); // map alpha
+          fill(0,0,100,alphaVal);
+      }
+     fill(0,0,100); 
     }
     var distMouse = dist(mouseX, mouseY, mouseX,this.position.y);
     //if the vehicle is hooked and not near the mouse, we can rotate it towards the mouse
@@ -129,6 +145,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
       textSize(r);
       text(word,this.position.x,this.position.y);
     }
+    //print(this.position);
   }
 
   // Wraparound
@@ -137,14 +154,14 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word,lineref, posref) 
     
     //this resets obj to wrap, and makes sure that it appears offscreen
     //if x is less than 0 minus the size of the object, then set x to be the width plus the obj size 
-    if (this.position.x < -this.r) this.position.x = width+this.r;
+    if (this.position.x < -this.r) this.position.x = width;
     // if x is greater than the width plus obj size, set x to be 0 minus the obj size
     if (this.position.x >  width+this.r) this.position.x = -this.r;
     
     //same as above, but using variables now
+    //we use r, which is the size, to be sure that the full word is displayed
     if (this.position.y < this.yMin-this.r) this.position.y = this.getYMax()+this.r;
     if (this.position.y > this.yMax+this.r) this.position.y = this.getYMin()-this.r;
-    
   }
 
  this.bordersXOnly = function() 

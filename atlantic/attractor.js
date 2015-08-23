@@ -21,10 +21,10 @@ function Attractor(waveX, waveY, yOffset, theta, thetaMod, amp)
   this.showWave = function()
   {
       // this turns off / on the marker of attraction
-      fill(0,255,0);
+      fill(255,20,147);
       noStroke();
-      ellipse(this.waveX, this.waveY, 10, 10); // "current" test marker
-      //ellipse(this.waveX, this.waveY+this.yOffset, 10, 10); // "current" test marker
+      ellipse(this.waveX, this.waveY, 20, 20); // "current" test marker
+
   }
   
   this.getWaveX = function()
