@@ -1,22 +1,8 @@
-//fix motion along y for anchor word DONE
-//fix x wrap for words DONE
-//divide zones properly DONE
-
-//add fonts
-
-
-
-
 
 //make randomly accessed passages
-
-//how can we swap and save out? //DO WE EVEN WANT TO? ONLY TO DISPLAY SEPARATELY
-//how can we show when you've got a complete sentence ALMOSt DONE, needs help!
-
+//how can we swap and save out? 
 //view the new text??
-
 //add flocking?
-
 
 // A list of vehicles aka words
 var vehcs = [];
@@ -38,6 +24,8 @@ var arrivedColor;
 var concordance;
 var partsCount= {};
 var lastYMax;
+var newParts = [];
+var newWords = [];
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -50,9 +38,6 @@ var myFont;
 //variable for text zone
 var zone;
 
-//image
-var im;
-
 
 //variable to keep track of currentMaxScroll and currentMinScroll so we know where the frame is
 var currentMaxScroll;
@@ -60,13 +45,12 @@ var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  // rawText = loadStrings("assets/words.txt");
-  // allParts = loadStrings("assets/parts.txt");
-  rawText = loadStrings("assets/wordsLastShort.txt");
-  allParts = loadStrings("assets/partsLastShort.txt");
+  rawText = loadStrings("assets/words.txt");
+  allParts = loadStrings("assets/parts.txt");
+  // rawText = loadStrings("assets/wordsLastShort.txt");
+  // allParts = loadStrings("assets/partsLastShort.txt");
   //this is the ordered list of parts
   partsList = loadStrings("assets/partslookup.txt");
-  //im = loadImage("assets/horizon.png");
   //myFont = loadFont('');
 }
 
@@ -225,12 +209,25 @@ function keyPressed() {
       //this will release the vehicles
       for (var i = 0; i < zones[h].vehicles.length; i++) {
         if (zones[h].vehicles[i].isHooked) {
-          //swapOutWords(zones[h].vehicles[i]);
           zones[h].vehicles[i].unHook();
+          //swapOutWords messes up the unhooking-- it's related to finding hooked words
+          //using lineref and posref, which may have been changed on the fly
+          //swapOutWords(zones[h], zones[h].vehicles[i]);
+          
       }
     }
   }
   hookedWords = [];
+} else if(keyCode === TAB){
+  print("hit tab!");
+  //saveOutNewText();
+  for (var h = 0; h < zones.length; h++)
+  {
+      for (var i = 0; i < zones[h].vehicles.length; i++)
+      {
+        print(zones[h].vehicles[i]);
+      }
+  }  
 }
   //print("cMax: " + currentMaxScroll + " cMin: " + currentMinScroll);
   return false;
@@ -294,36 +291,77 @@ function setAllHookedTargets(pointWordPos) {
   }
 }
 
-function swapOutWords()
+function swapOutWords(zone, vehicle)
 {
+  // for(var i =0; i<zone.vehicles.length; i++)
+  // {
+  //   print(zone.vehicles[i]);
+  // }
+  //SOMETHING WEIRD IN HERE...
+  //SOME VEHICLES ARE UNDEFINED!!! WHAT????
+  //when a word is released, swap its i and j position in the array
+  lineref = vehicle.getLineref();
+  posref = vehicle.getPosref();
+  // print("the Vehicle's OG lineref " + lineref);
+  // print("the Vehicles OG posref " + posref);
+  chooser = Math.round(random(0, zone.vehicles.length));
+  print("chooser " + chooser);
+  print(zone.vehicles.length);
+  print(zone.vehicles[chooser]);
+  //another randomly selected word from its zone
   
+  newLineref = zone.vehicles[chooser].getLineref();
+  newPosref =  zone.vehicles[chooser].getPosref();
+  // print("new lineref " + newLineref);
+  // print("new posref " + newPosref);
+  zone.vehicles[chooser].setLineref(lineref);
+  zone.vehicles[chooser].setPosref(posref);
+  vehicle.setLineref(newLineref);
+  vehicle.setPosref(newPosref);
+  // print("the Vehicle's NEW lineref " + vehicle.getLineref());
+  // print("the Vehicles NEW posref " + vehicle.getPosref());
 }
 
-//some feedback to show you have all the words in the line
-//this is not working now
-function setColorForFullCatch()
+//something wrong here, with concatenating the lines...
+function saveOutNewText()
 {
-  for (var i = 0; i < hookedWords.length; i++)
-   {
-     print(hookedWords.length);
-     print("status is " +zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].arrived
-      + "word is " + zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].word);
-     if(zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getArrived())
-     {
-       println("here!");
-       counter+=1;
-       print("this is  counter " + counter);
-     }
-     if(counter === hookedWords.length)
-     {
-       for (var j = 0; j < hookedWords.length; j++)
-       {
-         println("all here!");
-         //zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setColor();
-       }
-     }
-   }
-   counter = 0;
+  print("in saveOutNewText()!");
+  for (var h = 0; h < zones.length; h++) 
+  {
+      //this will release the vehicles
+      for (var i = 0; i < zones[h].vehicles.length; i++) 
+      {
+        var theLine = zones[h].vehicles[i].getLineref();
+        var thePos = zones[h].vehicles[i].getPosref();
+        newWords[theLine][thePos] = zones[h].vehicles[i].getWord();
+        newParts[theLine][thePos] = zones[h].vehicles[i].getPart();
+        // newWords[theLine][thePos] = "changed!";
+        // newParts[theLine][thePos] = "all new!";
+      }
+  }
+  //print them out to see....
+  for (var i = 0; i < newWords.length; i++) 
+  { 
+    //empty strings to hold new lines
+    var newStringWords ="";
+    var newStringParts = "";
+    for (var j = 0; j < newWords[i].length; j++) 
+    {
+      newStringWords= newStringWords.concat(newWords[i]);
+      newStringWords= newStringWords.concat(" ");
+      //print(newStringWords);
+      newStringParts= newStringParts.concat(newParts[i]);
+      newStringParts= newStringParts.concat(" ");
+      //print(newWords[i][j]);
+      //print(newParts[i][j]);
+    }
+    newWords[i]= newStringWords;
+    newParts[i]= newStringParts;
+  }
+  print(newWords);
+  print(newParts);
+  saveStrings(newWords,"newWords.txt");
+  saveStrings(newParts,"newParts.txt");
 }
 
 //make parts objects and zone objects according to the list of parts of speech
@@ -351,7 +389,7 @@ function loadZoneDataPts() {
       }
   }
   lastYMax = offset;
-  print("lastYMax is" + lastYMax);
+  //print("lastYMax is" + lastYMax);
   
 }
 
@@ -433,7 +471,7 @@ function makeWords() {
         //r, maxspeed, maxforce,
         partsData[tempParts[j]].size, partsData[tempParts[j]].maxspeed, partsData[tempParts[j]].maxforce,
         //word,lineref, posref
-        tempWords[j], i, j);
+        tempWords[j], i, j, partsData[tempParts[j]].name);
       // print(w.word + " is the word");
       //step through the array of zones
       for (var k = 0; k < zones.length; k++) {
@@ -449,6 +487,8 @@ function makeWords() {
         }
       }
     }
+    newWords[i] = tempWords;
+    newParts[i] = tempParts;
   }
 }  
 
@@ -464,10 +504,8 @@ function checkWordCounts(data)
   }
   // Process this data
   concordance.process(text);
-
   // Sort
   concordance.sortByCount();
-  
   var keys = concordance.getKeys();
   partsCount = concordance.getHash();
   //print(partsCount);

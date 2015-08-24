@@ -32,3 +32,31 @@
       //   //print(partName +"  has too many! " + partsCount[partName])
       // else
       // {
+      
+      
+      //some feedback to show you have all the words in the line
+//this is not working now
+// function setColorForFullCatch()
+// {
+//   for (var i = 0; i < hookedWords.length; i++)
+//   {
+//     print(hookedWords.length);
+//     print("status is " +zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].arrived
+//       + "word is " + zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].word);
+//     if(zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].getArrived())
+//     {
+//       println("here!");
+//       counter+=1;
+//       print("this is  counter " + counter);
+//     }
+//     if(counter === hookedWords.length)
+//     {
+//       for (var j = 0; j < hookedWords.length; j++)
+//       {
+//         println("all here!");
+//         //zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setColor();
+//       }
+//     }
+//   }
+//   counter = 0;
+// }

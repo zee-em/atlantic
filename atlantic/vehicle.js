@@ -4,7 +4,7 @@
 //add parameters: lineref, posref
 //added parameters; r, maxspeed, maxforce
 
-function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref) {
+function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref, part) {
   // All the usual stuff
   this.position = createVector(x, y);
   this.r = r;
@@ -23,7 +23,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref)
   this.isPointWord = false;
   this.origSpeed = maxspeed;
   this.origForce = maxforce;
-  this.arrived = false;
+  this.part = part;
 
   this.applyBehaviors = function(vehicles, x, y) {
 
@@ -197,6 +197,22 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref)
 
   this.getPosref = function() {
     return this.posref;
+  }
+  
+  this.getWord = function() {
+    return this.word;
+  }
+  
+  this.getPart = function() {
+    return this.part;
+  }
+  
+  this.setLineref = function(lr) {
+    this.lineref = lr;
+  }
+
+  this.setPosref = function(pr) {
+    this.posref = pr;
   }
 
   this.getOrgiSpeed = function() {
