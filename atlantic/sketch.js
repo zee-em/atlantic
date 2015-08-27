@@ -210,24 +210,21 @@ function keyPressed() {
       for (var i = 0; i < zones[h].vehicles.length; i++) {
         if (zones[h].vehicles[i].isHooked) {
           zones[h].vehicles[i].unHook();
-          //swapOutWords messes up the unhooking-- it's related to finding hooked words
-          //using lineref and posref, which may have been changed on the fly
-          //swapOutWords(zones[h], zones[h].vehicles[i]);
-          
+          //swapOutWords messes up the unhooking
+          //print("this is the vehicle" + zones[h].vehicles[i]);
       }
     }
+  }
+  for(var i = 0; i< hookedWords.length; i++)
+  {
+    //the location in a zone and vehicle array of each word
+   swapOutWords(zones[hookedWords[i].ipos],
+   zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos]);
   }
   hookedWords = [];
 } else if(keyCode === TAB){
   print("hit tab!");
-  //saveOutNewText();
-  for (var h = 0; h < zones.length; h++)
-  {
-      for (var i = 0; i < zones[h].vehicles.length; i++)
-      {
-        print(zones[h].vehicles[i]);
-      }
-  }  
+  saveOutNewText();
 }
   //print("cMax: " + currentMaxScroll + " cMin: " + currentMinScroll);
   return false;
@@ -255,7 +252,7 @@ function setAllHookedTargets(pointWordPos) {
   //go through each item in the hookedWords array and check to see if it's the point word
    for (var i = 0; i < hookedWords.length; i++)
    {
-     
+     //this is the current location of the zone, and the vehicle
      zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxspeed(random(4,7));
      zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].setMaxforce(random(.05,1));
      if(zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos].isPointWord)
@@ -293,18 +290,14 @@ function setAllHookedTargets(pointWordPos) {
 
 function swapOutWords(zone, vehicle)
 {
-  // for(var i =0; i<zone.vehicles.length; i++)
-  // {
-  //   print(zone.vehicles[i]);
-  // }
-  //SOMETHING WEIRD IN HERE...
-  //SOME VEHICLES ARE UNDEFINED!!! WHAT????
-  //when a word is released, swap its i and j position in the array
+  print(zone);
+  print(vehicle);
   lineref = vehicle.getLineref();
   posref = vehicle.getPosref();
-  // print("the Vehicle's OG lineref " + lineref);
-  // print("the Vehicles OG posref " + posref);
-  chooser = Math.round(random(0, zone.vehicles.length));
+  //SOMETHING WRONG WITH CHOOSER!!!
+  print("the Vehicle's OG lineref " + lineref);
+  print("the Vehicles OG posref " + posref);
+  chooser = Math.round(random(0, zone.vehicles.length-1));
   print("chooser " + chooser);
   print(zone.vehicles.length);
   print(zone.vehicles[chooser]);
@@ -318,8 +311,8 @@ function swapOutWords(zone, vehicle)
   zone.vehicles[chooser].setPosref(posref);
   vehicle.setLineref(newLineref);
   vehicle.setPosref(newPosref);
-  // print("the Vehicle's NEW lineref " + vehicle.getLineref());
-  // print("the Vehicles NEW posref " + vehicle.getPosref());
+  print("the Vehicle's NEW lineref " + vehicle.getLineref());
+  print("the Vehicles NEW posref " + vehicle.getPosref());
 }
 
 //something wrong here, with concatenating the lines...
@@ -328,11 +321,13 @@ function saveOutNewText()
   print("in saveOutNewText()!");
   for (var h = 0; h < zones.length; h++) 
   {
-      //this will release the vehicles
+    //for all the words
       for (var i = 0; i < zones[h].vehicles.length; i++) 
       {
+        //get the line 
         var theLine = zones[h].vehicles[i].getLineref();
         var thePos = zones[h].vehicles[i].getPosref();
+        //add to that array
         newWords[theLine][thePos] = zones[h].vehicles[i].getWord();
         newParts[theLine][thePos] = zones[h].vehicles[i].getPart();
         // newWords[theLine][thePos] = "changed!";
@@ -340,30 +335,30 @@ function saveOutNewText()
       }
   }
   //print them out to see....
-  for (var i = 0; i < newWords.length; i++) 
+  print(newWords.length);
+  for (var j = 0; j < newWords.length; j++) 
   { 
-    //empty strings to hold new lines
-    var newStringWords ="";
-    var newStringParts = "";
-    for (var j = 0; j < newWords[i].length; j++) 
-    {
-      newStringWords= newStringWords.concat(newWords[i]);
-      newStringWords= newStringWords.concat(" ");
-      //print(newStringWords);
-      newStringParts= newStringParts.concat(newParts[i]);
-      newStringParts= newStringParts.concat(" ");
-      //print(newWords[i][j]);
-      //print(newParts[i][j]);
-    }
-    newWords[i]= newStringWords;
-    newParts[i]= newStringParts;
+    print(newWords[j]);
+    // //empty strings to hold new lines
+    // var newStringWords ="";
+    // var newStringParts = "";
+    // for (var j = 0; j < newWords[i].length; j++) 
+    // {
+    //   //newStringWords+= newWords[i]+ " ";
+    //   //newStringWords= newStringWords.concat(" ");
+      
+    //   newStringParts+= newParts[i] + " ";
+    //   //print(newWords[i][j]);
+    //   //print(newParts[i][j]);
+    // }
   }
-  print(newWords);
-  print(newParts);
-  saveStrings(newWords,"newWords.txt");
-  saveStrings(newParts,"newParts.txt");
+  // print(newWords);
+  // print(newParts);
+  //var list =["apple", "banana", "peach", "kimchi"];
+  //saveStrings(list,"newWords.txt");
+  //saveStrings(newWords,"newWords.txt");
+  //saveStrings(newParts,"newParts.txt");
 }
-
 //make parts objects and zone objects according to the list of parts of speech
 function loadZoneDataPts() {
   var offset = 300; //this is the distance of the first zone from the top pf the screen

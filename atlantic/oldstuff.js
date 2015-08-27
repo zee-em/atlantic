@@ -60,3 +60,48 @@
 //   }
 //   counter = 0;
 // }
+
+
+// //something wrong here, with concatenating the lines...
+// function saveOutNewText()
+// {
+//   print("in saveOutNewText()!");
+//   for (var h = 0; h < zones.length; h++) 
+//   {
+//       //this will release the vehicles
+//       for (var i = 0; i < zones[h].vehicles.length; i++) 
+//       {
+//         var theLine = zones[h].vehicles[i].getLineref();
+//         var thePos = zones[h].vehicles[i].getPosref();
+//         newWords[theLine][thePos] = zones[h].vehicles[i].getWord();
+//         newParts[theLine][thePos] = zones[h].vehicles[i].getPart();
+//         // newWords[theLine][thePos] = "changed!";
+//         // newParts[theLine][thePos] = "all new!";
+//       }
+//   }
+//   //print them out to see....
+//   for (var i = 0; i < newWords.length; i++) 
+//   { 
+//     //empty strings to hold new lines
+//     var newStringWords ="";
+//     var newStringParts = "";
+//     for (var j = 0; j < newWords[i].length; j++) 
+//     {
+//       newStringWords= newStringWords.concat(newWords[i]);
+//       newStringWords= newStringWords.concat(" ");
+//       //print(newStringWords);
+//       newStringParts= newStringParts.concat(newParts[i]);
+//       newStringParts= newStringParts.concat(" ");
+//       //print(newWords[i][j]);
+//       //print(newParts[i][j]);
+//     }
+//     newWords[i]= newStringWords;
+//     newParts[i]= newStringParts;
+//   }
+//   print(newWords);
+//   print(newParts);
+//   //var list =["apple", "banana", "peach", "kimchi"];
+//   //saveStrings(list,"newWords.txt");
+//   saveStrings(newWords,"newWords.txt");
+//   saveStrings(newParts,"newParts.txt");
+// }

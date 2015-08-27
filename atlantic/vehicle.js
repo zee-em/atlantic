@@ -262,7 +262,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref,
   this.unHook = function() {
     this.isHooked = false;
     this.isPointWord = false;
-    this.arrived = false;
+    //print("unhooked " + this.word);
     // this.resetMaxforce();
     // this.resetMaxspeed();
   }
