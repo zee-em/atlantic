@@ -1,7 +1,6 @@
 
 //make randomly accessed passages
-//how can we swap and save out? 
-//view the new text??
+//minimize swapping function
 //add flocking?
 
 // A list of vehicles aka words
@@ -26,6 +25,9 @@ var partsCount= {};
 var lastYMax;
 var newParts = [];
 var newWords = [];
+var citation;
+var topTitle;
+var instructions;
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -45,10 +47,10 @@ var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  rawText = loadStrings("assets/words.txt");
-  allParts = loadStrings("assets/parts.txt");
-  // rawText = loadStrings("assets/wordsLastShort.txt");
-  // allParts = loadStrings("assets/partsLastShort.txt");
+  // rawText = loadStrings("assets/words.txt");
+  // allParts = loadStrings("assets/parts.txt");
+  rawText = loadStrings("assets/wordsLastShort.txt");
+  allParts = loadStrings("assets/partsLastShort.txt");
   //this is the ordered list of parts
   partsList = loadStrings("assets/partslookup.txt");
   //myFont = loadFont('');
@@ -61,8 +63,8 @@ function setup() {
   textFont("Georgia");
   concordance = new Concordance();
   citation = new Title("from CHAPTER 135. The Chase.--Third Day", 50,50,16)
-  topTitle = new Title("from Moby Dick, by Herman Melville", 50,70,12);
-  //endTitle = new Title("THE END", width/2, 8500, 36);
+  topTitle = new Title("in Moby Dick, by Herman Melville", 50,70,12);
+  instructions = new Title("(Use up and down arrows to dive or surface; click a word to hook a line and press return to release your catch.)", 50, 90, 11);
   checkWordCounts(allParts);
   createCanvas(800, 480);
   currentMaxScroll = height;
@@ -77,12 +79,14 @@ function setup() {
 function draw() {
   //print(frameRate());
   colorMode(HSB, 360, 100, 100, 1);
-  //what is the real maxScroll number?
+  //use scroll position to change background color
   var currentlight = map(-currentMaxScroll,0,3000,50,0);
   background(223, 70, currentlight);
   //background(50);
   topTitle.show();
   citation.show();
+  fill(38,100,100);
+  instructions.show();
   for (var h = 0; h < zones.length; h++) {
     var checkDisplay = zones[h].testToDisplay();
     if (checkDisplay === true) 
@@ -137,7 +141,6 @@ function draw() {
     }
     
   }
-  //setColorForFullCatch();
 }
 
 function mouseClicked() {
@@ -188,6 +191,7 @@ function keyPressed() {
     }
     topTitle.setYUp(scrollVal);
     citation.setYUp(scrollVal);
+    instructions.setYUp(scrollVal);
     currentMaxScroll -= scrollVal;
     currentMinScroll -= scrollVal;
   } else if (keyCode === UP_ARROW && currentMinScroll <0) {
@@ -204,22 +208,28 @@ function keyPressed() {
     currentMinScroll += scrollVal;
     topTitle.setYDown(scrollVal);
     citation.setYDown(scrollVal);
+    instructions.setYDown(scrollVal);
   } else if (keyCode === ENTER) {
     for (var h = 0; h < zones.length; h++) {
       //this will release the vehicles
       for (var i = 0; i < zones[h].vehicles.length; i++) {
         if (zones[h].vehicles[i].isHooked) {
           zones[h].vehicles[i].unHook();
-          //swapOutWords messes up the unhooking
-          //print("this is the vehicle" + zones[h].vehicles[i]);
       }
     }
   }
-  for(var i = 0; i< hookedWords.length; i++)
+  
+
+  //LET'S SWAP OUT FEWER WORDS HERE-- select some number at random!
+  var howManyToSwap = Math.round(random(0, hookedWords.length-1));
+  print(howManyToSwap + " is how many to swap");
+  for(var i = 0; i< howManyToSwap; i++)
   {
     //the location in a zone and vehicle array of each word
-   swapOutWords(zones[hookedWords[i].ipos],
-   zones[hookedWords[i].ipos].vehicles[hookedWords[i].jpos]);
+    var swapWordChooser = Math.round(random(0, hookedWords.length-1));
+    print(swapWordChooser + " this is the chooser");
+    swapOutWords(zones[hookedWords[swapWordChooser].ipos],
+    zones[hookedWords[swapWordChooser].ipos].vehicles[hookedWords[swapWordChooser].jpos]);
   }
   hookedWords = [];
 } else if(keyCode === TAB){
@@ -246,7 +256,7 @@ function hookTheFullLine(lineref, pointWordPos) {
   setAllHookedTargets(pointWordPos);
 }
 
-//need to see how point word y is updating here
+
 function setAllHookedTargets(pointWordPos) {
   //print(pointWordPos + "is point word position");
   //go through each item in the hookedWords array and check to see if it's the point word
@@ -294,13 +304,12 @@ function swapOutWords(zone, vehicle)
   print(vehicle);
   lineref = vehicle.getLineref();
   posref = vehicle.getPosref();
-  //SOMETHING WRONG WITH CHOOSER!!!
-  print("the Vehicle's OG lineref " + lineref);
-  print("the Vehicles OG posref " + posref);
+  // print("the Vehicle's OG lineref " + lineref);
+  // print("the Vehicles OG posref " + posref);
   chooser = Math.round(random(0, zone.vehicles.length-1));
-  print("chooser " + chooser);
-  print(zone.vehicles.length);
-  print(zone.vehicles[chooser]);
+  // print("chooser " + chooser);
+  // print(zone.vehicles.length);
+  // print(zone.vehicles[chooser]);
   //another randomly selected word from its zone
   
   newLineref = zone.vehicles[chooser].getLineref();
@@ -359,9 +368,10 @@ function saveOutNewText()
   //saveStrings(newWords,"newWords.txt");
   //saveStrings(newParts,"newParts.txt");
 }
+
 //make parts objects and zone objects according to the list of parts of speech
 function loadZoneDataPts() {
-  var offset = 300; //this is the distance of the first zone from the top pf the screen
+  var offset = 300; //this is the distance of the first zone from the top of the screen
   //use the list of parts to make parts objects
   for (var i = 0; i < partsList.length; i++) {
     var partName = trim(partsList[i]);
@@ -383,7 +393,7 @@ function loadZoneDataPts() {
       //print('this is the name ' + partName + " this is yMax "+ offset
       }
   }
-  lastYMax = offset;
+  lastYMax = offset-200;
   //print("lastYMax is" + lastYMax);
   
 }
@@ -394,6 +404,7 @@ function makePart(name, offset, population)
       //use the current offset and info about the population to determine the max y value
       var ymax;
       var zoneHeight;
+      var speed;
       //print(name + " is name in makePart!");
       //print(offset + " is intial  offset in makePart!");
       if(name === "xx" )
@@ -401,19 +412,21 @@ function makePart(name, offset, population)
         //make zone height smaller for the punctuation because they're so tiny
          zoneHeight = (population *.5)-100;
          ymax = offset+ zoneHeight;
+         speed = 5;
       }
       else
       {
         zoneHeight = (population *2)+ 100;
         // zoneHeight = (population *2)+ 40;
         ymax = offset + zoneHeight;
+        speed = random(1.5,5.5);
       }
       
       //colorMode(HSB, 360, 100, 100, 1);
       var cl = color(210, 100, offset * -1);
       //parts parameters: name, ymin, ymax, size, maxspeed, maxforce, cl
       //offset becomes yYmin
-      var thisPart = new Part(name, offset, ymax, random(10,13), random(1.5,5.5), .35, cl, population, zoneHeight);
+      var thisPart = new Part(name, offset, ymax, random(10,13), speed, .35, cl, population, zoneHeight);
       //var thisPart = new Part(name, offset, ymax, 10, random(.05, 5), random(.05, .5), cl);
       return thisPart;
 }
