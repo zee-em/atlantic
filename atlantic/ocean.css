@@ -1,11 +1,12 @@
 body {
-    background-color: #00223d;
+    background-color: #fff;
 }
 
 
 p {
     font-family: "Georgia","Times New Roman", Serif;
-    font-size: 12px;
-    text-align: center;
-    color: #fff;
+    font-size: 14px;
+    text-align: left;
+    color: #00223d;
+    width:600px ;
 }
