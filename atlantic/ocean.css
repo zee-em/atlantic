@@ -3,10 +3,15 @@ body {
 }
 
 
-p {
+.p1 {
     font-family: "Georgia","Times New Roman", Serif;
     font-size: 14px;
     text-align: left;
     color: #00223d;
     width:600px ;
+    padding: 50px;
+}
+.p2 { font-style: italic;
+      font-size: 12px;
+      text-align: center;
 }
