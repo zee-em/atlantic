@@ -1,5 +1,5 @@
 body {
-    background-color:#fff;
+    background-color: #fff;
 }
 
 
@@ -7,14 +7,11 @@ body {
     font-family: "Georgia","Times New Roman", Serif;
     font-size: 14px;
     text-align: left;
-    color: #00223d ;
-    width:600px;
-    padding: 5px 25px;
+    color: #00223d;
+    width:600px ;
+    padding: 50px;
 }
 .p2 { font-style: italic;
       font-size: 12px;
-      text-align: left;
-      width: 600;
-      color: #00223d ;
-      padding: 0px 25px;
+      text-align: center;
 }
