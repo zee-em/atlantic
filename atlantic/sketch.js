@@ -11,9 +11,45 @@ var zones = [];
 // attractor object
 var att;
 
+var textArray = ["Ch23.txt", "Ch26.txt", "Ch28.txt", "Ch3.txt", "Ch33.txt", "Ch6.txt", 
+"Ch1.txt", "Ch14.txt", "Ch42.txt", "Ch47.txt", "Ch11.txt", "Ch73.txt", "Ch74.txt", 
+"Ch79.txt", "Ch81.txt", "Ch84.txt", "Ch87.txt", "Ch91.txt","Ch98.txt", "Ch110.txt", 
+"Ch118.txt", "Ch130.txt", "Ch135.txt"];
+var partsArray = ["Ch23P.txt", "Ch26P.txt", "Ch28P.txt", "Ch3P.txt", "Ch33P.txt", "Ch6P.txt", 
+"Ch1P.txt", "Ch14P.txt", "Ch42P.txt", "Ch47P.txt", "Ch11P.txt", "Ch73P.txt", "Ch74P.txt", 
+"Ch79P.txt", "Ch81P.txt", "Ch84P.txt", "Ch87P.txt", "Ch91P.txt","Ch98P.txt", "Ch110P.txt", 
+"Ch118P.txt", "Ch130P.txt", "Ch135P.txt"];
+var titleArray = ["Chapter Twenty-Three, The Lee Shore",
+"Chapter Twenty-Six, Knights And Squires",
+"Chapter Twenty-Eight, Ahab",
+"Chapter Three, The Spouter-Inn",
+"Chapter Thirty-Three, The Specksnyder",
+"Chapter Six, The Street",
+"Chapter One, Loomings",
+"Chapter Fourteen, Nantucket",
+"Chapter Forty-Two, The Whiteness of the Whale",
+"Chapter Forty-Seven, The Mat-Maker",
+"Chapter Eleven, The Nightgown",
+"Chapter Seventy-Three, Stubb and Flask Kill a Right Whale; and Then Have a Talk Over Him",
+"Chapter Seventy-Four, The Sperm Whale's Head - Contrasted View",
+"Chapter Seventy-Nine, The Prairie",
+"Chapter Eighty-One, The Pequod Meets The Virgin",
+"Chapter Eighty-Four, Pitchpoling",
+"Chapter Eighty-Seven, The Grand Armada",
+"Chapter Ninety-One, The Pequod Meets The Rose-Bud",
+"Chapter Ninety-Eight, Stowing Down And Clearing Up",
+"Chapter One Hundred And Ten, Queequeg in His Coffin",
+"Chapter One Hundred And Eighteen, The Quadrant",
+"Chapter One Hundred And Thirty, The Hat",
+"Chapter One Hundred And Thirty-Five, The Chase - The Third Day"];
+
+//REMOVE 79
 //variables to hold string input
+//just use mf to 
+var mf;
 var partsList;
 var rawText;
+var slawText;
 var allParts;
 var partsData = [];
 var hookedWords = [];
@@ -28,6 +64,8 @@ var newWords = [];
 var citation;
 var topTitle;
 var instructions;
+var chapterName;
+
 
 //intial yMin and yMax for the test
 var yMin = 200;
@@ -39,7 +77,7 @@ var myFont;
 
 //variable for text zone
 var zone;
-
+var fileChooser
 
 //variable to keep track of currentMaxScroll and currentMinScroll so we know where the frame is
 var currentMaxScroll;
@@ -47,22 +85,22 @@ var currentMinScroll;
 var scrollVal = 4;
 
 function preload() {
-  // rawText = loadStrings("assets/words.txt");
-  // allParts = loadStrings("assets/parts.txt");
-  rawText = loadStrings("assets/wordsLastShort.txt");
-  allParts = loadStrings("assets/partsLastShort.txt");
-  //this is the ordered list of parts
+  fileChooser = Math.round(random(0, textArray.length));
+  rawText = loadStrings("assets/"+textArray[fileChooser]);
+  allParts = loadStrings("assets/"+partsArray[fileChooser]);
+  // rawText = loadStrings("assets/"+textArray[22]);
+  // allParts = loadStrings("assets/"+partsArray[22]);
   partsList = loadStrings("assets/partslookup.txt");
-  //myFont = loadFont('');
+  
 }
 
 function setup() {
+
   frameRate(30);
-  //print("HELP COMPUTER!!!")
-  textSize(18);
+  textSize(21);
   textFont("Georgia");
   concordance = new Concordance();
-  citation = new Title("from CHAPTER 135. The Chase.--Third Day", 50,50,16)
+  citation = new Title("From " + titleArray[fileChooser], 50,50,16)
   topTitle = new Title("in Moby Dick, by Herman Melville", 50,70,12);
   instructions = new Title("(Use up and down arrows to dive or surface; click a word to hook a line and press return to release your catch.)", 50, 90, 11);
   checkWordCounts(allParts);
@@ -93,17 +131,17 @@ function draw() {
     {
       if(zones[h].name === "xx")
       {
-        for(var i = 0; i < zones[h].vehicles.length/2.5; i++ )
+        for(var i = 0; i < zones[h].vehicles.length/1.75; i++ )
         {
-         if (zones[h].vehicles[i].isHooked === false)
-         {
+        if (zones[h].vehicles[i].isHooked === false)
+        {
             //if not hooked, seek local attractor
             zones[h].vehicles[i].applyBehaviors(zones[h].vehicles, zones[h].attractor.getWaveX(), zones[h].attractor.getWaveY());
             //update and maintain zone borders
             zones[h].vehicles[i].update();
             zones[h].vehicles[i].borders();
             zones[h].vehicles[i].show();
-         }
+        }
         }
       }
       else
@@ -123,7 +161,7 @@ function draw() {
     }
     zones[h].attractor.wave();
     //FYI if we show wave w/o calling wave, marker will not be drawn with y offset 
-    zones[h].attractor.showWave();
+    //zones[h].attractor.showWave();
     //zones[h].showZone();
     } 
     for (var i = 0; i < zones[h].vehicles.length; i++)
@@ -202,7 +240,7 @@ function keyPressed() {
       for (var i = 0; i < zones[h].vehicles.length; i++) {
         zones[h].vehicles[i].setYDown(scrollVal);
 }
-          //update current max and min scroll 
+  //update current max and min scroll 
 }
     currentMaxScroll += scrollVal;
     currentMinScroll += scrollVal;
@@ -300,74 +338,25 @@ function setAllHookedTargets(pointWordPos) {
 
 function swapOutWords(zone, vehicle)
 {
-  print(zone);
-  print(vehicle);
+  //print(zone);
+  //print(vehicle);
   lineref = vehicle.getLineref();
   posref = vehicle.getPosref();
-  // print("the Vehicle's OG lineref " + lineref);
-  // print("the Vehicles OG posref " + posref);
+ 
   chooser = Math.round(random(0, zone.vehicles.length-1));
-  // print("chooser " + chooser);
-  // print(zone.vehicles.length);
-  // print(zone.vehicles[chooser]);
-  //another randomly selected word from its zone
+  //choose another randomly selected word from its zone
   
   newLineref = zone.vehicles[chooser].getLineref();
   newPosref =  zone.vehicles[chooser].getPosref();
-  // print("new lineref " + newLineref);
-  // print("new posref " + newPosref);
+  //swap them out
   zone.vehicles[chooser].setLineref(lineref);
   zone.vehicles[chooser].setPosref(posref);
   vehicle.setLineref(newLineref);
   vehicle.setPosref(newPosref);
-  print("the Vehicle's NEW lineref " + vehicle.getLineref());
-  print("the Vehicles NEW posref " + vehicle.getPosref());
+  // print("the Vehicle's NEW lineref " + vehicle.getLineref());
+  // print("the Vehicles NEW posref " + vehicle.getPosref());
 }
 
-//something wrong here, with concatenating the lines...
-function saveOutNewText()
-{
-  print("in saveOutNewText()!");
-  for (var h = 0; h < zones.length; h++) 
-  {
-    //for all the words
-      for (var i = 0; i < zones[h].vehicles.length; i++) 
-      {
-        //get the line 
-        var theLine = zones[h].vehicles[i].getLineref();
-        var thePos = zones[h].vehicles[i].getPosref();
-        //add to that array
-        newWords[theLine][thePos] = zones[h].vehicles[i].getWord();
-        newParts[theLine][thePos] = zones[h].vehicles[i].getPart();
-        // newWords[theLine][thePos] = "changed!";
-        // newParts[theLine][thePos] = "all new!";
-      }
-  }
-  //print them out to see....
-  print(newWords.length);
-  for (var j = 0; j < newWords.length; j++) 
-  { 
-    print(newWords[j]);
-    // //empty strings to hold new lines
-    // var newStringWords ="";
-    // var newStringParts = "";
-    // for (var j = 0; j < newWords[i].length; j++) 
-    // {
-    //   //newStringWords+= newWords[i]+ " ";
-    //   //newStringWords= newStringWords.concat(" ");
-      
-    //   newStringParts+= newParts[i] + " ";
-    //   //print(newWords[i][j]);
-    //   //print(newParts[i][j]);
-    // }
-  }
-  // print(newWords);
-  // print(newParts);
-  //var list =["apple", "banana", "peach", "kimchi"];
-  //saveStrings(list,"newWords.txt");
-  //saveStrings(newWords,"newWords.txt");
-  //saveStrings(newParts,"newParts.txt");
-}
 
 //make parts objects and zone objects according to the list of parts of speech
 function loadZoneDataPts() {
@@ -389,9 +378,17 @@ function loadZoneDataPts() {
       //add the zone into the zone array
       append(zones, thisZone);
           //***update offset before you go!!****
-      offset = thisPart.yMax;
-      //print('this is the name ' + partName + " this is yMax "+ offset
+          //want the punctuation to overlap a bit
+      if(thisPart.name === "xx")
+      {
+         offset = thisPart.yMax-30;
       }
+      else
+      {
+        offset = thisPart.yMax;
+      }
+      //print('this is the name ' + partName + " this is yMax "+ offset
+    }
   }
   lastYMax = offset-200;
   //print("lastYMax is" + lastYMax);
@@ -410,7 +407,7 @@ function makePart(name, offset, population)
       if(name === "xx" )
       {
         //make zone height smaller for the punctuation because they're so tiny
-         zoneHeight = (population *.5)-100;
+         zoneHeight = (population *.5)-20;
          ymax = offset+ zoneHeight;
          speed = 5;
       }
@@ -419,7 +416,7 @@ function makePart(name, offset, population)
         zoneHeight = (population *2)+ 100;
         // zoneHeight = (population *2)+ 40;
         ymax = offset + zoneHeight;
-        speed = random(1.5,5.5);
+        speed = random(1.75,6);
       }
       
       //colorMode(HSB, 360, 100, 100, 1);
@@ -436,7 +433,7 @@ function makeZone(thePart)
   //THIS IS JUST FOR THE ATTRACTOR
   if(thePart.name === "xx")
   {
-    print("in attractor definition area");
+    //print("in attractor definition area");
     attrY = thePart.yMax;
   }
   else
@@ -469,7 +466,9 @@ function makeWords() {
       //if has extra && is full
       //We are now making  vehicles and storing them in an array
       //use the current part of speech to ID the parts data
-      //print(partsData[tempParts[j]]);
+      // print(partsData[tempParts[j]]);
+      // print(tempWords[j]);
+      // print(tempParts[j]);
       //check in partsData
       w = new Vehicle(
         //x, y

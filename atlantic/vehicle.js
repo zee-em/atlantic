@@ -103,7 +103,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref,
     //a variable that shows the distance
     noStroke();
     if (this.isHooked) {
-      fill(27, 100, 100); // bright butt green
+      fill(27, 100, 100); // orange
     } else {
       var zoneMiddle = (this.yMin + this.yMax) / 2; // find middle of zone
 
@@ -249,7 +249,7 @@ function Vehicle(x, y, yMin, yMax, r, maxspeed, maxforce, word, lineref, posref,
 
   this.checkHook = function() {
     if (mouseX >= this.position.x && mouseX <= this.position.x + textWidth(this.word) && mouseY >= this.position.y - this.r && mouseY <= this.position.y && this.isHooked === false) {
-      print("hooked!");
+      //print("hooked!");
       //word = "HOOKED";
       this.isHooked = true;
       return true;
