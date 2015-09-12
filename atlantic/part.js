@@ -1,4 +1,4 @@
-function Part(name, yMin, yMax, size, maxspeed, maxforce, cl)
+function Part(name, yMin, yMax, size, maxspeed, maxforce, cl, population, zoneHeight)
 {
   this.name = name;
   this.yMin = yMin;
@@ -7,4 +7,6 @@ function Part(name, yMin, yMax, size, maxspeed, maxforce, cl)
   this.maxspeed = maxspeed;
   this.maxforce = maxforce;
   this.cl = cl;
+  this.population = population;
+  this.zoneHeight = zoneHeight;
 }  

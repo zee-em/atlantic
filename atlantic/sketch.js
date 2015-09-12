@@ -65,6 +65,7 @@ var citation;
 var topTitle;
 var instructions;
 var chapterName;
+var canvas;
 
 
 //intial yMin and yMax for the test
@@ -104,7 +105,8 @@ function setup() {
   topTitle = new Title("in Moby Dick, by Herman Melville", 50,70,12);
   instructions = new Title("(Use up and down arrows to dive or surface; click a word to hook a line and press return to release your catch.)", 50, 90, 11);
   checkWordCounts(allParts);
-  createCanvas(800, 480);
+  canvas = createCanvas(800, 480);
+  canvas.parent('myContainer');
   currentMaxScroll = height;
   currentMinScroll = 0;
   //arrivedColor = color(255,0,0);
@@ -416,7 +418,7 @@ function makePart(name, offset, population)
         zoneHeight = (population *2)+ 100;
         // zoneHeight = (population *2)+ 40;
         ymax = offset + zoneHeight;
-        speed = random(1.75,6);
+        speed = random(1.5,5);
       }
       
       //colorMode(HSB, 360, 100, 100, 1);
@@ -441,8 +443,8 @@ function makeZone(thePart)
     attrY = thePart.yMax-(thePart.population+15);
     // var offScreenLeft = 10-20;
   }
-  var offScreenRight = width +40;
-  var offScreenLeft = 10-40;
+  var offScreenRight = width +60;
+  var offScreenLeft = 10-60;
   var chooser = Math.round(random(0,1));
   var xOffVal = [offScreenLeft, offScreenRight];
   //print("what we get for chooser " + xOffVal[chooser]);
