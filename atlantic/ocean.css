@@ -1,6 +1,5 @@
 body {
     background-color: #fff;
-    padding: 25px;
 }
 
 #myContainer {
@@ -17,11 +16,14 @@ body {
     color: #00223d;
     width:600px ;
     padding: 5px 25px;
+    margin: 0 25px;
 }
 .p2 { font-style: italic;
       font-size: 12px;
       text-align: left;
       width:600px;
       padding: 5px 25px;
+      padding: 5px 25px;
+      margin: 0 25px;
 }
 
